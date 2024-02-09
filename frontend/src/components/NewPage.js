@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import '../styles/NewPage.css'; // import the CSS file
+import './NewPage.css'; // import the CSS file
 
 function NewPage() {
   const [getMessage, setGetMessage] = useState({})
