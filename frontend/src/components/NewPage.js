@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import '../styles/NewPage.css'; // import the CSS file
+import '../NewPage.css'; // import the CSS file
 
 function NewPage() {
   const [getMessage, setGetMessage] = useState({})
 
-  useEffect(()=>{
+  useEffect(() => {
     axios.get('http://localhost:5000/flask/hello').then(response => {
       console.log("SUCCESS", response)
       setGetMessage(response)
@@ -17,8 +17,8 @@ function NewPage() {
   return (
     <div className="NewPage">
       <header className="NewPage-header">
-        <p>React + Flask Tutorial</p>
-        <div>{getMessage.status === 200 ? 
+        <p>React + Flask Tutorial @ NewPage</p>
+        <div>{getMessage.status === 200 ?
           <h3>{getMessage.data.message}</h3>
           :
           <h3>LOADING</h3>}</div>
