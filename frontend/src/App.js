@@ -3,7 +3,7 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 
-import NewPage from './pages/NewPage'; // import NewPage
+import NewPage from './components/NewPage'; // import NewPage
 
 function App() {
   const [getMessage, setGetMessage] = useState({})
@@ -21,7 +21,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <NewPage /> {}
+        <NewPage /> { }
       </header>
     </div>
   );
