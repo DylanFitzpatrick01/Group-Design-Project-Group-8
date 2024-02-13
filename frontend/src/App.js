@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 
 import NewPage from './components/NewPage'; // import NewPage
-import Profile from './components/Profile'; // import Profile
 
 function App() {
   const [getMessage, setGetMessage] = useState({})
@@ -23,7 +22,6 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <NewPage />
-        <Profile />
       </header>
     </div>
   );
