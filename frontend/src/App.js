@@ -3,8 +3,8 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 
-import NewPage from './pages/NewPage'; // import NewPage
-import Societies from './pages/Societies'; // import Societies page
+import NewPage from './components/NewPage'; // import NewPage
+import Societies from './components/Societies'; // import Societies page
 
 
 function App() {
