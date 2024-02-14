@@ -1,9 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { Profiler, useEffect, useState } from 'react';
 import axios from 'axios'
 
 import NewPage from './components/NewPage'; // import NewPage
+import Profile from './components/Profile'; // import NewPage
 
 function App() {
   const [getMessage, setGetMessage] = useState({})
@@ -21,7 +22,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <NewPage />
+        <Profile />
       </header>
     </div>
   );
