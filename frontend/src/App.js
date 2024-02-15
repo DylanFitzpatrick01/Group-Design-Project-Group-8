@@ -3,28 +3,13 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 
-import NewPage from './components/NewPage'; // import NewPage
-import Modules from './components/Modules';
+import NotificationsPage from './components/NotificationsPage/NotificationsPage';
 
 function App() {
-  const [getMessage, setGetMessage] = useState({})
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/flask/hello').then(response => {
-      console.log("SUCCESS", response)
-      setGetMessage(response)
-    }).catch(error => {
-      console.log(error)
-    })
-
-  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <NewPage /> {}
-        <Modules /> {}
-      </header>
+      // Navigation Bar component will go here
     </div>
   );
 }

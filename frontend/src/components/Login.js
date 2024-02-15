@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import './NewPage.css'; // import the CSS file
+import './Login.css'; // import the CSS file
 
-function NewPage() {
+function Login() {
   const [getMessage, setGetMessage] = useState({})
 
   useEffect(()=>{
@@ -15,9 +15,9 @@ function NewPage() {
 
   }, [])
   return (
-    <div className="NewPage">
-      <header className="NewPage-header">
-        <p>React + Flask Tutorial</p>
+    <div className="Login">
+      <header className="Login-header">
+        <p>Login</p>
         <div>{getMessage.status === 200 ? 
           <h3>{getMessage.data.message}</h3>
           :
@@ -27,4 +27,4 @@ function NewPage() {
   );
 }
 
-export default NewPage;
+export default Login;
