@@ -9,9 +9,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <NotificationsPage />
-      </header>
+      // Navigation Bar component will go here
     </div>
   );
 }

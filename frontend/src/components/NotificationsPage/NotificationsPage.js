@@ -19,10 +19,6 @@ function NotificationsPage() {
     <div className="NotificationsPage">
       <header className="NotificationsPage-header">
         <p>Notifications Page</p>
-        <div>{getMessage.status === 200 ? 
-          <h3>{getMessage.data.message}</h3>
-          :
-          <h3>LOADING</h3>}</div>
       </header>
       <div className="NotificationsList">
       <NotificationBlock notificationType="societyPost" />

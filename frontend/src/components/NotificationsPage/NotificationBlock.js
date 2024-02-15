@@ -4,13 +4,15 @@ import './NotificationBlock.css';
 
 function DirectReplyNotificationComponent() {
     return (
-        <div className="NotificationComponent">
-            <div className="NotificationComponent-header">
-                <p>User XXXXX replied to you in Module X</p>
-                <div className="NotificationTimeStamp">4 hours ago</div>
-            </div>
-            <div className="NotificationComponent-body">
-                <p>Want to get lunch after this lecture?</p>
+        <div className="NotificationComponentOuter">
+            <div className="NotificationComponent">
+                <div className="NotificationComponent-header">
+                    <h2>User XXXXX replied to you in Module X</h2>
+                    <div className="NotificationTimeStamp">4 hours ago</div>
+                </div>
+                <div className="NotificationComponent-body">
+                    <p>Want to get lunch after this lecture?</p>
+                </div>
             </div>
         </div>
     );
@@ -19,13 +21,15 @@ function DirectReplyNotificationComponent() {
 
 function SocietyNotificationComponent() {
     return (
-        <div className="NotificationComponent">
-            <div className="NotificationComponent-header">
-                <p>New Post from Society XXXXX</p>
-                <div className="NotificationTimeStamp">2 hours ago</div>
-            </div>
-            <div className="NotificationComponent-body">
-                <p>Pride, Prejudice and Pizza night with the Lit Soc this Friday!!!</p>
+        <div className='NotificationComponentOuter'>
+            <div className="NotificationComponent">
+                <div className="NotificationComponent-header">
+                    <h2>New Post from Society XXXXX</h2>
+                    <div className="NotificationTimeStamp">2 hours ago</div>
+                </div>
+                <div className="NotificationComponent-body">
+                    <p>Pride, Prejudice and Pizza night with the Lit Soc this Friday!!!</p>
+                </div>
             </div>
         </div>
     );
