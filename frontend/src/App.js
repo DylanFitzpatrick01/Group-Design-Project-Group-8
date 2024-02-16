@@ -1,7 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
+
 
 
 import NewPage from './components/NewPage'; // import NewPage
