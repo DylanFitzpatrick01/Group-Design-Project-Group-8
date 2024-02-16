@@ -6,31 +6,31 @@
     display: flex;
     flex-direction: column;
     padding: 1%;
-    border-bottom: 1px solid #e9dfc7;
+    border-bottom: 1px solid #176B87;
     cursor: pointer;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
     width: 80%;
     margin: 0 auto;
-    background-color: #f4efe3;
+    background-color: #053B50;
 }
 
 .NotificationComponent-header{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: green;
-    
+
 }
 
 .NotificationComponent-header h2{
     font-weight: 800;
-    font-size: 16px;
+    font-size: 18px;
+    color: #64CCC5;
 }
 
 .NotificationTimeStamp{
-    font-size: 14px;
-    color: #a0a0a0;
+    font-size: 13px;
+    color: #d3d0d0;
 }
 
 .NotificationComponent-body{
@@ -38,4 +38,6 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
+    color: #ffffff;
+    font-size: 15px;
 }

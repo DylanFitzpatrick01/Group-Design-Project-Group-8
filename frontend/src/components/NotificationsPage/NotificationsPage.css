@@ -1,11 +1,11 @@
 .NotificationsPage {
     text-align: center;
     min-height: 100vh;
-    background-color: #fff;
+    background-color: #032938;
   }
   
   .NotificationsPage-header {
-    background-color: #e9dfc7;
+    background-color: #032938;
     display: flex;
     flex-direction: column;
     align-items: center;
