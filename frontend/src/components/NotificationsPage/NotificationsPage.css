@@ -1,15 +1,14 @@
 .NotificationsPage {
-    text-align: center;
-    min-height: 100vh;
-    background-color: #fff;
-  }
-  
-  .NotificationsPage-header {
-    background-color: #e9dfc7;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 3%;
-  }
- 
+  text-align: center;
+  min-height: 100vh;
+  background-color: var(--background-color);
+}
+
+.NotificationsPage-header {
+  background-color: var(--card-background);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 3%;
+}

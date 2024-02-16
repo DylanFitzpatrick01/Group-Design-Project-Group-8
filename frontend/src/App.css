@@ -9,3 +9,11 @@
   color: white;
 }
 
+:root {
+  --background-color: #032938;
+  --card-background: #053B50;
+  --shadows: #176B87;
+  --accent: #64CCC5; /* for titles and accents */
+  --ordinary-text: #ffffff; 
+  --unimportant-text: #a0a0a0;
+}
