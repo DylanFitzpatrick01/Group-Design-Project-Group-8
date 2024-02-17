@@ -1,6 +1,8 @@
 .textBoxContainer{
     width: 100%;
     justify-content: flex-end;
+    padding-top: 1%;
+    padding-bottom: 2%;
 }
 
 .inputContainer {

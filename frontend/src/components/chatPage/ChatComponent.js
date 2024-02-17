@@ -35,7 +35,7 @@ function TheirText({ message, timestamp }) {
 
 function Text({ message, isMyMessage, timestamp }) {
     return (
-        <div>
+        <div className="textContainer">
             {isMyMessage ? <MyText message={message} timestamp={timestamp} /> : <TheirText message={message} timestamp={timestamp}/>}
         </div>
     );
