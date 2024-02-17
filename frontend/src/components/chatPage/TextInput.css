@@ -1,0 +1,55 @@
+.textBoxContainer{
+    width: 100%;
+    justify-content: flex-end;
+    padding-top: 1%;
+    padding-bottom: 2%;
+}
+
+.inputContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1%;
+}
+
+.textBox{
+    width: 87%;
+    height: 3.5vh;
+    resize: none;
+    background-color: var(--card-background);
+    color: var(--ordinary-text);
+    border: 2px solid var(--shadows);
+    border-radius: 10px;
+    padding-left: 0.5%;
+    padding-top: 0.5%;
+}
+
+.textBox:focus { /* when the text box is clicked on */
+    outline: none;
+    box-shadow: 0 0 3px var(--accent); 
+}
+
+.textBox::placeholder {
+    color: var(--ordinary-text);
+    font-size: 18px;
+}
+
+.sendButton{
+    width: 5%;
+    height: 3.5vh;
+    background-color: var(--shadows);
+    color: var(--ordinary-text);
+    border-radius: 10px;
+}
+
+.sendButton:active { /* on click */
+    background-color: var(--accent);
+}
+
+.textBoxEmpty {
+    border: none; /* No border when text box is empty */
+}
+
+.textBoxNotEmpty {
+    border: 2px solid var(--accent); /* Border when text box is not empty */
+}
