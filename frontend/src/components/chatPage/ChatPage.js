@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ChatComponent from './ChatComponent';
-import TextInput from './TextInput'; // Fix the casing of the import statement
+import TextInput from './TextInput'; 
 
 function ChatPage() {
     return (

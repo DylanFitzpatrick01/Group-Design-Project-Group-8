@@ -9,7 +9,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    gap: 1%; /* Adds some space between the textarea and button */
+    gap: 1%;
 }
 
 .textBox{
@@ -24,9 +24,9 @@
     padding-top: 0.5%;
 }
 
-.textBox:focus {
-    outline: none; /* Removes the default browser outline */
-    box-shadow: 0 0 3px var(--accent); /* Adds a pink outline using box-shadow */
+.textBox:focus { /* when the text box is clicked on */
+    outline: none;
+    box-shadow: 0 0 3px var(--accent); 
 }
 
 .textBox::placeholder {
@@ -42,8 +42,8 @@
     border-radius: 10px;
 }
 
-.sendButton:active {
-    background-color: var(--accent); /* Change to your desired color */
+.sendButton:active { /* on click */
+    background-color: var(--accent);
 }
 
 .textBoxEmpty {
