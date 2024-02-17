@@ -1,10 +1,11 @@
 .App {
   text-align: center;
+  background-color: var(--background-color);
 }
 
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--card-background);
   display: flex;
   color: white;
 }
