@@ -43,7 +43,7 @@ function AddUser() {
     return (
         <div className="AddUser">
             <div>
-                <button onClick={addUser}>Add User</button>
+                <button onClick={addUser}>Add Demo Users</button>
             </div>
         </div >
     );
