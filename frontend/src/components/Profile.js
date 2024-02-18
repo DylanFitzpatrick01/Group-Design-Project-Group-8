@@ -32,6 +32,7 @@ function Profile({ username }) {
 
 
   useEffect(() => {
+    // get user profile from firebase
     const getUser = async () => {
       try {
         const docRef = doc(db, "users", username);
@@ -40,7 +41,6 @@ function Profile({ username }) {
           console.log("Document data:", docSnap.data());
           setUserInfo(docSnap.data());
         } else {
-          // doc.data() will be undefined in this case
           console.log("No such document!");
         }
       } catch (e) {
