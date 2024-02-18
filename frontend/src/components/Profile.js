@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
 // import axios from 'axios'
 import './Profile.css'; // import the CSS file
-import { collection, addDoc } from "firebase/firestore";
-import { app } from '../firebase.js';
+import { doc, getDoc } from "firebase/firestore";
+import { db } from '../firebase.js';
 
-function Profile() {
-  const [getMessage, setGetMessage] = useState({})
+function Profile({ username }) {
+
+  // const [getMessage, setGetMessage] = useState({})
   const [userInfo, setUserInfo] = useState({
-    name: 'FIRSTNAME SURNAME', // Example name
-    avatar: 'https://images.pexels.com/photos/669015/pexels-photo-669015.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', // Example avatar URL
-    yearOfStudy: 'Sophomore', // Example year of study
-    courseTitle: 'Computer Science', // Example course title
-    activeStatus: '🔴 Busy', // Example active status
-    bio: 'Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.' // Example bio
+    name: '',
+    email: '',
+    avatar: '',
+    yearOfStudy: 0,
+    courseTitle: '',
+    activeStatus: 0,
+    bio: ''
   });
+
   const [posts, setPosts] = useState([
     {
       id: 1, title: 'My first post', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', date: '2023-01-01T12:00:00', like: 5, comment: 2, share: 0
@@ -25,12 +28,25 @@ function Profile() {
   ]);
 
 
-
-
-
   useEffect(() => {
+    const getUser = async () => {
+      try {
+        const docRef = doc(db, "users", username);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          setUserInfo(docSnap.data());
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    };
+    getUser();
+  }, [username])
 
-  }, [])
   return (
     <div className="Profile">
       <div className="container">
@@ -55,7 +71,7 @@ function Profile() {
 
               </div>
               <div className="col-7 border-0 rounded d-flex justify-content-center align-items-center" id="bioCard">
-                <p class="m-0">{userInfo.bio}</p>
+                <p className="m-0">{userInfo.bio}</p>
               </div>
             </div>
           </div>
