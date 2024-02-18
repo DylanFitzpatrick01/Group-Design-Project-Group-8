@@ -1,77 +1,137 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios'
 import './Profile.css'; // import the CSS file
+import { db } from '../firebase.js';
+import { doc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
+import { getStatus } from './getStatus.js';
+import { getYear } from './getYear.js';
 
-function Profile() {
-  const [getMessage, setGetMessage] = useState({})
+
+// Profile takes a username (the name of the collection in FB) as a prop
+
+function Profile({ username }) {
   const [userInfo, setUserInfo] = useState({
-    name: 'FIRSTNAME SURNAME', // Example name
-    avatar: 'https://img2.doubanio.com/icon/ul135503917-1.jpg', // Example avatar URL
-    yearOfStudy: 'Sophomore', // Example year of study
-    courseTitle: 'Computer Science', // Example course title
+    name: '',
+    email: '',
+    avatar: '',
+    yearOfStudy: 0,
+    courseTitle: '',
+    activeStatus: 0,
+    bio: ''
   });
+
   const [posts, setPosts] = useState([
-    {
-      id: 1, title: 'My first post', content: 'This is my first post content!', date: '2023-01-01T12:00:00'
-    },
-    {
-      id: 2, title: 'My second post', content: 'This is my second post content!', date: '2024-02-01T15:30:00'
-    },
-    // Add more posts here
-  ]);
+    {}]);
 
 
   useEffect(() => {
-    axios.get('http://localhost:5000/flask/hello').then(response => {
-      console.log("SUCCESS", response)
-      setGetMessage(response)
-    }).catch(error => {
-      console.log(error)
-    })
+    // get user profile from firebase
+    const getUser = async () => {
+      try {
+        const docRef = doc(db, "users", username);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          setUserInfo(docSnap.data());
+        } else {
+          console.log("No such document!");
+        }
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    };
 
-  }, [])
+    const getPosts = async () => {
+      try {
+        // get user posts from firebase
+        // query: where('author', '==', username);
+        const q = query(collection(db, "posts"), where("author", "==", username));
+        const docSnap = await getDocs(q);
+        if (!docSnap.empty) {
+          const posts = [];
+          docSnap.forEach((doc) => {
+            posts.push(doc.data());
+          });
+          console.log("Posts data:", posts);
+          setPosts(posts);
+        } else {
+          console.log("No matching documents.");
+        }
+      } catch (e) {
+        console.error("Error getting documents: ", e);
+      }
+    };
+
+
+    getUser();
+    getPosts();
+  }, [username])
+
+
   return (
     <div className="Profile">
-      <header className="Profile-header">
-        <p>React + Flask Tutorial @ Profile</p>
-        <div>
-          {getMessage.status === 200 ?
-            <h3>{getMessage.data.message}</h3>
-            :
-            <h3>LOADING</h3>
-          }
-        </div>
-      </header>
-      <div className="profile-container">
-        <div className="user-info">
-          <div className="profile-picture">
-            <img src={userInfo.avatar} alt="User avatar" />
+      <div className="container">
+        {/* profile card */}
+        <div className="row mt-5 p-4 rounded border-0" id="profileCard">
+          <div className="col-5 ">
+            <div className="profile-picture">
+              <img src={userInfo.avatar} alt="User avatar" className="img-fluid" />
+            </div>
           </div>
-          <div className="user-details">
-            <h1>{userInfo.name}</h1>
-            <p>Year of study: {userInfo.yearOfStudy}</p>
-            <p>Course title:  {userInfo.courseTitle}</p>
-            <button className="btn add">Add</button>
-            <button className="btn dm">DM</button>
-          </div>
-        </div>
-        <div className="recent-posts">
-          <h2>Recent Posts</h2>
-          {posts.map(post => (
-            <div key={post.id} className="post">
-              <div className="post-date">POSTED - {new Date(post.date).toLocaleString()}</div>
-              <div className="post-content">{post.content}</div>
-              <div className="post-interactions">
-                <span>Like (5)</span>
-                <span>Comment (2)</span>
-                <span>Share (0)</span>
+          <div className="col-7 border-0 ">
+            <div className="row ">
+              <p className="text-start"><h1 id="userName">{userInfo.name}</h1></p>
+            </div>
+            <div className="row ">
+              <div className="col-5 ">
+                <div className="user-details text-start ">
+                  <p>{getYear(userInfo.yearOfStudy)}</p>
+                  <p>{userInfo.courseTitle}</p>
+                  <p>{getStatus(userInfo.activeStatus)}</p>
+                </div>
+              </div>
+              <div className="col-7 border-0 rounded d-flex justify-content-center align-items-center" id="bioCard">
+                <p className="m-0">{userInfo.bio}</p>
               </div>
             </div>
-          ))}
+          </div>
+        </div>
+        {/* interact btns */}
+        <div className="row mt-3 d-flex justify-content-end">
+          <div className="col-auto">
+            <button className="btn bioBtn" >ADD</button>
+          </div>
+          <div className="col-auto" style={{ paddingRight: "0px" }}>
+            <button className="btn bioBtn" >DM</button>
+          </div>
+        </div>
+        {/* user posts */}
+        <div className="row mt-4 text-start">
+          <h2 id="recentPosts">Recent Posts</h2>
+        </div>
+        <div className="row mt-1 p-4 rounded border-0" id="userPosts">
+          {/* head */}
+          <div className="col">
+            {posts.map(post => (
+              <div key={post.id} className="row border-0 mb-4 post rounded">
+                <div className="col-10 ms-3">
+                  <div className="row border-0 text-start">
+                    <p className="mt-3 mb-3 postTitle">{post.title} - {new Date(post.date).toLocaleString()}</p>
+                  </div>
+                  <div className="row border-0 text-start">
+                    <p className="m-0 mb-3">{post.content}</p>
+                  </div>
+                </div>
+                <div className="col-1 ms-3 postLnk d-flex flex-column justify-content-center">
+                  <div className="row border-0"><a href="#">Like({post.like})</a></div>
+                  <div className="row border-0"><a href="#">Comment({post.comment})</a></div>
+                  <div className="row border-0"><a href="#">Share({post.share})</a></div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-
-    </div>
+    </div >
   );
 }
 
