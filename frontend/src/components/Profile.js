@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import './Profile.css'; // import the CSS file
 import { doc, getDoc } from "firebase/firestore";
 import { db } from '../firebase.js';
+import { getStatus } from './getStatus.js';
+import { getYear } from './getYear.js';
 
 function Profile({ username }) {
 
@@ -64,9 +66,9 @@ function Profile({ username }) {
             <div className="row ">
               <div className="col-5 ">
                 <div className="user-details text-start ">
-                  <p>{userInfo.yearOfStudy}</p>
+                  <p>{getYear(userInfo.yearOfStudy)}</p>
                   <p>{userInfo.courseTitle}</p>
-                  <p>{userInfo.activeStatus}</p>
+                  <p>{getStatus(userInfo.activeStatus)}</p>
                 </div>
 
               </div>
