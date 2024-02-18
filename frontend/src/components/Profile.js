@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-// import axios from 'axios'
 import './Profile.css'; // import the CSS file
-import { doc, getDoc } from "firebase/firestore";
 import { db } from '../firebase.js';
+import { doc, getDoc } from "firebase/firestore";
 import { getStatus } from './getStatus.js';
 import { getYear } from './getYear.js';
 
-function Profile({ username }) {
 
-  // const [getMessage, setGetMessage] = useState({})
+// Profile takes a username (the name of the collection in FB) as a prop
+
+function Profile({ username }) {
   const [userInfo, setUserInfo] = useState({
     name: '',
     email: '',
@@ -19,6 +19,7 @@ function Profile({ username }) {
     bio: ''
   });
 
+  // TODO: replace this with a call to the backend
   const [posts, setPosts] = useState([
     {
       id: 1, title: 'My first post', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', date: '2023-01-01T12:00:00', like: 5, comment: 2, share: 0
@@ -70,7 +71,6 @@ function Profile({ username }) {
                   <p>{userInfo.courseTitle}</p>
                   <p>{getStatus(userInfo.activeStatus)}</p>
                 </div>
-
               </div>
               <div className="col-7 border-0 rounded d-flex justify-content-center align-items-center" id="bioCard">
                 <p className="m-0">{userInfo.bio}</p>
@@ -78,7 +78,7 @@ function Profile({ username }) {
             </div>
           </div>
         </div>
-        {/* dm */}
+        {/* interact btns */}
         <div className="row mt-3 d-flex justify-content-end">
           <div className="col-auto">
             <button className="btn bioBtn" >ADD</button>
@@ -114,8 +114,6 @@ function Profile({ username }) {
           </div>
         </div>
       </div>
-
-
     </div >
   );
 }
