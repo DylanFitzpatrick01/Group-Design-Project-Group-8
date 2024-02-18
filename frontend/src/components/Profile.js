@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Profile.css'; // import the CSS file
 import { db } from '../firebase.js';
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
 import { getStatus } from './getStatus.js';
 import { getYear } from './getYear.js';
 
@@ -19,16 +19,8 @@ function Profile({ username }) {
     bio: ''
   });
 
-  // TODO: replace this with a call to the backend
   const [posts, setPosts] = useState([
-    {
-      id: 1, title: 'My first post', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', date: '2023-01-01T12:00:00', like: 5, comment: 2, share: 0
-    },
-    {
-      id: 2, title: 'My second post', content: 'This is my second post content!', date: '2024-02-01T15:30:00', like: 14, comment: 6, share: 2
-    },
-    // Add more posts here
-  ]);
+    {}]);
 
 
   useEffect(() => {
@@ -47,8 +39,33 @@ function Profile({ username }) {
         console.error("Error adding document: ", e);
       }
     };
+
+    const getPosts = async () => {
+      try {
+        // get user posts from firebase
+        // query: where('author', '==', username);
+        const q = query(collection(db, "posts"), where("author", "==", username));
+        const docSnap = await getDocs(q);
+        if (!docSnap.empty) {
+          const posts = [];
+          docSnap.forEach((doc) => {
+            posts.push(doc.data());
+          });
+          console.log("Posts data:", posts);
+          setPosts(posts);
+        } else {
+          console.log("No matching documents.");
+        }
+      } catch (e) {
+        console.error("Error getting documents: ", e);
+      }
+    };
+
+
     getUser();
+    getPosts();
   }, [username])
+
 
   return (
     <div className="Profile">
