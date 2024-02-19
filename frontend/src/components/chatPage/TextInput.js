@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './TextInput.css';
+import { sendChat } from './SendReceiveChats';
 
-function TextInput() {
+function TextInput({ moduleCode, user }) {
     const [message, setMessage] = useState('');
     const textareaRef = useRef(null);
 
@@ -18,10 +19,11 @@ function TextInput() {
 
     const handleSend = (event) => {
         event.preventDefault();
-        if (message.trim() !== '') {
-            // send to firebase here
-            console.log('message:', message);
-            setMessage('');
+        if (message !== '' && message != null) {
+            if ((message || '').trim() !== '') {
+                sendChat(moduleCode, message, user);
+                setMessage('');
+            }
         }
     };
 
