@@ -94,8 +94,9 @@
     border-bottom: 2px solid var(--shadows);
   }
 
-  .SubmitButton :focus{
+  .SubmitButton:active{
     background-color: var(--accent);
+    border-bottom: none;
   }
 
   .ErrorText{
