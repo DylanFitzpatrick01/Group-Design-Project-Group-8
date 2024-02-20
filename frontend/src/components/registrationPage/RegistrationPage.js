@@ -16,7 +16,6 @@ function RegistrationPage() {
     activeStatus: 0,
     bio: '',
   });
-  const [buttonClicked, setButtonClicked] = useState(false);
 
   const emailRegex = /^[^\s@]+@tcd\.ie$/i; // Regex to validate TCD email
 
@@ -73,7 +72,6 @@ function RegistrationPage() {
         courseTitle: '',
         bio: '',
       });
-      setButtonClicked(true);
     } catch (error) {
       console.error('Error adding document: ', error);
     }
