@@ -21,14 +21,18 @@
 
   .RegistrationBox{
     background-color: var(--card-background);
-    margin: 5% 20%;
+    margin: 5% 30%;
     min-height: 70vh;
     border-radius: 2.5%;
     border-bottom: 2px solid var(--shadows);
   }
 
+  .ProfilePicture{
+    align-items: center;
+  }
+
   .ProfilePictureText{
-    margin-left: 41.25%;
+    margin-right: 10%;
   }
 
   .PreviewImage{
@@ -41,15 +45,25 @@
     position: relative;
     overflow: hidden;
     border-radius: 50%;
-    margin-left: 40%;
+    margin-right: 10%;
   }
 
   .ImageUpload{
     margin-top: 1rem;
-    margin-left: 35%;
+    margin-left: 5%;
   }
 
-  .FirstName, .LastName, .ProfilePicture, .CourseName, .YearOfStudy, .Bio, .Email{
+  .FirstName, .LastName, .ProfilePicture, .CourseName, .YearOfStudy, .Email{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    color: var(--ordinary-text);
+    margin-left: 10%;
+    margin-bottom: 5%;
+    font-size: 20px;
+  }
+
+  .Bio{
     display: flex;
     flex-direction: column;
     text-align: left;
@@ -60,11 +74,11 @@
   }
 
   .FirstNameInput, .LastNameInput, .CourseNameInput, .YearOfStudyInput, .EmailInput{
-    width: 75%;
+    width: 80%;
   }
 
   .BioInput{
-    width: 175%;
+    width: 90%;
     height: 100px
   }
 
@@ -76,10 +90,16 @@
     background-color: var(--card-background);
     border-radius: 10%;
     margin-top: -2.5%;
-    margin-left: 75%;
+    margin-left: 65%;
     border-bottom: 2px solid var(--shadows);
   }
 
   .SubmitButton :focus{
     background-color: var(--accent);
+  }
+
+  .ErrorText{
+    color: red;
+    font-size: 15px;
+    margin-bottom: 0px;
   }
