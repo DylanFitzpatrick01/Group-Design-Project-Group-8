@@ -71,7 +71,7 @@ function RegistrationPage() {
           </div>
           <div className= "Bio">
             <p>Bio</p>
-            <input className="BioInput" />
+            <textarea className="BioInput" />
           </div>
         </div>
       </div>
