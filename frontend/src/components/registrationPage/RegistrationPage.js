@@ -11,7 +11,7 @@ function RegistrationPage() {
     firstName: '',
     lastName: '',
     avatar: null,
-    yearOfStudy: '1',
+    yearOfStudy: 1,
     courseTitle: '',
     activeStatus: 0,
     bio: '',
@@ -46,14 +46,16 @@ function RegistrationPage() {
   };
 
   const handleYearChange = (e) => {
-    setFormData({...formData, yearOfStudy: e.target.value});
+    const year = parseInt(e.target.value)
+    setFormData({...formData, yearOfStudy: year});
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!emailRegex.test(formData.email)) {
-      setFormData({ ...formData, emailError: 'Must use a valid TCD email address' });      return;
+      setFormData({ ...formData, emailError: 'Must use a valid TCD email address' });      
+      return;
     }
     else{
       setFormData({ ...formData, emailError: '' }); 
@@ -64,11 +66,12 @@ function RegistrationPage() {
       console.log('Document written with ID: ', docRef.id);
 
       setFormData({
+        activeStatus: 0,
         email: '',
         firstName: '',
         lastName: '',
         avatar: null,
-        yearOfStudy: '',
+        yearOfStudy: 1,
         courseTitle: '',
         bio: '',
       });
@@ -119,13 +122,13 @@ function RegistrationPage() {
             <div className="YearOfStudy" onChange={handleYearChange}>
                 <p>Year of Study</p>
                 <select value={formData.yearOfStudy} className="YearOfStudyInput">
-                  <option value="1">Junior Freshman (Year 1)</option>
-                  <option value="2">Senior Freshman (Year 2)</option>
-                  <option value="3">Junior Sophister (Year 3)</option>
-                  <option value="4">Senior Sophister (Year 4)</option>
-                  <option value="5">Masters</option>
-                  <option value="6">PhD</option>
-                  <option value="7">Other</option>
+                  <option value={1}>Junior Freshman (Year 1)</option>
+                  <option value={2}>Senior Freshman (Year 2)</option>
+                  <option value={3}>Junior Sophister (Year 3)</option>
+                  <option value={4}>Senior Sophister (Year 4)</option>
+                  <option value={5}>Masters</option>
+                  <option value={6}>PhD</option>
+                  <option value={7}>Other</option>
                 </select>
               </div>  
             </div>
