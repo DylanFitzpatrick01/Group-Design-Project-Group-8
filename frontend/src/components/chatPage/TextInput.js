@@ -35,7 +35,7 @@ function TextInput({ moduleCode, user }) {
                         ref={textareaRef}
                         className='textBox'
                         placeholder="Type your message..."
-                        value={message} // add username, timestamp, isMyMessage here?
+                        value={message} 
                         onChange={handleInputChange} />
                     <button className={`sendButton ${message ? 'textBoxNotEmpty' : 'textBoxEmpty'}`} type="submit">Send</button>
                 </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ChatComponent from './ChatComponent';
 import { useUpdatedChats } from './SendReceiveChats';
@@ -14,14 +14,37 @@ function formatTimestamp(timestamp) {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
+function checkUser(username, currentUser) {
+    if (username === currentUser) {
+        return true;
+    }
+    else return false;
+}
+
 function AllChatsForAModule({ moduleCode }) {
     const chats = useUpdatedChats(moduleCode);
+
+    // for testing purposes only but when user is logged in, this will be the current user
+    const currentUser = "Karen Ball";
+
+    // reference to the latest message so we can auto scroll there
+    const endOfMessagesRef = useRef(null);
+    useEffect(() => {
+        endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [chats]);
 
     return (
         <>
             {chats.map((chat, index) => (
-                <ChatComponent key={chat.id} message={chat.text} isMyMessage={false} timestamp={formatTimestamp(chat.timestamp)} name={chat.displayName}/>
+                <ChatComponent
+                    key={chat.id}
+                    message={chat.text}
+                    isMyMessage={checkUser(chat.displayName, currentUser)} // testing
+                    timestamp={formatTimestamp(chat.timestamp)}
+                    name={chat.displayName}
+                />
             ))}
+            <div ref={endOfMessagesRef} />
         </>
     );
 }

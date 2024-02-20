@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AllChatsForAModule from './AllChatsForAModule';  
 import TextInput from './TextInput'; 
@@ -7,11 +7,12 @@ import { useUpdatedChats } from './SendReceiveChats';
 import User from '../../models/User';
 
 function ChatPage() {
-    const chats = useUpdatedChats('csu44098');
+    const textInputRef = useRef(null);
 
     useEffect(() => {
-        console.log(chats);
-    }, [chats]);
+        textInputRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, []);
+
 
     // dummy user for testing
     const userOne = new User(
@@ -27,7 +28,7 @@ function ChatPage() {
     return (
         <>
             <AllChatsForAModule moduleCode='csu44098' />
-            <TextInput moduleCode='csu44098' user={userOne}/>
+            <TextInput ref={textInputRef} moduleCode='csu44098' user={userOne}/> // user should be logged in user but using dummy user for now
         </>
     );
 }
