@@ -1,0 +1,85 @@
+.RegistrationPage {
+    text-align: center;
+    min-height: 100vh;
+    background-color: var(--background-color);
+  }
+
+  .RegistrationPage-header {
+    background-color: var(--card-background);
+    color: var(--accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0.5rem;
+  }
+  
+  .h1{
+    color: var(--accent);
+    text-align: center;
+  }
+
+  .RegistrationBox{
+    background-color: var(--card-background);
+    margin: 5% 20%;
+    min-height: 70vh;
+    border-radius: 2.5%;
+    border-bottom: 2px solid var(--shadows);
+  }
+
+  .ProfilePictureText{
+    margin-left: 41.25%;
+  }
+
+  .PreviewImage{
+    width: 150px;
+    height: 150px;
+    border: 2px dashed #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-left: 40%;
+  }
+
+  .ImageUpload{
+    margin-top: 1rem;
+    margin-left: 35%;
+  }
+
+  .FirstName, .LastName, .ProfilePicture, .CourseName, .YearOfStudy, .Bio, .Email{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    color: var(--ordinary-text);
+    margin-left: 5%;
+    margin-bottom: 5%;
+    font-size: 20px;
+  }
+
+  .FirstNameInput, .LastNameInput, .CourseNameInput, .YearOfStudyInput, .EmailInput{
+    width: 75%;
+  }
+
+  .BioInput{
+    width: 175%;
+    height: 100px
+  }
+
+  .SubmitButton{
+    display: flex;
+    margin-left: 2rem;
+    border: none;
+    color: var(--ordinary-text);
+    background-color: var(--card-background);
+    border-radius: 10%;
+    margin-top: -2.5%;
+    margin-left: 75%;
+    border-bottom: 2px solid var(--shadows);
+  }
+
+  .SubmitButton :focus{
+    background-color: var(--accent);
+  }
