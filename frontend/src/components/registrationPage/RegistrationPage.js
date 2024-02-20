@@ -7,13 +7,14 @@ import {db} from '../../firebase';
 function RegistrationPage() {
   const [getMessage, setGetMessage] = useState({})
   const [formData, setFormData] = useState({
+    email: '',
     firstName: '',
     lastName: '',
-    email: '',
-    courseTitle: '',
+    avatar: null,
     yearOfStudy: '1',
+    courseTitle: '',
+    activeStatus: 0,
     bio: '',
-    image: null,
   });
 
   const emailRegex = /^[^\s@]+@tcd\.ie$/i; // Regex to validate TCD email
@@ -33,7 +34,7 @@ function RegistrationPage() {
     if (selectedImage) {
       const reader = new FileReader();
       reader.onload = () => {
-        setFormData({ ...formData, image: reader.result });
+        setFormData({ ...formData, avatar: reader.result });
       };
       reader.readAsDataURL(selectedImage);
     }
@@ -66,7 +67,7 @@ function RegistrationPage() {
         email: '',
         firstName: '',
         lastName: '',
-        image: {},
+        avatar: null,
         yearOfStudy: '',
         courseTitle: '',
         bio: '',
@@ -85,7 +86,7 @@ function RegistrationPage() {
         <div className = "RegistrationBox">
             <div className="ProfilePicture">
               <p className="ProfilePictureText">Profile Picture</p>
-              <img src={formData.image} alt="Preview" className="PreviewImage"/>
+              <img src={formData.avatar} alt="Preview" className="PreviewImage"/>
               <input className="ImageUpload" type="file" accept="image/*" onChange={handleImageChange} />
           </div>
           <div className = "row row-cols-2">
