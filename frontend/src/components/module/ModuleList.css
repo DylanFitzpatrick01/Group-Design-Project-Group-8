@@ -36,14 +36,3 @@
   color: var(--accent);
 }
 
-.module-chat-title{
-  color: var(--accent);
-  position: sticky;
-  top:0;
-  width: 100%;
-  padding-top: 10px;
-  z-index: 1000;
-  background-color: var(--card-background);
-  text-align: left;
-  font-size: 20px;
-}

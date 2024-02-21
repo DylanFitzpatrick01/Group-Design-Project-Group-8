@@ -6,7 +6,7 @@ import TextInput from './TextInput';
 import { useUpdatedChats } from './SendReceiveChats';
 import User from '../../models/User';
 import { useParams } from 'react-router-dom';
-
+import './ChatPage.css';
 
 function ChatPage() {
     const { moduleCode } = useParams();
@@ -30,9 +30,12 @@ function ChatPage() {
 
     return (
         <>
-            <AllChatsForAModule moduleCode={moduleCode} />
-            <TextInput ref={textInputRef} moduleCode={moduleCode} user={userOne} />
-            {/* // user should be logged in user but using dummy user for now */}
+            <div className="chat-container">
+                <div className="module-chat-title">{moduleCode} Chats</div>
+                <AllChatsForAModule moduleCode={moduleCode} />
+                <TextInput ref={textInputRef} moduleCode={moduleCode} user={userOne} />
+                {/* // user should be logged in user but using dummy user for now */}
+            </div>
         </>
     );
 }

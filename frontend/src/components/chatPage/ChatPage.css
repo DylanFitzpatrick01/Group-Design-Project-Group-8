@@ -1,0 +1,21 @@
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+.module-chat-title{
+    color: var(--accent);
+    position: sticky;
+    top:0;
+    width: 100%;
+    padding-top: 0.5%;
+    padding-bottom: 1%;
+    z-index: 1000;
+    padding-left: 2%;
+    background-color: var(--card-background);
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+  }
