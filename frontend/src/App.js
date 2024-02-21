@@ -9,13 +9,26 @@ import axios from 'axios'
 import NewPage from './components/NewPage'; // import NewPage
 import Societies from './components/Societies'; // import Societies page
 import NotificationsPage from './components/NotificationsPage/NotificationsPage';
+import ModulesList from './components/module/ModuleList';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ChatPage from './components/chatPage/ChatPage'; // import ChatPage
+
+
 
 function App() {
 
   return (
     <div className="App">
+      <Router>
       // Navigation Bar component will go here
+        
+        <Routes>
+          <Route path="/modules" element={<ModulesList />} />
+          <Route path="/chat/csu44098" element={<ChatPage moduleCode={"csu44098"}/>} />
+        </Routes>
+      </Router>
     </div>
+
   );
 }
 
