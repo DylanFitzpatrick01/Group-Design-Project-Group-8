@@ -20,6 +20,10 @@ export function getYear(year) {
         case 5:
             return "Graduate";
         case 6:
+            return "Master";
+        case 7:
+            return "PhD";
+        case 8:
             return "Other";
         default:
             return "unknown";
