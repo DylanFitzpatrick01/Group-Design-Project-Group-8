@@ -1,14 +1,20 @@
 .chat-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     min-height: 100vh;
 }
 
-.module-chat-title{
+.chat-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.module-chat-title {
     color: var(--accent);
     position: sticky;
-    top:0;
+    top: 0;
     width: 100%;
     padding-top: 0.5%;
     padding-bottom: 1%;
@@ -16,6 +22,15 @@
     padding-left: 2%;
     background-color: var(--card-background);
     text-align: left;
-    font-size: 20px;
+    font-size: 30px;
     font-weight: bold;
-  }
+}
+
+.back-button{
+    background-color: var(--card-background);
+    color: var(--ordinary-text);
+    border: none;
+    padding: 0.5%;
+    margin: 0.5%;
+    font-size: 16px;
+}

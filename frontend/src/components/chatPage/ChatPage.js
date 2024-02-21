@@ -7,6 +7,8 @@ import { useUpdatedChats } from './SendReceiveChats';
 import User from '../../models/User';
 import { useParams } from 'react-router-dom';
 import './ChatPage.css';
+import { Link } from 'react-router-dom';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 function ChatPage() {
     const { moduleCode } = useParams();
@@ -30,11 +32,20 @@ function ChatPage() {
 
     return (
         <>
+            <div className="module-chat-title">
+                <Link to="/modules">
+                    <button className='back-button'>
+                    <i className="bi bi-arrow-left-square" style={{ color: 'var(--accent)', fontSize: '30px' }}></i>                    
+                    </button>
+                </Link>
+                {moduleCode} Chats
+            </div>
             <div className="chat-container">
-                <div className="module-chat-title">{moduleCode} Chats</div>
-                <AllChatsForAModule moduleCode={moduleCode} />
-                <TextInput ref={textInputRef} moduleCode={moduleCode} user={userOne} />
-                {/* // user should be logged in user but using dummy user for now */}
+                <div className="chat-content">
+                    <AllChatsForAModule moduleCode={moduleCode} />
+                    <TextInput ref={textInputRef} moduleCode={moduleCode} user={userOne} />
+                    {/* // user should be logged in user but using dummy user for now */}
+                </div>
             </div>
         </>
     );
