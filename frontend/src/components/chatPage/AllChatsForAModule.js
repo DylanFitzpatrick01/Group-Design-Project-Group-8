@@ -35,16 +35,18 @@ function AllChatsForAModule({ moduleCode }) {
 
     return (
         <>
-            {chats.map((chat, index) => (
-                <ChatComponent
-                    key={chat.id}
-                    message={chat.text}
-                    isMyMessage={checkUser(chat.displayName, currentUser)} // testing
-                    timestamp={formatTimestamp(chat.timestamp)}
-                    name={chat.displayName}
-                />
-            ))}
-            <div ref={endOfMessagesRef} />
+            <div style={{ maxHeight: '80vh', overflowY: 'auto' }}>
+                {chats.map((chat, index) => (
+                    <ChatComponent
+                        key={chat.id}
+                        message={chat.text}
+                        isMyMessage={checkUser(chat.displayName, currentUser)} // testing
+                        timestamp={formatTimestamp(chat.timestamp)}
+                        name={chat.displayName}
+                    />
+                ))}
+                <div ref={endOfMessagesRef} />
+            </div>
         </>
     );
 }
