@@ -24,7 +24,7 @@ function App() {
         
         <Routes>
           <Route path="/modules" element={<ModulesList />} />
-          <Route path="/chat/:moduleCode" element={<ChatPage />} />
+          <Route path="/modules/:moduleCode" element={<ChatPage />} />
         </Routes>
       </Router>
     </div>

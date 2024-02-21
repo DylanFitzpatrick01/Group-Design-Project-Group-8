@@ -32,7 +32,7 @@ const ModulesList = () => {
     <div className="module-list-container">
       <h1 className="module-title">Module List</h1>
       {modules.map((module) => (
-        <Link key={module.id} to={`/chat/${module.id}`}>
+        <Link key={module.id} to={`/modules/${module.id}`}>
           <button className="module-item-button">
             {module.id} - {module.name}
           </button>
