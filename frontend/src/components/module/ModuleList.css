@@ -12,11 +12,27 @@
   padding: 1px ;
   color: var(--ordinary-text);
   box-shadow: 0px 1px 5px var(--shadows);
-  width: 65%;
+  width: 65vh;
   text-align: left;
   height: 30px;
+}
+
+.module-item-button {
+  background-color: var(--card-background);
+  margin: 5px 0;
+  padding: 1px;
+  color: var(--ordinary-text);
+  box-shadow: 0px 1px 5px var(--shadows);
+  width: 65vh;
+  text-align: left;
+  height: 30px;
+  border: none; 
+  white-space: nowrap; 
+  box-sizing: border-box;
+
 }
 
 .module-title {
   color: var(--accent);
 }
+

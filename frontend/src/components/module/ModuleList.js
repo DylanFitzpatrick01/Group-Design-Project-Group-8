@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import './ModuleList.css';
-
-
+import { Link } from 'react-router-dom';
+import AddChatsCollections from './AddChatCollections';
+import AddChatCollections from './AddChatCollections';
 const ModulesList = () => {
   const [modules, setModules] = useState([]);
   const modulesCollectionRef = collection(db, "modules");
@@ -18,13 +19,24 @@ const ModulesList = () => {
     getModules();
   }, []);
 
+  useEffect(() => {
+    const addChats = async () => {
+      await AddChatCollections();
+    };
+
+    addChats();
+  }, []);
+
+
   return (
     <div className="module-list-container">
       <h1 className="module-title">Module List</h1>
       {modules.map((module) => (
-        <div key={module.id} className="module-item">
-          <p>{module.id} - {module.name}</p>
-        </div>
+        <Link key={module.id} to={`/modules/${module.id}`}>
+          <button className="module-item-button">
+            {module.id} - {module.name}
+          </button>
+        </Link>
       ))}
     </div>
   );

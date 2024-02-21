@@ -2,14 +2,13 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ChatComponent.css';
 
-function MyText({ message, timestamp }) {
-    const { displayName, text } = message;
+function MyText({ message, timestamp, name }) {
     return (
         <>
-            <div className='myUsername'>{displayName}</div>
+            <div className='myUsername'>{name}</div>
             <div className='rightAlign'>
                 <div className='message myText'>
-                    {text}
+                    {message}
                     <div className='timestamp'>{timestamp}</div>
                 </div>
             </div>
@@ -17,15 +16,14 @@ function MyText({ message, timestamp }) {
     );
 }
 
-function TheirText({ message, timestamp }) {
-    const { displayName, text } = message;
+function TheirText({ message, timestamp, name }) {
 
     return (
         <>
-            <div className='theirUsername'>{displayName}</div>
+            <div className='theirUsername'>{name}</div>
             <div className='leftAlign'>
                 <div className='message theirText'>
-                    {text}
+                    {message}
                     <div className='timestamp'>{timestamp}</div>
                 </div>
             </div>
@@ -33,19 +31,10 @@ function TheirText({ message, timestamp }) {
     );
 }
 
-function Text({ message, isMyMessage, timestamp }) {
+function ChatComponent({ message, isMyMessage, timestamp, name}) {
     return (
         <div className="textContainer">
-            {isMyMessage ? <MyText message={message} timestamp={timestamp} /> : <TheirText message={message} timestamp={timestamp}/>}
-        </div>
-    );
-}
-
-function ChatComponent() {
-    return (
-        <div>
-            <Text message={{ displayName: 'John', text: 'Hello, how are you today? Im doing okay :)'}} timestamp="22:21" isMyMessage={true} />
-            <Text message={{ displayName: 'Jane', text: 'Hi! Good, actually. Less sick today!'}} timestamp="13:12" isMyMessage={false} />
+            {isMyMessage ? <MyText message={message} timestamp={timestamp} name={name} /> : <TheirText message={message} timestamp={timestamp} name={name}/>}
         </div>
     );
 }
