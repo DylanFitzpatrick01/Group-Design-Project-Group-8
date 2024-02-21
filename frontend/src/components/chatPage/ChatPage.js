@@ -5,8 +5,12 @@ import AllChatsForAModule from './AllChatsForAModule';
 import TextInput from './TextInput';
 import { useUpdatedChats } from './SendReceiveChats';
 import User from '../../models/User';
+import { useParams } from 'react-router-dom';
 
-function ChatPage({ moduleCode }) {
+
+function ChatPage() {
+    const { moduleCode } = useParams();
+
     const textInputRef = useRef(null);
 
     useEffect(() => {
