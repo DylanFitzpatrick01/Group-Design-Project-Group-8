@@ -5,24 +5,33 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 
 
-
+import Navbar from './components/NavBar';
 import NewPage from './components/NewPage'; // import NewPage
 import Societies from './components/Societies'; // import Societies page
 import NotificationsPage from './components/NotificationsPage/NotificationsPage';
 import ModulesList from './components/module/ModuleList';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ChatPage from './components/chatPage/ChatPage'; // import ChatPage
+import Login from './components/Login';
 
-
+const navLinks = [
+  { to: "/new", label: "New Page" },
+  { to: "/societies", label: "Societies" },
+  { to: "/notifications", label: "Notifications" },
+  { to: "/modules", label: "Modules" }
+];
 
 function App() {
 
   return (
     <div className="App">
       <Router>
-      // Navigation Bar component will go here
-        
+      <Navbar navLinks={navLinks} />
         <Routes>
+          <Route path="/new" element={<NewPage />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/societies" element={<Societies />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/modules" element={<ModulesList />} />
           <Route path="/modules/:moduleCode" element={<ChatPage />} />
         </Routes>
