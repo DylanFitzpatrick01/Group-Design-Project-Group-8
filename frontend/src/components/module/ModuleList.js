@@ -4,8 +4,9 @@ import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import './ModuleList.css';
 import { Link } from 'react-router-dom';
-import AddChatsCollections from './AddChatCollections';
 import AddChatCollections from './AddChatCollections';
+import AddModuleBar from './AddModuleBar';
+
 const ModulesList = () => {
   const [modules, setModules] = useState([]);
   const modulesCollectionRef = collection(db, "modules");
@@ -29,15 +30,18 @@ const ModulesList = () => {
 
 
   return (
-    <div className="module-list-container">
-      <h1 className="module-title">Module List</h1>
-      {modules.map((module) => (
-        <Link key={module.id} to={`/modules/${module.id}`}>
-          <button className="module-item-button">
-            {module.id} - {module.name}
-          </button>
-        </Link>
-      ))}
+    <div>
+      <AddModuleBar />
+      <div className="module-list-container">
+        <h1 className="module-title">Module List</h1>
+        {modules.map((module) => (
+          <Link key={module.id} to={`/modules/${module.id}`}>
+            <button className="module-item-button">
+              {module.id} - {module.name}
+            </button>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };
