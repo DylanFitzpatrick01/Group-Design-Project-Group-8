@@ -1,0 +1,52 @@
+.LoginPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  background-color: var(--background-color);
+}
+
+.Login-container {
+  background-color: var(--card-background);
+  color: var(--ordinary-text);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px var(--shadows);
+  max-width: 400px;
+  width: 100%;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border: 1px solid var(--shadows);
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--accent);
+  color: var(--ordinary-text);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 10px;
+}
+
+.button:hover {
+  background-color: darken(var(--accent), 10%);
+}
+
+.error-message {
+  color: red; 
+  margin-bottom: 15px;
+}
+
+.link {
+  color: var(--accent);
+  cursor: pointer;
+}
