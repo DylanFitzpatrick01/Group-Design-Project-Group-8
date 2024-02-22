@@ -45,3 +45,8 @@
     width: 20px;
     height: 20px;
   }
+
+  .navbar li a.active {
+    background-color: var(--shadows);
+    color: var(--ordinary-text);
+  }
