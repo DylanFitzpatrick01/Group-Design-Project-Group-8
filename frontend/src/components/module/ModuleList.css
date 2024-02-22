@@ -26,8 +26,8 @@
   width: 65vh;
   text-align: left;
   height: 30px;
-  border: none; 
-  white-space: nowrap; 
+  border: none;
+  white-space: nowrap;
   box-sizing: border-box;
 
 }
@@ -35,4 +35,3 @@
 .module-title {
   color: var(--accent);
 }
-

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { db } from '../../firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import './AddModuleBar.css'; // Ensure you have this CSS file for styling
+import './AddModuleBar.css';
 
 const AddModuleBar = () => {
   const [showForm, setShowForm] = useState(false);
