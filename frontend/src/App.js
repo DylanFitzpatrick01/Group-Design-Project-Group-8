@@ -15,10 +15,11 @@ import ChatPage from './components/chatPage/ChatPage'; // import ChatPage
 import Login from './components/Login';
 
 const navLinks = [
-  { to: "/new", label: "New Page" },
+  { to: "/modules", label: "Modules" },
   { to: "/societies", label: "Societies" },
-  { to: "/notifications", label: "Notifications" },
-  { to: "/modules", label: "Modules" }
+  { to: "/", label: "Login" },
+  { to: "/notifications", label: <img src="bell.png" alt="Notifications"/> },
+
 ];
 
 function App() {
@@ -28,7 +29,6 @@ function App() {
       <Router>
       <Navbar navLinks={navLinks} />
         <Routes>
-          <Route path="/new" element={<NewPage />} />
           <Route path="/" element={<Login />} />
           <Route path="/societies" element={<Societies />} />
           <Route path="/notifications" element={<NotificationsPage />} />

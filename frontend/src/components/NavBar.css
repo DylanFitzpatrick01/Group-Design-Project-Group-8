@@ -1,6 +1,15 @@
 .navbar {
-    background-color: blue;
+    display: flex;
+    justify-content: space-between; /* Distribute items along the main axis */
+    align-items: center; /* Center items vertically */
+    background-color: var(--card-background);
     color: white;
+    padding: 10px 20px; /* Adjust padding */
+  }
+
+  .navbar h1 {
+    margin: 0;
+    color: var(--accent)
   }
   
   .navbar ul {
@@ -24,11 +33,15 @@
     text-decoration: none;
     color: white;
     background-color: transparent;
-    border: 1px solid white;
     border-radius: 5px;
   }
   
   .navbar li a:hover {
-    background-color: white;
-    color: blue;
+    background-color:var(--shadows);
+    color: var(--ordinary-text);
+  }
+
+  .navbar img {
+    width: 20px;
+    height: 20px;
   }
