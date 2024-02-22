@@ -1,0 +1,52 @@
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Distribute items along the main axis */
+    align-items: center; /* Center items vertically */
+    background-color: var(--card-background);
+    color: white;
+    padding: 10px 20px; /* Adjust padding */
+  }
+
+  .navbar h1 {
+    margin: 0;
+    color: var(--accent)
+  }
+  
+  .navbar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .navbar li {
+    display: inline-block;
+    margin-right: 10px; /* Add spacing between buttons */
+  }
+  
+  .navbar li:last-child {
+    margin-right: 0; /* Remove margin from the last button */
+  }
+  
+  .navbar li a {
+    display: block;
+    padding: 10px 20px; /* Adjust padding to give the buttons a size */
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+    border-radius: 5px;
+  }
+  
+  .navbar li a:hover {
+    background-color:var(--shadows);
+    color: var(--ordinary-text);
+  }
+
+  .navbar img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .navbar li a.active {
+    background-color: var(--shadows);
+    color: var(--ordinary-text);
+  }
