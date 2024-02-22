@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ChatComponent.css';
 
-function MyText({ message, timestamp, name }) {
+function MyText({ message, timestamp, name, avatar }) {
     return (
         <>
             <div className='rightAlign2'>
@@ -16,7 +16,7 @@ function MyText({ message, timestamp, name }) {
                 </div>
                 <div className="profile-picture-right">
                     <img
-                        src='https://images.unsplash.com/photo-1567270671170-fdc10a5bf831?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                        src={avatar}
                         alt="User avatar"
                     />
                 </div>
@@ -25,7 +25,7 @@ function MyText({ message, timestamp, name }) {
     );
 }
 
-function TheirText({ message, timestamp, name }) {
+function TheirText({ message, timestamp, name, avatar }) {
 
     return (
         <>
@@ -35,7 +35,7 @@ function TheirText({ message, timestamp, name }) {
             <div className='leftAlign'>
                 <div className="profile-picture">
                     <img
-                        src='https://images.unsplash.com/photo-1567270671170-fdc10a5bf831?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                        src={avatar} 
                         alt="User avatar"
                     />
                 </div>
@@ -48,10 +48,10 @@ function TheirText({ message, timestamp, name }) {
     );
 }
 
-function ChatComponent({ message, isMyMessage, timestamp, name }) {
+function ChatComponent({ message, isMyMessage, timestamp, name, avatar }) {
     return (
         <div className="textContainer">
-            {isMyMessage ? <MyText message={message} timestamp={timestamp} name={name} /> : <TheirText message={message} timestamp={timestamp} name={name} />}
+            {isMyMessage ? <MyText message={message} timestamp={timestamp} name={name} avatar={avatar} /> : <TheirText message={message} timestamp={timestamp} name={name} avatar={avatar} />}
         </div>
     );
 }
