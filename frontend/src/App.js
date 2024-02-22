@@ -13,12 +13,14 @@ import ModulesList from './components/module/ModuleList';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ChatPage from './components/chatPage/ChatPage'; // import ChatPage
 import Login from './components/Login';
+import Profile from './components/Profile';
+
 
 const navLinks = [
   { to: "/modules", label: "Modules" },
   { to: "/societies", label: "Societies" },
-  { to: "/", label: "Login" },
   { to: "/notifications", label: <img src="bell.png" alt="Notifications"/> },
+  { to: "/profile", label: <img src="profile.png" alt="Profile"/> },
 
 ];
 
@@ -33,6 +35,7 @@ function App() {
           <Route path="/societies" element={<Societies />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/modules" element={<ModulesList />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/modules/:moduleCode" element={<ChatPage />} />
         </Routes>
       </Router>
