@@ -25,7 +25,7 @@ function AllChatsForAModule({ moduleCode }) {
     const chats = useUpdatedChats(moduleCode);
 
     // for testing purposes only but when user is logged in, this will be the current user
-    const currentUser = "Karen Ball";
+    const currentUser = "Sebastian Lambert";
 
     // reference to the latest message so we can auto scroll there
     const endOfMessagesRef = useRef(null);
@@ -43,6 +43,7 @@ function AllChatsForAModule({ moduleCode }) {
                         isMyMessage={checkUser(chat.displayName, currentUser)} // testing
                         timestamp={formatTimestamp(chat.timestamp)}
                         name={chat.displayName}
+                        avatar={chat.avatar}
                     />
                 ))}
                 <div ref={endOfMessagesRef} />
