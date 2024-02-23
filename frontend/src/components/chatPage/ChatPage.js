@@ -10,7 +10,7 @@ import './ChatPage.css';
 import { Link } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-function ChatPage() {
+function ChatPage({ rootPage }) {
     const { moduleCode } = useParams();
 
     const textInputRef = useRef(null);
@@ -53,7 +53,7 @@ function ChatPage() {
     return (
         <>
             <div className="module-chat-title">
-                <Link to="/modules">
+                <Link to={rootPage}>
                     <button className='back-button'>
                     <i className="bi bi-arrow-left-square" style={{ color: 'var(--accent)', fontSize: '30px' }}></i>                    
                     </button>
