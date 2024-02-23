@@ -17,9 +17,6 @@ function NotificationsPage() {
   }, [])
   return (
     <div className="NotificationsPage">
-      <header className="NotificationsPage-header">
-        <p>Notifications Page</p>
-      </header>
       <div className="NotificationsList">
       <NotificationBlock notificationType="societyPost" />
       <NotificationBlock notificationType="directReply" />

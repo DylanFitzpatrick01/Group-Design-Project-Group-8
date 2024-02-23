@@ -17,6 +17,7 @@ async function sendChat(moduleCode, text, user) {
             text: text,
             timestamp: serverTimestamp(),
             uid: user.email,
+            avatar: user.avatar,
         });
     } catch (error) {
         console.error(error);

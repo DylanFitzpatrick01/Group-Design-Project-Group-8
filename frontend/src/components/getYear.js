@@ -10,20 +10,18 @@
 export function getYear(year) {
     switch (year) {
         case 1:
-            return "Freshman";
+            return "Junior Freshman (Year 1)";
         case 2:
-            return "Sophomore";
+            return "Senior Freshman (Year 2)";
         case 3:
-            return "Junior";
+            return "Junior Sophister (Year 3)";
         case 4:
-            return "Senior";
+            return "Senior Sophister (Year 4)";
         case 5:
-            return "Graduate";
-        case 6:
             return "Master";
-        case 7:
+        case 6:
             return "PhD";
-        case 8:
+        case 7:
             return "Other";
         default:
             return "unknown";
