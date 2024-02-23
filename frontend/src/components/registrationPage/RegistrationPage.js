@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import './RegistrationPage.css'; // import the CSS file
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import {db} from '../../firebase';
 
 function RegistrationPage() {
@@ -62,7 +62,7 @@ function RegistrationPage() {
     }
 
     try {
-      const docRef = await addDoc(collection(db, 'users'), formData);
+      const docRef = await setDoc(doc(db, 'users', formData.email.split("@")[0]), formData);
       console.log('Document written with ID: ', docRef.id);
 
       setFormData({
@@ -90,7 +90,7 @@ function RegistrationPage() {
             <div className="ProfilePicture">
               <p className="ProfilePictureText">Profile Picture</p>
               <img src={formData.avatar} alt="Preview" className="PreviewImage"/>
-              <input className="ImageUpload" type="file" accept="image/*" onChange={handleImageChange} />
+              <input required className="ImageUpload" type="file" accept="image/*" onChange={handleImageChange} />
           </div>
           <div className = "row row-cols-2">
             <div className="col">
@@ -119,7 +119,7 @@ function RegistrationPage() {
               </div>
             </div>
             <div className='col'>
-            <div className="YearOfStudy" onChange={handleYearChange}>
+            <div className="YearOfStudy" name="yearOfStudy" onChange={handleYearChange}>
                 <p>Year of Study</p>
                 <select value={formData.yearOfStudy} className="YearOfStudyInput">
                   <option value={1}>Junior Freshman (Year 1)</option>
