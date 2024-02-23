@@ -38,7 +38,7 @@ function Login() {
   
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/societies'); //login successfully, navigate to the societies page
+      navigate('/profile'); //login successfully, navigate to the profile page
     } catch (error) {
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         setError("Account or password is incorrect.");
@@ -63,7 +63,7 @@ function Login() {
         if (result.additionalUserInfo && result.additionalUserInfo.isNewUser) {
           navigate('/registration'); // New user, navigate to the registration page
         } else {
-          navigate('/societies'); // Existing user, navigate to the societies page.
+          navigate('/profile'); // Existing user, navigate to the profile page.
         }
       } else {
         setError("Please use a @tcd.ie email address.");
