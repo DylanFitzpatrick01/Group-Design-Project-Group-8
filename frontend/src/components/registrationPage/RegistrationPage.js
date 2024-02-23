@@ -8,8 +8,7 @@ function RegistrationPage() {
   const [getMessage, setGetMessage] = useState({})
   const [formData, setFormData] = useState({
     email: '',
-    firstName: '',
-    lastName: '',
+    name: '',
     avatar: null,
     yearOfStudy: 1,
     courseTitle: '',
@@ -62,14 +61,15 @@ function RegistrationPage() {
     }
 
     try {
-      const docRef = await setDoc(doc(db, 'users', formData.email.split("@")[0]), formData);
+      const { firstName, lastName, ...data } = formData; // Removing firstName and lastName
+      const name = `${formData.firstName} ${formData.lastName}`; // Combining firstName and lastName
+      const docRef = await setDoc(doc(db, 'users', formData.email.split("@")[0]), { ...data, name });
       console.log('Document written with ID: ', docRef.id);
 
       setFormData({
         activeStatus: 0,
         email: '',
-        firstName: '',
-        lastName: '',
+        name: '',
         avatar: null,
         yearOfStudy: 1,
         courseTitle: '',
