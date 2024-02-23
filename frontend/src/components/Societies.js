@@ -16,13 +16,7 @@ function Societies() {
   }, [])
   return (
     <div className="Societies">
-      <header className="Societies-header">
-        <p>Login</p>
-        <div>{getMessage.status === 200 ?
-          <h3>{getMessage.data.message}</h3>
-          :
-          <h3>LOADING</h3>}</div>
-      </header>
+      
     </div>
   );
 }
