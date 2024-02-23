@@ -33,7 +33,7 @@ function TheirText({ message, timestamp, name, avatar }) {
                 <div className='theirUsername'>{name}</div>
             </div>
             <div className='leftAlign'>
-                <div className="profile-picture">
+                <div className="profile-picture-left">
                     <img
                         src={avatar} 
                         alt="User avatar"
