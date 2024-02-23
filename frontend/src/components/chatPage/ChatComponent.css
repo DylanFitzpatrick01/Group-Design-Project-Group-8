@@ -81,7 +81,7 @@
     color: var(--unimportant-text);
 }
 
-.profile-picture{
+.profile-picture-left{
     display: flex;
     justify-content: flex-start;
     align-items: left;
@@ -96,7 +96,7 @@
     padding-top: 0.5%;
 }
 
-.profile-picture img {
+.profile-picture-left img {
     width: 4vh;
     height: 4vh;
     margin-left:0%;
