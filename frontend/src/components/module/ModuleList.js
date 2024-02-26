@@ -6,6 +6,8 @@ import './ModuleList.css';
 import { Link, useNavigate } from 'react-router-dom';
 import AddChatCollections from './AddChatCollections';
 import AddModuleBar from './AddModuleBar';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 
 const ModulesList = () => {
   const [modules, setModules] = useState([]);
@@ -14,9 +16,15 @@ const ModulesList = () => {
   // if the user is not logged in, redirect to the login page
   const navigate = useNavigate();
   useEffect(() => {
-    if (!localStorage.getItem('accessToken')) {
-      navigate('/');
-    }
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (!user) {
+        console.log("User is not logged in");
+        navigate('/');
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {

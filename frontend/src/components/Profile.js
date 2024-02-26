@@ -5,6 +5,7 @@ import { doc, getDoc, getDocs, collection, query, where } from "firebase/firesto
 import { getStatus } from './getStatus.js';
 import { getYear } from './getYear.js';
 import { useNavigate } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 
 // Profile takes a username (the name of the collection in FB) as a prop
@@ -26,10 +27,17 @@ function Profile({ }) {
 
   // if the user is not logged in, redirect to the login page
   const navigate = useNavigate();
+  // if the user is not logged in, redirect to the login page
   useEffect(() => {
-    if (!localStorage.getItem('accessToken')) {
-      navigate('/');
-    }
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (!user) {
+        console.log("User is not logged in");
+        navigate('/');
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
 
