@@ -8,7 +8,8 @@ import { getYear } from './getYear.js';
 
 // Profile takes a username (the name of the collection in FB) as a prop
 
-function Profile({ username }) {
+function Profile({ }) {
+  const username = localStorage.getItem('userPrefix');
   const [userInfo, setUserInfo] = useState({
     name: '',
     email: '',
