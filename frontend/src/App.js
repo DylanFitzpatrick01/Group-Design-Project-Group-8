@@ -15,13 +15,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ChatPage from './components/chatPage/ChatPage'; // import ChatPage
 import Login from './components/LoginPage';
 import Profile from './components/Profile';
-
+import LogoutPage from './components/Logout';
 
 const navLinks = [
   { to: "/modules", label: "Modules" },
   { to: "/societies", label: "Societies" },
-  { to: "/notifications", label: <img src="bell.png" alt="Notifications"/> },
-  { to: "/profile", label: <img src="profile.png" alt="Profile"/> },
+  { to: "/notifications", label: <img src="bell.png" alt="Notifications" /> },
+  { to: "/profile", label: <img src="profile.png" alt="Profile" /> },
+  { to: "/logout", label: <img src="logout.png" alt="Logout" /> },
 
 ];
 
@@ -30,7 +31,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-      <Navbar navLinks={navLinks} />
+        <Navbar navLinks={navLinks} />
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/societies" element={<Societies />} />
@@ -39,6 +40,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/modules/:moduleCode" element={<ChatPage />} />
           <Route path="/registration" element={<RegistrationPage />} />
+          <Route path="/logout" element={<LogoutPage />} />
         </Routes>
       </Router>
     </div>
