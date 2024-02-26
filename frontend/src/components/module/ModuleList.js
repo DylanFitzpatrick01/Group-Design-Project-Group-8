@@ -3,13 +3,21 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import './ModuleList.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AddChatCollections from './AddChatCollections';
 import AddModuleBar from './AddModuleBar';
 
 const ModulesList = () => {
   const [modules, setModules] = useState([]);
   const modulesCollectionRef = collection(db, "modules");
+
+  // if the user is not logged in, redirect to the login page
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!localStorage.getItem('accessToken')) {
+      navigate('/');
+    }
+  }, []);
 
   useEffect(() => {
     const getModules = async () => {
