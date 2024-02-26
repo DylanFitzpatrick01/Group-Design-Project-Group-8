@@ -31,7 +31,9 @@ function Login() {
       const token = await user.getIdToken();
       localStorage.setItem('accessToken', token); // Save the token to localStorage
       // Query a user's specific document
-      const docRef = doc(db, 'users', user.uid);
+      // use email prefix for Firestore query
+      const prefix = user.email.split('@')[0];
+      const docRef = doc(db, 'users', prefix);
       const docSnap = await getDoc(docRef);
   
       // Check whether the document exists
