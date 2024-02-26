@@ -95,13 +95,21 @@ function RegistrationPage() {
                 <input required className="LastNameInput" name="lastName" value={formData.lastName} onChange={handleInputChange} />
               </div>
             </div>
-            <div className=" col">
+            <div className="col">
               <div className="Email">
                 <p>TCD Email Address</p>
-                <input required className="EmailInput" name="email" value={formData.email} onChange={handleInputChange} />
+                <input
+                  required
+                  className="EmailInput"
+                  name="email"
+                  value={localStorage.getItem('userEmail')}
+                  onChange={handleInputChange}
+                  readOnly
+                />
                 {formData.emailError && <p className="ErrorText">{formData.emailError}</p>}
               </div>
             </div>
+
             <div className="col">
               <div className="CourseName">
                 <p>Course Title</p>
