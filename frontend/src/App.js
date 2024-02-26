@@ -13,7 +13,7 @@ import RegistrationPage from './components/registrationPage/RegistrationPage';
 import ModulesList from './components/module/ModuleList';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ChatPage from './components/chatPage/ChatPage'; // import ChatPage
-import Login from './components/Login';
+import Login from './components/LoginPage';
 import Profile from './components/Profile';
 
 
