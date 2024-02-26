@@ -3,11 +3,14 @@ import axios from 'axios'
 import './RegistrationPage.css'; // import the CSS file
 import { doc, setDoc } from "firebase/firestore";
 import { db } from '../../firebase';
+import { useNavigate } from 'react-router-dom';
+
 
 function RegistrationPage() {
+  const navigate = useNavigate();
   const [getMessage, setGetMessage] = useState({})
   const [formData, setFormData] = useState({
-    email: '',
+    email: localStorage.getItem('userEmail'),
     name: '',
     avatar: null,
     yearOfStudy: 1,
@@ -15,6 +18,13 @@ function RegistrationPage() {
     activeStatus: 0,
     bio: '',
   });
+
+  // if the user is not logged in, redirect to the login page
+  useEffect(() => {
+    if (!localStorage.getItem('accessToken')) {
+      navigate('/');
+    }
+  }, []);
 
   const emailRegex = /^[^\s@]+@tcd\.ie$/i; // Regex to validate TCD email
 
@@ -42,19 +52,22 @@ function RegistrationPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!emailRegex.test(formData.email)) {
-      setFormData({ ...formData, emailError: 'Must use a valid TCD email address' });
-      return;
-    }
-    else {
-      setFormData({ ...formData, emailError: '' });
-    }
+    // email validation is done in login stage
+    // if (!emailRegex.test(formData.email)) {
+    //   setFormData({ ...formData, emailError: 'Must use a valid TCD email address' });
+    //   return;
+    // }
+    // else {
+    //   setFormData({ ...formData, emailError: '' });
+    // }
 
     try {
       const { firstName, lastName, ...data } = formData; // Removing firstName and lastName
       const name = `${formData.firstName} ${formData.lastName}`; // Combining firstName and lastName
-      const docRef = await setDoc(doc(db, 'users', formData.email.split("@")[0]), { ...data, name });
+      const docRef = doc(db, 'users', formData.email.split("@")[0]);
+      await setDoc(docRef, { ...data, name });
       console.log('Document written with ID: ', docRef.id);
+      navigate('/profile');
 
       setFormData({
         activeStatus: 0,
