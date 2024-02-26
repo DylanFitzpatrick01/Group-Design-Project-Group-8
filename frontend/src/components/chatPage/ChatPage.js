@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AllChatsForAModule from './AllChatsForAModule';
 import TextInput from './TextInput';
@@ -9,53 +9,50 @@ import { useParams } from 'react-router-dom';
 import './ChatPage.css';
 import { Link } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { doc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
+import { db } from '../../firebase.js';
+
 
 function ChatPage() {
     const { moduleCode } = useParams();
 
     const textInputRef = useRef(null);
 
+    const [userInfo, setUserInfo] = useState(null);
+
+
     useEffect(() => {
         textInputRef.current?.scrollIntoView({ behavior: 'smooth' });
+        getUser();
     }, []);
 
-    // dummy user for testing
-    const userOne = new User(
-        0,
-        "https://images.unsplash.com/photo-1587723958656-ee042cc565a1?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "Freshman at TCD 📚 | Diving into the world of Computer Science 💻",
-        "Computer Science",
-        "ballk@tcd.ie",
-        "Karen Ball",
-        1
-    );
+    // current User
+    const getUser = async () => {
+        try {
+            const docRef = doc(db, "users", localStorage.getItem('userPrefix'));
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                console.log("Document data:", docSnap.data());
+                const userData = docSnap.data();
+                const { activeStatus, avatar, bio, courseTitle, email, name, yearOfStudy } = userData;
+                const user = new User(activeStatus, avatar, bio, courseTitle, email, name, yearOfStudy);
+                console.log(user);
+                setUserInfo(user);
+            } else {
+                console.log("No such document!");
+            }
+        } catch (e) {
+            console.error("Error fetching document: ", e);
+        }
+    };
 
-    const userTwo = new User(
-        1,
-        "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=2515&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "Year 3 CS Major @ TCD | Tech Visionary 🌟",
-        "Computer Science",
-        "lambertse@tcd.ie",
-        "Sebastian Lambert",
-        3
-    );
-
-    const userThree = new User(
-        0,
-        "https://images.unsplash.com/photo-1567270671170-fdc10a5bf831?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "TCD Year 2 | CS Explorer 🚀",
-        "Computer Science",
-        "petersa1@tcd.ie",
-        "Amelia Peters",
-        2
-    );
 
     return (
         <>
             <div className="module-chat-title">
                 <Link to="/modules">
                     <button className='back-button'>
-                    <i className="bi bi-arrow-left-square" style={{ color: 'var(--accent)', fontSize: '30px' }}></i>                    
+                        <i className="bi bi-arrow-left-square" style={{ color: 'var(--accent)', fontSize: '30px' }}></i>
                     </button>
                 </Link>
                 {moduleCode}
@@ -63,8 +60,8 @@ function ChatPage() {
             <div className="chat-container">
                 <div className="chat-content">
                     <AllChatsForAModule moduleCode={moduleCode} />
-                    <TextInput ref={textInputRef} moduleCode={moduleCode} user={userTwo} />
-                    {/* // user should be logged in user but using dummy user for now */}
+                    <TextInput ref={textInputRef} moduleCode={moduleCode} user={userInfo} />
+
                 </div>
             </div>
         </>

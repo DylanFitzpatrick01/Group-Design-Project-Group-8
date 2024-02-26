@@ -15,8 +15,8 @@ function formatTimestamp(timestamp) {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
-function checkUser(username, currentUser) {
-    if (username === currentUser) {
+function checkUser(username) {
+    if (username === localStorage.getItem('userEmail')) {
         return true;
     }
     else return false;
@@ -24,17 +24,6 @@ function checkUser(username, currentUser) {
 
 function AllChatsForAModule({ moduleCode }) {
     const chats = useUpdatedChats(moduleCode);
-
-    // for testing purposes only but when user is logged in, this will be the current user
-    const currentUser = new User(
-        1,
-        "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=2515&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "Year 3 CS Major @ TCD | Tech Visionary 🌟",
-        "Computer Science",
-        "lambertse@tcd.ie",
-        "Sebastian Lambert",
-        3
-    );
 
     // reference to the latest message so we can auto scroll there
     const endOfMessagesRef = useRef(null);
@@ -49,7 +38,7 @@ function AllChatsForAModule({ moduleCode }) {
                     <ChatComponent
                         key={chat.id}
                         message={chat.text}
-                        isMyMessage={checkUser(chat.uid, currentUser.email)} // testing
+                        isMyMessage={checkUser(chat.uid)}
                         timestamp={formatTimestamp(chat.timestamp)}
                         name={chat.displayName}
                         avatar={chat.avatar}
