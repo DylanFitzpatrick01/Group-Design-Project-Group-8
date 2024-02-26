@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import './ChatPage.css';
 import { Link } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { doc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from '../../firebase.js';
 
 
