@@ -31,7 +31,9 @@ function Login() {
       const token = await user.getIdToken();
       localStorage.setItem('accessToken', token); // Save the token to localStorage
       // Query a user's specific document
-      const docRef = doc(db, 'users', user.uid);
+      // use email prefix for Firestore query
+      const prefix = user.email.split('@')[0];
+      const docRef = doc(db, 'users', prefix);
       const docSnap = await getDoc(docRef);
   
       // Check whether the document exists
@@ -52,15 +54,15 @@ function Login() {
       const result = await signInWithPopup(auth, googleProvider);
       const userEmail = result.user.email;
 
-    // 检查电子邮件地址是否符合特定后缀
+    // Check that the email address matches a specific suffix
       const allowedDomains = ["tcd.ie", "csc.tcd.ie", "gmail.com"];
       const isAllowedDomain = allowedDomains.some(domain => userEmail.endsWith(domain));
 
       if (isAllowedDomain) {
-      // 登录成功后，检查用户是否已注册
+      // After successful login, check whether the user is registered
         await checkUserRegistration(result.user);
     } else {
-      await result.user.delete(); // 可选：删除不符合条件的用户账户
+      await result.user.delete(); // Delete user accounts that do not meet the requirements
       setError("Please use an email address with a permitted domain (tcd.ie, csc.tcd.ie, gmail.com).");
     }
   } catch (error) {
