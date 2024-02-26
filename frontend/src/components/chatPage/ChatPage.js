@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { doc, getDoc } from "firebase/firestore";
 import { db } from '../../firebase.js';
+import { useNavigate } from 'react-router-dom';
 
 
 function ChatPage() {
@@ -19,6 +20,14 @@ function ChatPage() {
     const textInputRef = useRef(null);
 
     const [userInfo, setUserInfo] = useState(null);
+
+    // if the user is not logged in, redirect to the login page
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (!localStorage.getItem('accessToken')) {
+            navigate('/');
+        }
+    }, []);
 
 
     useEffect(() => {
