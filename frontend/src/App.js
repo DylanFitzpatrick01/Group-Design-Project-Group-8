@@ -38,6 +38,7 @@ function App() {
           <Route path="/modules" element={<ModulesList />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/modules/:moduleCode" element={<ChatPage />} />
+          <Route path="/registration" element={<RegistrationPage />} />
         </Routes>
       </Router>
     </div>
