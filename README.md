@@ -23,3 +23,4 @@ The repository for CSU44098 Group 8
 ## Backends
 
 Firebase: [Link to Firestore database](https://console.firebase.google.com/project/group-8---college-social-media/firestore/data/~2F)
+      - You must be a member of our Firebase project to access this link.
