@@ -4,6 +4,7 @@ import './RegistrationPage.css'; // import the CSS file
 import { doc, setDoc } from "firebase/firestore";
 import { db } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 
 function RegistrationPage() {
@@ -21,9 +22,15 @@ function RegistrationPage() {
 
   // if the user is not logged in, redirect to the login page
   useEffect(() => {
-    if (!localStorage.getItem('accessToken')) {
-      navigate('/');
-    }
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (!user) {
+        console.log("User is not logged in");
+        navigate('/');
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const emailRegex = /^[^\s@]+@tcd\.ie$/i; // Regex to validate TCD email
