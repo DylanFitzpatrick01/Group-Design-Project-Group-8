@@ -5,15 +5,30 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 
 
 function Login() {
   const navigate = useNavigate();
-  const [getMessage, setGetMessage] = useState({});
   const [error, setError] = useState('');
   const googleProvider = new GoogleAuthProvider();
-  const db = getFirestore()
+  const db = getFirestore();
+
+  // if the user is already logged in, redirect to the profile page
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (user) {
+        console.log("User is already logged in");
+        navigate('/profile');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+
 
   const checkUserRegistration = async (user) => {
     console.log("Checking user registration...");
@@ -65,21 +80,16 @@ function Login() {
     }
   };
 
-  const goToRegistration = () => {
-    navigate('/registration');
-  };
+  // const goToRegistration = () => {
+  //   navigate('/registration');
+  // };
 
   return (
     <div className="LoginPage">
       <div className="Login-container">
         <h2>Login</h2>
         {error && <p className="error-message">{error}</p>}
-        <button onClick={handleGoogleLogin} className="button">Login with Google</button>
-        <p>Don't have an account? <span className="link" onClick={goToRegistration}>Register here</span>.</p>
-        {getMessage.status === 200 ?
-          <h3>{getMessage.data.message}</h3>
-          :
-          <h3></h3>}
+        <button onClick={handleGoogleLogin} className="button">Login/Register with Google</button>
 
       </div>
     </div>
