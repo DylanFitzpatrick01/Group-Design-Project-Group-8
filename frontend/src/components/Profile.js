@@ -4,11 +4,14 @@ import { db } from '../firebase.js';
 import { doc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
 import { getStatus } from './getStatus.js';
 import { getYear } from './getYear.js';
+import { useNavigate } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 
 // Profile takes a username (the name of the collection in FB) as a prop
 
-function Profile({ username }) {
+function Profile({ }) {
+  const username = localStorage.getItem('userPrefix');
   const [userInfo, setUserInfo] = useState({
     name: '',
     email: '',
@@ -21,6 +24,21 @@ function Profile({ username }) {
 
   const [posts, setPosts] = useState([
     {}]);
+
+  // if the user is not logged in, redirect to the login page
+  const navigate = useNavigate();
+  // if the user is not logged in, redirect to the login page
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (!user) {
+        console.log("User is not logged in");
+        navigate('/');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
 
   useEffect(() => {
@@ -111,24 +129,27 @@ function Profile({ username }) {
         <div className="row mt-1 p-4 rounded border-0" id="userPosts">
           {/* head */}
           <div className="col">
-            {posts.map(post => (
-              <div key={post.id} className="row border-0 mb-4 post rounded">
-                <div className="col-10 ms-3">
-                  <div className="row border-0 text-start">
-                    <p className="mt-3 mb-3 postTitle">{post.title} - {new Date(post.date).toLocaleString()}</p>
+            {posts[0].date ? (
+              posts.map(post => (
+                <div key={post.id} className="row border-0 mb-4 post rounded">
+                  <div className="col-10 ms-3">
+                    <div className="row border-0 text-start">
+                      <p className="mt-3 mb-3 postTitle">{post.title} - {new Date(post.date).toLocaleString()}</p>
+                    </div>
+                    <div className="row border-0 text-start">
+                      <p className="m-0 mb-3">{post.content}</p>
+                    </div>
                   </div>
-                  <div className="row border-0 text-start">
-                    <p className="m-0 mb-3">{post.content}</p>
+                  <div className="col-1 ms-3 postLnk d-flex flex-column justify-content-center">
+                    <div className="row border-0"><a href="#">Like({post.like})</a></div>
+                    <div className="row border-0"><a href="#">Comment({post.comment})</a></div>
+                    <div className="row border-0"><a href="#">Share({post.share})</a></div>
                   </div>
                 </div>
-                <div className="col-1 ms-3 postLnk d-flex flex-column justify-content-center">
-                  <div className="row border-0"><a href="#">Like({post.like})</a></div>
-                  <div className="row border-0"><a href="#">Comment({post.comment})</a></div>
-                  <div className="row border-0"><a href="#">Share({post.share})</a></div>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : "No posts found."}
           </div>
+
         </div>
       </div>
     </div >

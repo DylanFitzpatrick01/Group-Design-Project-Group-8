@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import './RegistrationPage.css'; // import the CSS file
 import { doc, setDoc } from "firebase/firestore";
-import {db} from '../../firebase';
+import { db } from '../../firebase';
+import { useNavigate } from 'react-router-dom';
+
 
 function RegistrationPage() {
+  const navigate = useNavigate();
   const [getMessage, setGetMessage] = useState({})
   const [formData, setFormData] = useState({
-    email: '',
+    email: localStorage.getItem('userEmail'),
     name: '',
     avatar: null,
     yearOfStudy: 1,
@@ -16,17 +19,14 @@ function RegistrationPage() {
     bio: '',
   });
 
+  // if the user is not logged in, redirect to the login page
+  useEffect(() => {
+    if (!localStorage.getItem('accessToken')) {
+      navigate('/');
+    }
+  }, []);
+
   const emailRegex = /^[^\s@]+@tcd\.ie$/i; // Regex to validate TCD email
-
-  useEffect(()=>{
-    axios.get('http://localhost:5000/flask/hello').then(response => {
-      console.log("SUCCESS", response)
-      setGetMessage(response)
-    }).catch(error => {
-      console.log(error)
-    })
-
-  }, [])
 
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
@@ -46,25 +46,28 @@ function RegistrationPage() {
 
   const handleYearChange = (e) => {
     const year = parseInt(e.target.value)
-    setFormData({...formData, yearOfStudy: year});
+    setFormData({ ...formData, yearOfStudy: year });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!emailRegex.test(formData.email)) {
-      setFormData({ ...formData, emailError: 'Must use a valid TCD email address' });      
-      return;
-    }
-    else{
-      setFormData({ ...formData, emailError: '' }); 
-    }
+    // email validation is done in login stage
+    // if (!emailRegex.test(formData.email)) {
+    //   setFormData({ ...formData, emailError: 'Must use a valid TCD email address' });
+    //   return;
+    // }
+    // else {
+    //   setFormData({ ...formData, emailError: '' });
+    // }
 
     try {
       const { firstName, lastName, ...data } = formData; // Removing firstName and lastName
       const name = `${formData.firstName} ${formData.lastName}`; // Combining firstName and lastName
-      const docRef = await setDoc(doc(db, 'users', formData.email.split("@")[0]), { ...data, name });
+      const docRef = doc(db, 'users', formData.email.split("@")[0]);
+      await setDoc(docRef, { ...data, name });
       console.log('Document written with ID: ', docRef.id);
+      navigate('/profile');
 
       setFormData({
         activeStatus: 0,
@@ -86,40 +89,48 @@ function RegistrationPage() {
         <h1>Registration</h1>
       </header>
       <form onSubmit={handleSubmit}>
-        <div className = "RegistrationBox">
-            <div className="ProfilePicture">
-              <p className="ProfilePictureText">Profile Picture</p>
-              <img src={formData.avatar} alt="Preview" className="PreviewImage"/>
-              <input required className="ImageUpload" type="file" accept="image/*" onChange={handleImageChange} />
+        <div className="RegistrationBox">
+          <div className="ProfilePicture">
+            <p className="ProfilePictureText">Profile Picture</p>
+            <img src={formData.avatar} alt="Preview" className="PreviewImage" />
+            <input required className="ImageUpload" type="file" accept="image/*" onChange={handleImageChange} />
           </div>
-          <div className = "row row-cols-2">
+          <div className="row row-cols-2">
             <div className="col">
-              <div className= "FirstName">
+              <div className="FirstName">
                 <p>First Name</p>
-                <input required className="FirstNameInput" name="firstName" value={formData.firstName} onChange={handleInputChange}/>
+                <input required className="FirstNameInput" name="firstName" value={formData.firstName} onChange={handleInputChange} />
               </div>
             </div>
             <div className="col">
-              <div className= "LastName">
+              <div className="LastName">
                 <p>Surname</p>
-                <input required className="LastNameInput" name="lastName" value = {formData.lastName} onChange={handleInputChange}/>
+                <input required className="LastNameInput" name="lastName" value={formData.lastName} onChange={handleInputChange} />
               </div>
             </div>
-            <div className =" col">
-              <div className = "Email">
+            <div className="col">
+              <div className="Email">
                 <p>TCD Email Address</p>
-                <input required className="EmailInput" name="email" value = {formData.email} onChange={handleInputChange}/>
+                <input
+                  required
+                  className="EmailInput"
+                  name="email"
+                  value={localStorage.getItem('userEmail')}
+                  onChange={handleInputChange}
+                  readOnly
+                />
                 {formData.emailError && <p className="ErrorText">{formData.emailError}</p>}
               </div>
             </div>
-            <div className = "col">
-              <div className= "CourseName">
+
+            <div className="col">
+              <div className="CourseName">
                 <p>Course Title</p>
-                <input required className="CourseNameInput" name="courseTitle" value = {formData.courseTitle} onChange={handleInputChange}/>
+                <input required className="CourseNameInput" name="courseTitle" value={formData.courseTitle} onChange={handleInputChange} />
               </div>
             </div>
             <div className='col'>
-            <div className="YearOfStudy" name="yearOfStudy" onChange={handleYearChange}>
+              <div className="YearOfStudy" name="yearOfStudy" onChange={handleYearChange}>
                 <p>Year of Study</p>
                 <select value={formData.yearOfStudy} className="YearOfStudyInput">
                   <option value={1}>Junior Freshman (Year 1)</option>
@@ -130,15 +141,15 @@ function RegistrationPage() {
                   <option value={6}>PhD</option>
                   <option value={7}>Other</option>
                 </select>
-              </div>  
+              </div>
             </div>
           </div>
-          <div className= "Bio">
+          <div className="Bio">
             <p>Bio</p>
-            <textarea className="BioInput" name="bio" value = {formData.bio} onChange={handleInputChange} />
+            <textarea className="BioInput" name="bio" value={formData.bio} onChange={handleInputChange} />
           </div>
         </div>
-        <button type = "submit" className="SubmitButton">
+        <button type="submit" className="SubmitButton">
           Submit
         </button>
       </form>
