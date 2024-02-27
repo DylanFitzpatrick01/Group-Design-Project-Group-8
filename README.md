@@ -18,7 +18,7 @@ The repository for CSU44098 Group 8
 7. Install the dependencies: ```npm install```
 8. Run the project locally: ```npm start```
 9. If it doesn't open automatically, open [localhost:3000/](http://localhost:3000/)
-10. Use your tcd email to create an account and log in (for testing purposes, you can use any email)
+10. Use your tcd email to create an account and log in (for testing purposes, you can also use Gmail)
 
 ## Backends
 
