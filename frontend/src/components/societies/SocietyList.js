@@ -4,11 +4,14 @@ import { collection, getDocs } from 'firebase/firestore';
 import './SocietyList.css'; // import the CSS file
 import { Link } from 'react-router-dom';
 import AddSocietyChatCollections from './AddSocietyChatCollections';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 
 const SocietiesList = () => {
   const [societies, setSocieties] = useState([]);
   const socieitesCollectionRef = collection(db, "societies");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getSocieties = async () => {
@@ -25,7 +28,21 @@ const SocietiesList = () => {
     };
 
     addChats();
+  }, [])
+  
+  useEffect(() => {
+  const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (!user) {
+        console.log("User is not logged in");
+        navigate('/');
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
+
+  
 
 
   return (

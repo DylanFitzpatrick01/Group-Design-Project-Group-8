@@ -3,13 +3,29 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import './ModuleList.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AddChatCollections from './AddChatCollections';
 import AddModuleBar from './AddModuleBar';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 
 const ModulesList = () => {
   const [modules, setModules] = useState([]);
   const modulesCollectionRef = collection(db, "modules");
+
+  // if the user is not logged in, redirect to the login page
+  const navigate = useNavigate();
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (!user) {
+        console.log("User is not logged in");
+        navigate('/');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const getModules = async () => {
