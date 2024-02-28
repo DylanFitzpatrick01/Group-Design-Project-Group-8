@@ -2,11 +2,13 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ChatComponent.css';
 
-function MyText({ message, timestamp, name, avatar }) {
+function MyText({ message, timestamp, name, avatar, prefix }) {
     return (
         <>
             <div className='rightAlign2'>
-                <div className='myUsername'>{name}</div>
+                <div className='myUsername'>
+                    <a href={`../user/${prefix}`}>{name}</a>
+                </div>
             </div>
             <div className='rightAlign'>
 
@@ -25,17 +27,17 @@ function MyText({ message, timestamp, name, avatar }) {
     );
 }
 
-function TheirText({ message, timestamp, name, avatar }) {
+function TheirText({ message, timestamp, name, avatar, prefix }) {
 
     return (
         <>
             <div className='leftAlign2'>
-                <div className='theirUsername'>{name}</div>
+                <div className='theirUsername'> <a href={`../user/${prefix}`}>{name}</a></div>
             </div>
             <div className='leftAlign'>
                 <div className="profile-picture-left">
                     <img
-                        src={avatar} 
+                        src={avatar}
                         alt="User avatar"
                     />
                 </div>
@@ -48,10 +50,10 @@ function TheirText({ message, timestamp, name, avatar }) {
     );
 }
 
-function ChatComponent({ message, isMyMessage, timestamp, name, avatar }) {
+function ChatComponent({ message, isMyMessage, timestamp, name, avatar, prefix }) {
     return (
         <div className="textContainer">
-            {isMyMessage ? <MyText message={message} timestamp={timestamp} name={name} avatar={avatar} /> : <TheirText message={message} timestamp={timestamp} name={name} avatar={avatar} />}
+            {isMyMessage ? <MyText message={message} timestamp={timestamp} name={name} avatar={avatar} prefix={prefix} /> : <TheirText message={message} timestamp={timestamp} name={name} avatar={avatar} prefix={prefix} />}
         </div>
     );
 }
