@@ -37,6 +37,7 @@ function App() {
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/modules" element={<ModulesList />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/user/:id" element={<Profile />} />
           <Route path="/modules/:moduleCode" element={<ChatPage rootPage={"/modules"} />} />
           <Route path="/societies/:moduleCode" element={<ChatPage rootPage={"/societies"} />} />
           <Route path="/registration" element={<RegistrationPage />} />

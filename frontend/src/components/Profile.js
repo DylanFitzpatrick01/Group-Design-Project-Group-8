@@ -6,12 +6,14 @@ import { getStatus } from './getStatus.js';
 import { getYear } from './getYear.js';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useParams } from 'react-router-dom';
 
 
 // Profile takes a username (the name of the collection in FB) as a prop
 
-function Profile({ }) {
-  const username = localStorage.getItem('userPrefix');
+function Profile({ username }) {
+  const params = useParams();
+  username = params.id || localStorage.getItem('userPrefix');
   const [userInfo, setUserInfo] = useState({
     name: '',
     email: '',
