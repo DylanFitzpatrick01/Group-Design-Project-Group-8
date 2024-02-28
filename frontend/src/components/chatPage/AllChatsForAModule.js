@@ -42,6 +42,7 @@ function AllChatsForAModule({ moduleCode }) {
                         timestamp={formatTimestamp(chat.timestamp)}
                         name={chat.displayName}
                         avatar={chat.avatar}
+                        prefix={chat.uid.split('@')[0]}
                     />
                 ))}
                 <div ref={endOfMessagesRef} />

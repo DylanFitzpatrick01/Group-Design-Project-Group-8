@@ -19,9 +19,9 @@ import LogoutPage from './components/Logout';
 const navLinks = [
   { to: "/modules", label: "Modules" },
   { to: "/societies", label: "Societies" },
-  { to: "/notifications", label: <img src="bell.png" alt="Notifications" /> },
-  { to: "/profile", label: <img src="profile.png" alt="Profile" /> },
-  { to: "/logout", label: <img src="logout.png" alt="Logout" /> },
+  { to: "/notifications", label: <img src="/bell.png" alt="Notifications" /> },
+  { to: "/profile", label: <img src="/profile.png" alt="Profile" /> },
+  { to: "/logout", label: <img src="/logout.png" alt="Logout" /> },
 
 ];
 
@@ -37,6 +37,7 @@ function App() {
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/modules" element={<ModulesList />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/user/:id" element={<Profile />} />
           <Route path="/modules/:moduleCode" element={<ChatPage rootPage={"/modules"} />} />
           <Route path="/societies/:moduleCode" element={<ChatPage rootPage={"/societies"} />} />
           <Route path="/registration" element={<RegistrationPage />} />

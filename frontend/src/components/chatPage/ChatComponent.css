@@ -40,7 +40,7 @@
     font-size: 18px;
 }
 
-.myUsername{
+.myUsername {
     font-size: 12px;
     color: var(--unimportant-text);
     text-align: left;
@@ -48,6 +48,11 @@
     padding-left: 3%;
     display: flex;
     justify-content: flex-end;
+}
+
+.myUsername a {
+    color: var(--unimportant-text);
+
 }
 
 .theirText {
@@ -58,7 +63,7 @@
     font-size: 18px;
 }
 
-.theirUsername{
+.theirUsername {
     font-size: 12px;
     color: var(--accent);
     text-align: left;
@@ -68,6 +73,10 @@
     justify-content: flex-start;
 }
 
+.theirUsername a {
+    color: var(--accent);
+}
+
 .leftAlign2 {
     padding-right: 3%;
     padding-left: 3.5%;
@@ -75,13 +84,13 @@
     justify-content: flex-start;
 }
 
-.timestamp{
+.timestamp {
     font-size: 11px;
     text-align: right;
     color: var(--unimportant-text);
 }
 
-.profile-picture-left{
+.profile-picture-left {
     display: flex;
     justify-content: flex-start;
     align-items: left;
@@ -89,7 +98,7 @@
     padding-top: 0.5%;
 }
 
-.profile-picture-right{
+.profile-picture-right {
     justify-content: flex-end;
     align-items: right;
     padding-left: 1%;
@@ -99,16 +108,19 @@
 .profile-picture-left img {
     width: 4vh;
     height: 4vh;
-    margin-left:0%;
+    margin-left: 0%;
     border-radius: 50%;
     object-fit: cover;
-  }
+}
 
-  .profile-picture-right img {
+.profile-picture-right img {
     width: 4vh;
     height: 4vh;
-    margin-right:0%;
+    margin-right: 0%;
     border-radius: 50%;
     object-fit: cover;
-  }
+}
 
+a {
+    text-decoration: none;
+}

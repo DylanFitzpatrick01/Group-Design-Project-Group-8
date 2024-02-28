@@ -6,7 +6,9 @@ function MyText({ message, timestamp, name, avatar }) {
     return (
         <>
             <div className='rightAlign2'>
-                <div className='myUsername'>{name}</div>
+                <div className='myUsername'>
+                    <a href={`/profile`}>{name}</a>
+                </div>
             </div>
             <div className='rightAlign'>
 
@@ -15,29 +17,28 @@ function MyText({ message, timestamp, name, avatar }) {
                     <div className='timestamp'>{timestamp}</div>
                 </div>
                 <div className="profile-picture-right">
-                    <img
-                        src={avatar}
-                        alt="User avatar"
-                    />
+                    <a href={`/profile`}>
+                        <img src={avatar} alt="User avatar" />
+                    </a>
                 </div>
             </div>
         </>
     );
 }
 
-function TheirText({ message, timestamp, name, avatar }) {
+function TheirText({ message, timestamp, name, avatar, prefix }) {
 
     return (
         <>
             <div className='leftAlign2'>
-                <div className='theirUsername'>{name}</div>
+                <div className='theirUsername'>
+                    <a href={`/user/${prefix}`}>{name}</a></div>
             </div>
             <div className='leftAlign'>
                 <div className="profile-picture-left">
-                    <img
-                        src={avatar} 
-                        alt="User avatar"
-                    />
+                    <a href={`/user/${prefix}`}>
+                        <img src={avatar} alt="User avatar" />
+                    </a>
                 </div>
                 <div className='message theirText'>
                     {message}
@@ -48,10 +49,10 @@ function TheirText({ message, timestamp, name, avatar }) {
     );
 }
 
-function ChatComponent({ message, isMyMessage, timestamp, name, avatar }) {
+function ChatComponent({ message, isMyMessage, timestamp, name, avatar, prefix }) {
     return (
         <div className="textContainer">
-            {isMyMessage ? <MyText message={message} timestamp={timestamp} name={name} avatar={avatar} /> : <TheirText message={message} timestamp={timestamp} name={name} avatar={avatar} />}
+            {isMyMessage ? <MyText message={message} timestamp={timestamp} name={name} avatar={avatar} /> : <TheirText message={message} timestamp={timestamp} name={name} avatar={avatar} prefix={prefix} />}
         </div>
     );
 }
