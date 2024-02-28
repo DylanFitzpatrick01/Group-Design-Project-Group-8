@@ -19,9 +19,9 @@ import LogoutPage from './components/Logout';
 const navLinks = [
   { to: "/modules", label: "Modules" },
   { to: "/societies", label: "Societies" },
-  { to: "/notifications", label: <img src="bell.png" alt="Notifications" /> },
-  { to: "/profile", label: <img src="profile.png" alt="Profile" /> },
-  { to: "/logout", label: <img src="logout.png" alt="Logout" /> },
+  { to: "/notifications", label: <img src="/bell.png" alt="Notifications" /> },
+  { to: "/profile", label: <img src="/profile.png" alt="Profile" /> },
+  { to: "/logout", label: <img src="/logout.png" alt="Logout" /> },
 
 ];
 
