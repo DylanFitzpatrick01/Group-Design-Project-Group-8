@@ -6,11 +6,10 @@ import axios from 'axios'
 
 
 import Navbar from './components/NavBar';
-import NewPage from './components/NewPage'; // import NewPage
-import Societies from './components/Societies'; // import Societies page
 import NotificationsPage from './components/NotificationsPage/NotificationsPage';
 import RegistrationPage from './components/registrationPage/RegistrationPage';
 import ModulesList from './components/module/ModuleList';
+import SocietyList from './components/societies/SocietyList'; // import Societies page
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ChatPage from './components/chatPage/ChatPage'; // import ChatPage
 import Login from './components/LoginPage';
@@ -34,11 +33,12 @@ function App() {
         <Navbar navLinks={navLinks} />
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/societies" element={<Societies />} />
+          <Route path="/societies" element={<SocietyList />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/modules" element={<ModulesList />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/modules/:moduleCode" element={<ChatPage />} />
+          <Route path="/modules/:moduleCode" element={<ChatPage rootPage={"/modules"} />} />
+          <Route path="/societies/:moduleCode" element={<ChatPage rootPage={"/societies"} />} />
           <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/logout" element={<LogoutPage />} />
         </Routes>
