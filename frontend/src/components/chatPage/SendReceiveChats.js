@@ -7,11 +7,25 @@ import {
     onSnapshot,
     query,
     orderBy,
+    getDocs
 } from 'firebase/firestore';
+
+
+function getAllUserNames() {
+    return getDocs(query(collection(db, 'users'), orderBy('name', 'asc')))
+        .then(querySnapshot => {
+            return querySnapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
+        })
+        .catch(error => {
+            console.error("Error getting user names: ", error);
+            return [];
+        });
+}
 
 // add new chat to a module's chat collection
 async function sendChat(moduleCode, text, user) {
     try {
+        const allUserNames = await getAllUserNames();
         await addDoc(collection(db, 'modules', moduleCode, 'chats'), {
             displayName: user.name,
             text: text,
@@ -19,9 +33,35 @@ async function sendChat(moduleCode, text, user) {
             uid: user.email,
             avatar: user.avatar,
         });
+
+        if (text.includes('@')) {
+            const mentionedUser = text.split('@')[1].split(' ', 2).join(' ');
+            const mentionedUserObj = allUserNames.find(user => user.name === mentionedUser);
+            if (mentionedUserObj) {
+                console.log(user.name + " mentioned " + mentionedUserObj.id + " " + text);
+                sendMentionedNotification(moduleCode, text, user.name, mentionedUserObj.id, serverTimestamp());
+            }
+            else {
+                console.log('no user found');
+            }
+        }
     } catch (error) {
         console.error(error);
     }
+}
+
+async function sendMentionedNotification(moduleCode, text, mentionedByUsername, mentionedUserID, timestamp) {
+    try{
+        await addDoc(collection(db, 'users', mentionedUserID, 'notifications'), {
+            mentionedBy: mentionedByUsername,
+            text: text,
+            timestamp: timestamp,
+            moduleCode: moduleCode,
+        });
+    }
+    catch (error) {
+        console.error(error);
+    }   
 }
 
 // get all chats from a module and call getChatsOnChange every time the chats change
@@ -41,6 +81,8 @@ function getChats(moduleCode, getChatsOnChange) {
         }
     );
 }
+
+
 
 function useUpdatedChats(moduleCode) {
     const [chats, pullChats] = useState([]);
