@@ -16,6 +16,8 @@ import Login from './components/LoginPage';
 import Profile from './components/Profile';
 import LogoutPage from './components/Logout';
 import SocietyProfile from './components/societies/SocietyProfile';
+import Calendar from './components/calendar/Calendar';
+
 
 const navLinks = [
   { to: "/modules", label: "Modules" },
@@ -45,6 +47,7 @@ function App() {
           <Route path="/societies/:name/info" element={<SocietyProfile />} />
           <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/logout" element={<LogoutPage />} />
+          <Route path="/calendar" element={<Calendar />} />
         </Routes>
       </Router>
     </div>
