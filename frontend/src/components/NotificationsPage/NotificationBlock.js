@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import './NotificationBlock.css';
 
-function DirectReplyNotificationComponent() {
+function DirectReplyNotificationComponent({mentionedBy, moduleCode, timestamp, message}) {
+
     return (
         <div className="NotificationComponentOuter">
             <div className="NotificationComponent">
                 <div className="NotificationComponent-header">
-                    <h2>User XXXXX replied to you in Module X</h2>
-                    <div className="NotificationTimeStamp">4 hours ago</div>
+                    <h2>User {mentionedBy} mentioned you in Module {moduleCode}</h2>
+                    <div className="NotificationTimeStamp">{timestamp}</div>
                 </div>
                 <div className="NotificationComponent-body">
-                    <p>Want to get lunch after this lecture?</p>
+                    <p>{message}</p>
                 </div>
             </div>
         </div>
@@ -19,28 +20,28 @@ function DirectReplyNotificationComponent() {
 }
 
 
-function SocietyNotificationComponent() {
+function SocietyNotificationComponent({mentionedBy, moduleCode, timestamp, message}) {
     return (
         <div className='NotificationComponentOuter'>
             <div className="NotificationComponent">
                 <div className="NotificationComponent-header">
-                    <h2>New Post from Society XXXXX</h2>
-                    <div className="NotificationTimeStamp">2 hours ago</div>
+                    <h2>New Post from Society {moduleCode}</h2>
+                    <div className="NotificationTimeStamp">{timestamp}</div>
                 </div>
                 <div className="NotificationComponent-body">
-                    <p>Pride, Prejudice and Pizza night with the Lit Soc this Friday!!!</p>
+                    <p>{message}</p>
                 </div>
             </div>
         </div>
     );
 }
 
-function NotificationBlock({ notificationType }) {
+function NotificationBlock({ notificationType, mentionedBy, moduleCode, timestamp, message}) {
     switch (notificationType) {
         case 'societyPost':
-            return <SocietyNotificationComponent />;
+            return <SocietyNotificationComponent mentionedBy={mentionedBy} timestamp={timestamp} message={message}/>;
         case 'directReply':
-            return <DirectReplyNotificationComponent />;
+            return <DirectReplyNotificationComponent mentionedBy={mentionedBy} moduleCode={moduleCode} timestamp={timestamp} message={message}/>;
         default:
             throw new Error(`Unknown notification type: ${notificationType}`);
     }
