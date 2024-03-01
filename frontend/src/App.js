@@ -15,6 +15,8 @@ import ChatPage from './components/chatPage/ChatPage'; // import ChatPage
 import Login from './components/LoginPage';
 import Profile from './components/Profile';
 import LogoutPage from './components/Logout';
+import Calendar from './components/calendar/Calendar';
+
 
 const navLinks = [
   { to: "/modules", label: "Modules" },
@@ -42,6 +44,7 @@ function App() {
           <Route path="/societies/:moduleCode" element={<ChatPage rootPage={"/societies"} />} />
           <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/logout" element={<LogoutPage />} />
+          <Route path="/calendar" element={<Calendar />} />
         </Routes>
       </Router>
     </div>
