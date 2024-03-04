@@ -70,38 +70,38 @@
 .imagePreviewContainer {
     width: 87%;
     display: flex;
-    justify-content: flex-start; /* 保持与文本框内容一致的对齐方式 */
+    justify-content: flex-start; 
     margin: 10px 5% 0px;
     flex-wrap: wrap;
-    gap: 15px; /* 根据需要调整 */
-    background-color: var(--background-color); /* 使用与文本框相同的背景色 */
-    border-radius: 8px; /* 如果需要，调整以匹配文本框 */
-    padding: 5px; /* 根据需要添加内边距 */
+    gap: 15px; 
+    background-color: var(--background-color); 
+    border-radius: 8px; 
+    padding: 5px; 
 }
 
 .imagePreview {
-    position: relative; /* 关键添加这一行 */
-    display: inline-block; /* 允许图片横向排列并占用自己的空间 */
+    position: relative; 
+    display: inline-block; 
     width: 100px;
     height: 100px;
-    margin: 5px; /* 根据需要调整间距 */
-    border-radius: 5px; /* 图片圆角 */
+    margin: 5px; 
+    border-radius: 5px; 
 }
 
-/* 图片预览的样式 */
+
 .imagePreview img {
     
-    width: 100%; /* 或其他适合的大小 */
+    width: 100%;
     height: 100%;
-    object-fit: cover; /* 保持图片比例 */
-    border-radius: 5px; /* 如果需要，为图片添加圆角 */
+    object-fit: cover;
+    border-radius: 5px; 
 }
 
 .removeImageButton {
     position: absolute;
     top: 0px;
     right: 0px;
-    background-color:var(--accent); /* 或使用 var(--accent) 调整为您的主题颜色 */
+    background-color:var(--accent);
     color: var(--ordinary-text);
     border: none;
     border-radius: 50%;
@@ -115,7 +115,7 @@
 }
 
 .removeImageButton:hover {
-    background-color: var(--accent); /* 鼠标悬浮时的颜色 */
+    background-color: var(--accent); 
 }
 
 /* Hide the real file input box */
