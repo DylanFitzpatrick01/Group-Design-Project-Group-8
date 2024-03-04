@@ -1,7 +1,7 @@
 .textBoxContainer{
     width: 100%;
     justify-content: flex-end;
-    padding-top: 1%;
+    padding-top: 0;
     padding-bottom: 2%;
 }
 
@@ -42,6 +42,87 @@
     color: var(--ordinary-text);
     border-radius: 10px;
 }
+
+.sendButton:hover {
+    background-color: var(--accent); 
+}
+
+.uploadButton {
+    cursor: pointer;
+    background-color: var(--card-background); 
+    color: var(--ordinary-text); 
+    border: 2px solid var(--shadows); 
+    border-radius: 10px; 
+    padding: 0.5%; 
+    margin-right: 0.2%; 
+    font-size: 1rem; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto; 
+    height: 3.5vh; 
+}
+
+.uploadButton:hover {
+    background-color: var(--accent); 
+}
+
+.imagePreviewContainer {
+    width: 87%;
+    display: flex;
+    justify-content: flex-start; /* 保持与文本框内容一致的对齐方式 */
+    margin: 10px 5% 0px;
+    flex-wrap: wrap;
+    gap: 15px; /* 根据需要调整 */
+    background-color: var(--background-color); /* 使用与文本框相同的背景色 */
+    border-radius: 8px; /* 如果需要，调整以匹配文本框 */
+    padding: 5px; /* 根据需要添加内边距 */
+}
+
+.imagePreview {
+    position: relative; /* 关键添加这一行 */
+    display: inline-block; /* 允许图片横向排列并占用自己的空间 */
+    width: 100px;
+    height: 100px;
+    margin: 5px; /* 根据需要调整间距 */
+    border-radius: 5px; /* 图片圆角 */
+}
+
+/* 图片预览的样式 */
+.imagePreview img {
+    
+    width: 100%; /* 或其他适合的大小 */
+    height: 100%;
+    object-fit: cover; /* 保持图片比例 */
+    border-radius: 5px; /* 如果需要，为图片添加圆角 */
+}
+
+.removeImageButton {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color:var(--accent); /* 或使用 var(--accent) 调整为您的主题颜色 */
+    color: var(--ordinary-text);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.removeImageButton:hover {
+    background-color: var(--accent); /* 鼠标悬浮时的颜色 */
+}
+
+/* Hide the real file input box */
+.file-input {
+    display: none;
+}
+
 
 .sendButton:active { /* on click */
     background-color: var(--accent);
