@@ -18,7 +18,7 @@ function DirectReplyNotificationComponent({ mentionedBy, mentionedByAvatar, ment
                             </Link>
                              mentioned you in
                             <Link to={`/modules/${moduleCode}`} className='link-to-module'>
-                                Module {moduleCode}
+                                 {moduleCode}
                             </Link>
                         </div>
                     </h2>
