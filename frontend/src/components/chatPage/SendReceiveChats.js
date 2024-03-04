@@ -35,12 +35,22 @@ async function sendChat(moduleCode, text, user) {
         });
 
         if (text.includes('@')) {
-            const mentionedUser = text.split('@')[1].split(' ', 2).join(' ');
-            const mentionedUserObj = allUserNames.find(user => user.name === mentionedUser);
-            if (mentionedUserObj) {
-                sendMentionedNotification(moduleCode, text, user.name, user.avatar, user.id, mentionedUserObj.id, serverTimestamp());
+            // since some usernames have multiple spaces
+            // we need to check for usernames after an '@' symbol
+            const wordsAfterAt = text.split('@')[1].split(' ');
+            let username = '';
+            let mentionedUserObj = null; 
+            for (let i = 0; i < wordsAfterAt.length; i++) {
+                username += (i > 0 ? ' ' : '') + wordsAfterAt[i];
+                mentionedUserObj = allUserNames.find(user => user.name === username);
+                if (mentionedUserObj) {
+                    break;
+                }
+                console.log(i);
             }
-            else {
+            if (mentionedUserObj) { 
+                sendMentionedNotification(moduleCode, text, user.name, user.avatar, user.id, mentionedUserObj.id, serverTimestamp());
+            } else {
                 console.log('no user found');
             }
         }
@@ -50,7 +60,7 @@ async function sendChat(moduleCode, text, user) {
 }
 
 async function sendMentionedNotification(moduleCode, text, mentionedByUsername, mentionedByUserAvatar, mentionedByUserID, mentionedUserID, timestamp) {
-    try{
+    try {
         await addDoc(collection(db, 'users', mentionedUserID, 'notifications'), {
             mentionedBy: mentionedByUsername,
             mentionedByAvatar: mentionedByUserAvatar,
@@ -62,7 +72,7 @@ async function sendMentionedNotification(moduleCode, text, mentionedByUsername, 
     }
     catch (error) {
         console.error(error);
-    }   
+    }
 }
 
 // get all chats from a module and call getChatsOnChange every time the chats change

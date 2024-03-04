@@ -4,7 +4,7 @@ import './NotificationsPage.css'; // import the CSS file
 import NotificationBlock from './NotificationBlock';  // adjust the path if necessary
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { RetrieveNotifications, formatTimestamp} from './retrieveNotifications';
+import { RetrieveNotifications, formatTimestamp } from './retrieveNotifications';
 
 function NotificationsPage() {
   const [getMessage, setGetMessage] = useState({})
@@ -47,18 +47,23 @@ function NotificationsPage() {
   return (
     <div className="NotificationsPage">
       <div className="NotificationsList">
-        {directMentions.map((notification) => (
-
-          <NotificationBlock
-            notificationType="directReply"
-            mentionedBy={notification.mentionedBy}
-            mentionedByAvatar={notification.mentionedByAvatar}
-            mentionedByUserID={notification.mentionedByUserID}
-            moduleCode={notification.moduleCode}
-            timestamp={formatTimestamp(notification.timestamp)}
-            message={notification.text}
-          />
-        ))}
+        {directMentions.length > 0 ? (
+          directMentions.map((notification) => (
+            <NotificationBlock
+              notificationType="directReply"
+              mentionedBy={notification.mentionedBy}
+              mentionedByAvatar={notification.mentionedByAvatar}
+              mentionedByUserID={notification.mentionedByUserID}
+              moduleCode={notification.moduleCode}
+              timestamp={formatTimestamp(notification.timestamp)}
+              message={notification.text}
+            />
+          ))
+        ) : (
+          <div className='no-notifs-block-outer'>
+            <div className="no-notifs-block"><p>No Notifications</p></div>
+          </div>
+        )}
       </div>
     </div>
   );
