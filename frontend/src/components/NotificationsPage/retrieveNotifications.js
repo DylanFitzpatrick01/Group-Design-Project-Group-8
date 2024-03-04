@@ -44,29 +44,59 @@ const getUser = async () => {
 };
 
 
-async function GetAllNotificationsForUser() {
-    try {
-        const user = await getUser();
-        const querySnapshot = await getDocs(query(collection(db, 'users', user.id, 'notifications'), orderBy('timestamp', 'desc')));
-        return querySnapshot.docs.map(doc => {
-            const data = doc.data();
-            return { 
-                mentionedBy: data.mentionedBy,
-                mentionedByAvatar: data.mentionedByAvatar,
-                mentionedByUserID: data.mentionedByUserID,
-                text: data.text,
-                timestamp: data.timestamp,
-                moduleCode: data.moduleCode,
-            };
+function GetAllNotificationsForUser(onNewNotification) {
+    return getUser().then(user => {
+        return onSnapshot(
+            query(
+                collection(db, 'users', user.id, 'notifications'),
+                orderBy('timestamp', 'desc')
+            ),
+            (querySnapshot) => {
+                const notifications = querySnapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return { 
+                        mentionedBy: data.mentionedBy,
+                        mentionedByAvatar: data.mentionedByAvatar,
+                        mentionedByUserID: data.mentionedByUserID,
+                        text: data.text,
+                        timestamp: data.timestamp,
+                        moduleCode: data.moduleCode,
+                    };
+                });
+
+                onNewNotification(notifications);
+            },
+            (error) => {
+                console.error("Error getting notifications: ", error);
+            }
+        );
+    }).catch(error => {
+        console.error("Error getting user: ", error);
+    });
+}
+
+function useUpdatedNotifications() {
+    const [notifications, setNotifications] = useState([]);
+    const [unsubscribe, setUnsubscribe] = useState(null);
+
+    // have to do this because we can't use async in useEffect
+    useEffect(() => {
+        GetAllNotificationsForUser(setNotifications).then(unsub => {
+            setUnsubscribe(() => unsub);
         });
-    } catch (error) {
-        console.error("Error getting notifications: ", error);
-        return [];
-    }
+    }, []);
+
+    // then cleanup function once the async functin is done!
+    useEffect(() => {
+        return () => {
+            if (unsubscribe) {
+                unsubscribe();
+            }
+        };
+    }, [unsubscribe]);
+
+    return notifications;
 }
 
-function RetrieveNotifications() {
-    return GetAllNotificationsForUser();
-}
 
-export {RetrieveNotifications, formatTimestamp};
+export {useUpdatedNotifications, formatTimestamp};

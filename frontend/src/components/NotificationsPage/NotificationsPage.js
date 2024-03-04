@@ -1,29 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import './NotificationsPage.css'; // import the CSS file
-import NotificationBlock from './NotificationBlock';  // adjust the path if necessary
+import './NotificationsPage.css';
+import NotificationBlock from './NotificationBlock';  
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { RetrieveNotifications, formatTimestamp } from './retrieveNotifications';
+import { useUpdatedNotifications, formatTimestamp } from './retrieveNotifications';
 
 function NotificationsPage() {
   const [getMessage, setGetMessage] = useState({})
-  const [directMentions, setDirectMentions] = useState([]); // Add this line
-  // if the user is not logged in, redirect to the login page
   const navigate = useNavigate();
-
+  const directMentions = useUpdatedNotifications();
+  
   useEffect(() => {
-    RetrieveNotifications()
-      .then(notifs => {
-        if (Array.isArray(notifs)) {
-          setDirectMentions(notifs);
-        } else {
-          console.error("Error: RetrieveNotifications did not return an array");
-        }
-      })
-      .catch(error => console.error("Error retrieving notifications: ", error));
-
-
     // if the user is not logged in, redirect to the login page
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, user => {
