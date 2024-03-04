@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import './NotificationBlock.css';
+import { Link } from 'react-router-dom'; // Import Link
 
-function DirectReplyNotificationComponent({mentionedBy, moduleCode, timestamp, message}) {
-
+function DirectReplyNotificationComponent({ mentionedBy, mentionedByAvatar, mentionedByUserID, moduleCode, timestamp, message }) {
     return (
         <div className="NotificationComponentOuter">
             <div className="NotificationComponent">
                 <div className="NotificationComponent-header">
-                    <h2>User {mentionedBy} mentioned you in Module {moduleCode}</h2>
+                    <h2>
+                        <div className='body-container'>
+                            <Link to={`/user/${mentionedByUserID}`} className='link-to-profile'>
+                                <div className="profile-info"> 
+                                    <img src={mentionedByAvatar} alt="User avatar" />
+                                    {mentionedBy}
+                                </div>
+                            </Link>
+                             mentioned you in
+                            <Link to={`/modules/${moduleCode}`} className='link-to-module'>
+                                Module {moduleCode}
+                            </Link>
+                        </div>
+                    </h2>
                     <div className="NotificationTimeStamp">{timestamp}</div>
                 </div>
                 <div className="NotificationComponent-body">
@@ -20,7 +33,7 @@ function DirectReplyNotificationComponent({mentionedBy, moduleCode, timestamp, m
 }
 
 
-function SocietyNotificationComponent({mentionedBy, moduleCode, timestamp, message}) {
+function SocietyNotificationComponent({ moduleCode, timestamp, message }) {
     return (
         <div className='NotificationComponentOuter'>
             <div className="NotificationComponent">
@@ -36,12 +49,12 @@ function SocietyNotificationComponent({mentionedBy, moduleCode, timestamp, messa
     );
 }
 
-function NotificationBlock({ notificationType, mentionedBy, moduleCode, timestamp, message}) {
+function NotificationBlock({ notificationType, mentionedBy, mentionedByAvatar, mentionedByUserID, moduleCode, timestamp, message }) {
     switch (notificationType) {
         case 'societyPost':
-            return <SocietyNotificationComponent mentionedBy={mentionedBy} timestamp={timestamp} message={message}/>;
+            return <SocietyNotificationComponent mentionedBy={mentionedBy} timestamp={timestamp} message={message} />;
         case 'directReply':
-            return <DirectReplyNotificationComponent mentionedBy={mentionedBy} moduleCode={moduleCode} timestamp={timestamp} message={message}/>;
+            return <DirectReplyNotificationComponent mentionedBy={mentionedBy} mentionedByUserID={mentionedByUserID} moduleCode={moduleCode} mentionedByAvatar={mentionedByAvatar} timestamp={timestamp} message={message} />;
         default:
             throw new Error(`Unknown notification type: ${notificationType}`);
     }

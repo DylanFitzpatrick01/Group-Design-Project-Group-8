@@ -38,8 +38,7 @@ async function sendChat(moduleCode, text, user) {
             const mentionedUser = text.split('@')[1].split(' ', 2).join(' ');
             const mentionedUserObj = allUserNames.find(user => user.name === mentionedUser);
             if (mentionedUserObj) {
-                console.log(user.name + " mentioned " + mentionedUserObj.id + " " + text);
-                sendMentionedNotification(moduleCode, text, user.name, mentionedUserObj.id, serverTimestamp());
+                sendMentionedNotification(moduleCode, text, user.name, user.avatar, user.id, mentionedUserObj.id, serverTimestamp());
             }
             else {
                 console.log('no user found');
@@ -50,10 +49,12 @@ async function sendChat(moduleCode, text, user) {
     }
 }
 
-async function sendMentionedNotification(moduleCode, text, mentionedByUsername, mentionedUserID, timestamp) {
+async function sendMentionedNotification(moduleCode, text, mentionedByUsername, mentionedByUserAvatar, mentionedByUserID, mentionedUserID, timestamp) {
     try{
         await addDoc(collection(db, 'users', mentionedUserID, 'notifications'), {
             mentionedBy: mentionedByUsername,
+            mentionedByAvatar: mentionedByUserAvatar,
+            mentionedByUserID: mentionedByUserID,
             text: text,
             timestamp: timestamp,
             moduleCode: moduleCode,

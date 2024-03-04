@@ -52,6 +52,8 @@ function NotificationsPage() {
           <NotificationBlock
             notificationType="directReply"
             mentionedBy={notification.mentionedBy}
+            mentionedByAvatar={notification.mentionedByAvatar}
+            mentionedByUserID={notification.mentionedByUserID}
             moduleCode={notification.moduleCode}
             timestamp={formatTimestamp(notification.timestamp)}
             message={notification.text}

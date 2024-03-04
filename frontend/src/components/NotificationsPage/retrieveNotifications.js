@@ -52,6 +52,8 @@ async function GetAllNotificationsForUser() {
             const data = doc.data();
             return { 
                 mentionedBy: data.mentionedBy,
+                mentionedByAvatar: data.mentionedByAvatar,
+                mentionedByUserID: data.mentionedByUserID,
                 text: data.text,
                 timestamp: data.timestamp,
                 moduleCode: data.moduleCode,
