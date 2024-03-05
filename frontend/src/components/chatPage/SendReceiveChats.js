@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { db } from '../../firebase.js';
 import {
     collection,
@@ -23,17 +23,23 @@ function getAllUserNames() {
 }
 
 // add new chat to a module's chat collection
-async function sendChat(moduleCode, text, user) {
+async function sendChat(moduleCode, text, user, imageUrl = null) {
     try {
-        const allUserNames = await getAllUserNames();
-        await addDoc(collection(db, 'modules', moduleCode, 'chats'), {
+
+        const messageData = {
             displayName: user.name,
-            text: text,
+            text: text, 
             timestamp: serverTimestamp(),
             uid: user.email,
             avatar: user.avatar,
-        });
+        };
 
+        // If the image URL is provided, add it to the message data
+        if (imageUrl) {
+            messageData.imageUrl = imageUrl;
+        }
+        
+        const allUserNames = await getAllUserNames();
         if (text.includes('@')) {
             // since some usernames have multiple spaces
             // we need to check for usernames after an '@' symbol
@@ -54,8 +60,9 @@ async function sendChat(moduleCode, text, user) {
                 console.log('no user found');
             }
         }
+        await addDoc(collection(db, 'modules', moduleCode, 'chats'), messageData);
     } catch (error) {
-        console.error(error);
+        console.error("Failed to send chat:", error);
     }
 }
 

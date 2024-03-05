@@ -1,7 +1,7 @@
 .textBoxContainer{
     width: 100%;
     justify-content: flex-end;
-    padding-top: 1%;
+    padding-top: 0;
     padding-bottom: 2%;
 }
 
@@ -42,6 +42,87 @@
     color: var(--ordinary-text);
     border-radius: 10px;
 }
+
+.sendButton:hover {
+    background-color: var(--accent); 
+}
+
+.uploadButton {
+    cursor: pointer;
+    background-color: var(--card-background); 
+    color: var(--ordinary-text); 
+    border: 2px solid var(--shadows); 
+    border-radius: 10px; 
+    padding: 0.5%; 
+    margin-right: 0.2%; 
+    font-size: 1rem; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto; 
+    height: 3.5vh; 
+}
+
+.uploadButton:hover {
+    background-color: var(--accent); 
+}
+
+.imagePreviewContainer {
+    width: 87%;
+    display: flex;
+    justify-content: flex-start; 
+    margin: 10px 5% 0px;
+    flex-wrap: wrap;
+    gap: 15px; 
+    background-color: var(--background-color); 
+    border-radius: 8px; 
+    padding: 5px; 
+}
+
+.imagePreview {
+    position: relative; 
+    display: inline-block; 
+    width: 100px;
+    height: 100px;
+    margin: 5px; 
+    border-radius: 5px; 
+}
+
+
+.imagePreview img {
+    
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px; 
+}
+
+.removeImageButton {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color:var(--accent);
+    color: var(--ordinary-text);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.removeImageButton:hover {
+    background-color: var(--accent); 
+}
+
+/* Hide the real file input box */
+.file-input {
+    display: none;
+}
+
 
 .sendButton:active { /* on click */
     background-color: var(--accent);

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ChatComponent from './ChatComponent';
 import { useUpdatedChats } from './SendReceiveChats';
-import User from '../../models/User';
+
 
 function formatTimestamp(timestamp) {
     if (!timestamp) return '';
@@ -43,6 +43,7 @@ function AllChatsForAModule({ moduleCode }) {
                         name={chat.displayName}
                         avatar={chat.avatar}
                         prefix={chat.uid.split('@')[0]}
+                        imageUrl={chat.imageUrl}
                     />
                 ))}
                 <div ref={endOfMessagesRef} />
