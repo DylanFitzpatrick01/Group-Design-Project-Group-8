@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import './NotificationsPage.css'; // import the CSS file
-import NotificationBlock from './NotificationBlock';  // adjust the path if necessary
+import './NotificationsPage.css';
+import NotificationBlock from './NotificationBlock';  
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useUpdatedNotifications, formatTimestamp } from './retrieveNotifications';
 
 function NotificationsPage() {
   const [getMessage, setGetMessage] = useState({})
-
-  // if the user is not logged in, redirect to the login page
   const navigate = useNavigate();
-  // if the user is not logged in, redirect to the login page
+  const directMentions = useUpdatedNotifications();
+  
   useEffect(() => {
+    // if the user is not logged in, redirect to the login page
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, user => {
       if (!user) {
@@ -22,6 +23,7 @@ function NotificationsPage() {
 
     return () => unsubscribe();
   }, []);
+
   useEffect(() => {
     axios.get('http://localhost:5000/flask/hello').then(response => {
       console.log("SUCCESS", response)
@@ -29,13 +31,27 @@ function NotificationsPage() {
     }).catch(error => {
       console.log(error)
     })
-
-  }, [])
+  }, []);
   return (
     <div className="NotificationsPage">
       <div className="NotificationsList">
-        <NotificationBlock notificationType="societyPost" />
-        <NotificationBlock notificationType="directReply" />
+        {directMentions.length > 0 ? (
+          directMentions.map((notification) => (
+            <NotificationBlock
+              notificationType="directReply"
+              mentionedBy={notification.mentionedBy}
+              mentionedByAvatar={notification.mentionedByAvatar}
+              mentionedByUserID={notification.mentionedByUserID}
+              moduleCode={notification.moduleCode}
+              timestamp={formatTimestamp(notification.timestamp)}
+              message={notification.text}
+            />
+          ))
+        ) : (
+          <div className='no-notifs-block-outer'>
+            <div className="no-notifs-block"><p>No Notifications</p></div>
+          </div>
+        )}
       </div>
     </div>
   );

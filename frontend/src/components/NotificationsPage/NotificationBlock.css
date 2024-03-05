@@ -1,7 +1,7 @@
-
-.NotificationComponentOuter{
+.NotificationComponentOuter {
     padding: 2%;
 }
+
 .NotificationComponent {
     display: flex;
     flex-direction: column;
@@ -15,29 +15,85 @@
     background-color: var(--card-background);
 }
 
-.NotificationComponent-header{
+.NotificationComponent-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
 }
 
-.NotificationComponent-header h2{
+.NotificationComponent-header h2 {
     font-weight: 800;
     font-size: 18px;
     color: var(--accent);
 }
 
-.NotificationTimeStamp{
+.NotificationTimeStamp {
     font-size: 13px;
     color: var(--unimportant-text);
 }
 
-.NotificationComponent-body{
+.NotificationComponent-body {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
     color: var(--ordinary-text);
     font-size: 15px;
+}
+
+.body-container {
+    display: flex;
+    align-items: center;
+    gap: 1vh;
+}
+
+.body-container img {
+    width: 4vh;
+    height: 4vh;
+    margin-left: 0%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.link-to-module {
+    color: var(--accent);
+    text-decoration: underline;
+    font-weight: 2500;
+}
+
+.link-to-module:hover {
+    color: var(--ordinary-text);
+    font-weight: 2500;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center; 
+    gap: 2vh; 
+    transition: transform 0.3s ease;
+}
+
+.profile-info img:hover {
+    transform: scale(1.1);
+}
+
+
+.link-to-profile {
+    color: var(--accent);
+    font-weight: 2500;
+    transition: transform 0.3s ease;
+}
+
+.link-to-profile:hover {
+    font-weight: 2500;
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+
+}
+
+.link-to-profile img:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+
 }

@@ -51,7 +51,7 @@ function ChatPage({ rootPage }) {
                 console.log("Document data:", docSnap.data());
                 const userData = docSnap.data();
                 const { activeStatus, avatar, bio, courseTitle, email, name, yearOfStudy } = userData;
-                const user = new User(activeStatus, avatar, bio, courseTitle, email, name, yearOfStudy);
+                const user = new User(docSnap.id, activeStatus, avatar, bio, courseTitle, email, name, yearOfStudy);
                 console.log(user);
                 setUserInfo(user);
             } else {
