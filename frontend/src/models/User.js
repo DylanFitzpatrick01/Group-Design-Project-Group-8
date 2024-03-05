@@ -1,7 +1,8 @@
 // user model
     // add functions for updating user details
 class User {
-    constructor(activeStatus, avatar, bio, courseTitle, email, name, yearOfStudy) {
+    constructor(id, activeStatus, avatar, bio, courseTitle, email, name, yearOfStudy) {
+        this.id = id;
         this.activeStatus = activeStatus;
         this.avatar = avatar;
         this.bio = bio;
