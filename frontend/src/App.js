@@ -15,6 +15,7 @@ import ChatPage from './components/chatPage/ChatPage'; // import ChatPage
 import Login from './components/LoginPage';
 import Profile from './components/Profile';
 import LogoutPage from './components/Logout';
+import SocietyProfile from './components/societies/SocietyProfile';
 
 const navLinks = [
   { to: "/modules", label: "Modules" },
@@ -22,6 +23,7 @@ const navLinks = [
   { to: "/notifications", label: <img src="/bell.png" alt="Notifications" /> },
   { to: "/profile", label: <img src="/profile.png" alt="Profile" /> },
   { to: "/logout", label: <img src="/logout.png" alt="Logout" /> },
+
 
 ];
 
@@ -40,6 +42,7 @@ function App() {
           <Route path="/user/:id" element={<Profile />} />
           <Route path="/modules/:moduleCode" element={<ChatPage rootPage={"/modules"} />} />
           <Route path="/societies/:moduleCode" element={<ChatPage rootPage={"/societies"} />} />
+          <Route path="/societies/:name/info" element={<SocietyProfile />} />
           <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/logout" element={<LogoutPage />} />
         </Routes>

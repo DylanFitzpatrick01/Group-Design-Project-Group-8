@@ -34,6 +34,15 @@ function AddUserPost() {
                 comment: 0,
                 share: 0
             });
+            const docRef4 = await addDoc(collection(db, "posts"), {
+                author: 'Afro-Caribbean Society',
+                title: 'Paint & Chat!',
+                content: "Join us for a fun evening of painting and chatting! We'll be painting a beautiful sunset and discussing the latest news in the world of art.",
+                date: '2024-01-18T10:30:00',
+                like: 0,
+                comment: 0,
+                share: 0
+            });
             console.log("Document written with ID: ", docRef1.id);
         } catch (e) {
             console.error("Error adding document: ", e);
