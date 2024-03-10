@@ -106,6 +106,9 @@ function SocietyProfile({ name }) {
                   {societyInfo.twitter && <a href={"https://www.twitter.com/" + societyInfo.twitter} target="_blank" rel="noreferrer">
                     <i className="bi bi-twitter-x icon"></i>
                   </a>}
+                  {societyInfo.facebook && <a href={"https://www.facebook.com/" + societyInfo.facebook} target="_blank" rel="noreferrer">
+                    <i className="bi bi-facebook icon"></i>
+                  </a>}
                   {societyInfo.website && <a href={societyInfo.website} target="_blank" rel="noreferrer">
                     <i className="bi bi-globe icon"></i>
                   </a>}
