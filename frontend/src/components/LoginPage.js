@@ -7,8 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
-
-
 function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState('');
