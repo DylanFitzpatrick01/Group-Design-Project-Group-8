@@ -1,4 +1,3 @@
-import datetime
 import os.path
 
 from flask import Flask, send_from_directory, request, jsonify
@@ -10,24 +9,28 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from datetime import datetime
+import json
+
 
 API_KEY = "AIzaSyDAlrmNP4IydBXFKbj9ry7fZQmrswg1HKk"
 
 import os.path
 
-from flask import Flask, send_from_directory, request, jsonify
-from flask_restful import Api, Resource, reqparse
-from flask_cors import CORS #comment this on deployment
-from api.HelloApiHandler import HelloApiHandler
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 
 app = Flask(__name__, static_url_path='', static_folder='frontend/build')
 CORS(app) #comment this on deployment
 api = Api(app)
+
+
+# Function to format datetime from frontend
+# YYYY-MM-DDTHH:MM -> YYYY-MM-DDTHH:MM:SS
+def format_datetime(event):
+    for time_key in ['start', 'end']:
+        dt = datetime.strptime(event[time_key]['dateTime'], "%Y-%m-%dT%H:%M")
+        formatted_dt = dt.strftime("%Y-%m-%dT%H:%M:%S")
+        event[time_key]['dateTime'] = formatted_dt
+
 
 @app.route("/", defaults={'path':''})
 def serve(path):
@@ -63,6 +66,14 @@ def create_event():
         service = build("calendar", "v3", credentials=creds, developerKey=API_KEY)
 
         event = request.json
+
+        # format the datetime from frontend
+        format_datetime(event)
+
+        # delete recurrence if it's empty
+        if not any(event['recurrence']):
+            del event['recurrence']
+
 
         print(event)
         event = service.events().insert(calendarId='primary', body=event).execute()
