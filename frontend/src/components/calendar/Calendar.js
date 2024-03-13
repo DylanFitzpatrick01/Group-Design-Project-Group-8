@@ -30,7 +30,7 @@ function Calendar() {
         dateTime: endDateTime,
         timeZone: 'Europe/Dublin',
       },
-      recurrence: ['RRULE:FREQ=DAILY;COUNT=2'],
+      recurrence: [''],
       attendees,
       reminders: {
         useDefault: false,
