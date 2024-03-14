@@ -7,6 +7,8 @@ import { getYear } from './getYear.js';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useParams } from 'react-router-dom';
+import changeActiveStatus from './changeActiveStatus.js';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 
 // Profile takes a username (the name of the collection in FB) as a prop
@@ -20,12 +22,22 @@ function Profile({ username }) {
     avatar: '',
     yearOfStudy: 0,
     courseTitle: '',
-    activeStatus: 1,
+    activeStatus: 0,
     bio: ''
   });
 
   const [posts, setPosts] = useState([
     {}]);
+
+  const handleStatusChange = (newStatus) => {
+    setUserInfo(prevState => ({
+      ...prevState,
+      activeStatus: newStatus,
+    }));
+    changeActiveStatus(newStatus);
+  };
+
+
 
   // if the user is not logged in, redirect to the login page
   const navigate = useNavigate();
@@ -117,7 +129,24 @@ function Profile({ username }) {
                 <div className="user-details text-start ">
                   <p>{getYear(userInfo.yearOfStudy)}</p>
                   <p>{userInfo.courseTitle}</p>
-                  <p>{getStatus(userInfo.activeStatus)}</p>
+                  {params.id ? (
+                    <p>{getStatus(userInfo.activeStatus)}</p>
+                  ) : (
+                    <div className="dropdown">
+                      <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        {userInfo.activeStatus === 0 && "🔘 Invisible"}
+                        {userInfo.activeStatus === 1 && "🟢 Online"}
+                        {userInfo.activeStatus === 2 && "🔴 Busy"}
+                        {userInfo.activeStatus === 3 && "🟡 Away"}
+                      </button>
+                      <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><button className="dropdown-item" type="button" onClick={() => handleStatusChange(0)}>🔘 Invisible</button></li>
+                        <li><button className="dropdown-item" type="button" onClick={() => handleStatusChange(1)}>🟢 Online</button></li>
+                        <li><button className="dropdown-item" type="button" onClick={() => handleStatusChange(2)}>🔴 Busy</button></li>
+                        <li><button className="dropdown-item" type="button" onClick={() => handleStatusChange(3)}>🟡 Away</button></li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-7 border-0 rounded d-flex justify-content-center align-items-center" id="bioCard">
