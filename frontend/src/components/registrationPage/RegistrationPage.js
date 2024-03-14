@@ -16,7 +16,7 @@ function RegistrationPage() {
     avatar: null,
     yearOfStudy: 1,
     courseTitle: '',
-    activeStatus: 0,
+    activeStatus: 1,
     bio: '',
   });
 
@@ -77,7 +77,7 @@ function RegistrationPage() {
       navigate('/profile');
 
       setFormData({
-        activeStatus: 0,
+        activeStatus: 1,
         email: '',
         name: '',
         avatar: null,
