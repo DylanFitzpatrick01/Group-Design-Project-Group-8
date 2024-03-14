@@ -132,7 +132,7 @@ function SocietyProfile({ name }) {
         const docRef = await addDoc(collection(db, "posts"), {
           author: name,
           comment: 0,
-          content: event.summary + " has just created a new event! \nEvent: " + event.summary + "\nWhen: " + new Date(event.start.dateTime).toLocaleString() + " - " + new Date(event.end.dateTime).toLocaleString() + "\nWhere: " + event.location + "\nDescription: " + event.description,
+          content: name + " has just created a new event! \nEvent: " + event.summary + "\nWhen: " + new Date(event.start.dateTime).toLocaleString() + " - " + new Date(event.end.dateTime).toLocaleString() + "\nWhere: " + event.location + "\nDescription: " + event.description,
           date: currentDate.toISOString(),
           like: 0,
           share: 0,
