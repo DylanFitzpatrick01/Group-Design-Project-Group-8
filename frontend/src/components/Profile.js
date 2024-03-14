@@ -156,14 +156,17 @@ function Profile({ username }) {
           </div>
         </div>
         {/* interact btns */}
-        <div className="row mt-3 d-flex justify-content-end">
-          <div className="col-auto">
-            <button className="btn bioBtn" >ADD</button>
+        {/* not visible when checking self profile */}
+        {params.id && (
+          <div className="row mt-3 d-flex justify-content-end">
+            <div className="col-auto">
+              <button className="btn bioBtn" >ADD</button>
+            </div>
+            <div className="col-auto" style={{ paddingRight: "0px" }}>
+              <button className="btn bioBtn" >DM</button>
+            </div>
           </div>
-          <div className="col-auto" style={{ paddingRight: "0px" }}>
-            <button className="btn bioBtn" >DM</button>
-          </div>
-        </div>
+        )}
         {/* user posts */}
         <div className="row mt-4 text-start">
           <h2 id="recentPosts">Recent Posts</h2>
