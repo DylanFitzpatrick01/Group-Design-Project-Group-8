@@ -140,10 +140,10 @@ function Profile({ username }) {
                         {userInfo.activeStatus === 3 && "🟡 Away"}
                       </button>
                       <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><button className="dropdown-item" type="button" onClick={() => handleStatusChange(0)}>🔘 Invisible</button></li>
                         <li><button className="dropdown-item" type="button" onClick={() => handleStatusChange(1)}>🟢 Online</button></li>
                         <li><button className="dropdown-item" type="button" onClick={() => handleStatusChange(2)}>🔴 Busy</button></li>
                         <li><button className="dropdown-item" type="button" onClick={() => handleStatusChange(3)}>🟡 Away</button></li>
+                        <li><button className="dropdown-item" type="button" onClick={() => handleStatusChange(0)}>🔘 Invisible</button></li>
                       </ul>
                     </div>
                   )}
