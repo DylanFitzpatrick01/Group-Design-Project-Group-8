@@ -66,12 +66,24 @@ function ChatPage({ rootPage }) {
     return (
         <>
             <div className="module-chat-title">
-                <Link to={rootPage}>
-                    <button className='back-button'>
-                        <i className="bi bi-arrow-left-square" style={{ color: 'var(--accent)', fontSize: '30px' }}></i>
-                    </button>
-                </Link>
-                {moduleCode}
+                <div className="row justify-content-between align-items-center">
+                    <div className="col-10 col-sm-10 col-md-11">
+                        <Link to={rootPage}>
+                            <button className='back-button'>
+                                <i className="bi bi-arrow-left-square" style={{ color: 'var(--accent)', fontSize: '30px' }}></i>
+                            </button>
+                        </Link>
+                        {moduleCode}
+                    </div>
+                    <div className="col-2 col-sm-2 col-md-1">
+                        {/* if the rootpage is societies, add a button to the society profile page*/}
+                        {rootPage === '/societies' && <Link to={`/societies/${moduleCode}/info`}>
+                            <button className='back-button'>
+                                <i className="bi bi-info-circle-fill" style={{ color: 'var(--accent)', fontSize: '30px' }}></i>
+                            </button>
+                        </Link>}
+                    </div>
+                </div>
             </div>
             <div className="chat-container">
                 <div className="chat-content">
