@@ -20,7 +20,7 @@ function Profile({ username }) {
     avatar: '',
     yearOfStudy: 0,
     courseTitle: '',
-    activeStatus: 0,
+    activeStatus: 1,
     bio: ''
   });
 
@@ -44,7 +44,7 @@ function Profile({ username }) {
 
 
   useEffect(() => {
-    // get user profile from firebase
+    // Define the function to fetch user profile
     const getUser = async () => {
       try {
         const docRef = doc(db, "users", username);
@@ -60,10 +60,9 @@ function Profile({ username }) {
       }
     };
 
+    // Define the function to fetch user posts
     const getPosts = async () => {
       try {
-        // get user posts from firebase
-        // query: where('author', '==', username);
         const q = query(collection(db, "posts"), where("author", "==", username));
         const docSnap = await getDocs(q);
         if (!docSnap.empty) {
@@ -81,10 +80,22 @@ function Profile({ username }) {
       }
     };
 
-
+    // Execute getUser and getPosts immediately
     getUser();
     getPosts();
-  }, [username])
+
+    // Set a timeout to re-fetch the data after 1 second, but only once
+    // to update the online status of the user
+    const timer = setTimeout(() => {
+      getUser();
+      getPosts();
+      console.log("Data re-fetched after 1 second.");
+    }, 1000);
+
+    // Cleanup function to clear the timer if the component unmounts before the timer fires
+    return () => clearTimeout(timer);
+
+  }, [username]); // Dependencies array to run the effect when `username` changes
 
 
   return (

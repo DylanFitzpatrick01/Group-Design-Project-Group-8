@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
+import changeActiveStatus from './changeActiveStatus.js';
 
 function LogoutPage() {
   const navigate = useNavigate();
@@ -19,10 +20,13 @@ function LogoutPage() {
 
 
   useEffect(() => {
+    if (localStorage.getItem('userPrefix') != null) {
+      console.log("Setting active status to offline...");
+      changeActiveStatus(0);
+    }
     localStorage.removeItem('accessToken');
     localStorage.removeItem('userPrefix');
     localStorage.removeItem('userEmail');
-
     const auth = getAuth();
     signOut(auth).then(() => {
       console.log('Logged out successfully.');

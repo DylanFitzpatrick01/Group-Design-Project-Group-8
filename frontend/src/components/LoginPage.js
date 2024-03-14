@@ -6,7 +6,7 @@ import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
+import changeActiveStatus from './changeActiveStatus.js';
 
 
 function Login() {
@@ -47,6 +47,8 @@ function Login() {
 
       // Check whether the document exists
       if (docSnap.exists()) {
+        console.log("User is already registered, set active status to online.");
+        changeActiveStatus(1);
         navigate('/profile');
 
       } else {
