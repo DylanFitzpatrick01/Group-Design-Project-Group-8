@@ -41,7 +41,7 @@ api.add_resource(HelloApiHandler, '/flask/hello')
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
-@app.route('/calendar', methods=['POST'])
+@app.route('/societies/:name/info', methods=['POST'])
 def create_event():
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
