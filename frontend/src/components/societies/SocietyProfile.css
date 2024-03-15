@@ -17,7 +17,8 @@ p {
   text-decoration: none;
 }
 
-#recentPosts {
+#recentPosts ,
+#createEventTitle{
   color: var(--accent);
   font-weight: bold;
 
@@ -102,4 +103,9 @@ pre{
   color: var(--ordinary-text);
   margin: 5px 0;
   white-space: pre-wrap;
+}
+
+input, textarea{
+  border-radius: 5px;
+  width: 60%;
 }

@@ -28,7 +28,6 @@ function SocietyProfile({ name }) {
   const [description, setDescription] = useState('');
   const [startDateTime, setStartDateTime] = useState('');
   const [endDateTime, setEndDateTime] = useState('');
-  const [attendees, setAttendees] = useState([]);
   const [email, setEmail] = useState('');
   const [posts, setPosts] = useState([
     {}]);
@@ -95,11 +94,6 @@ function SocietyProfile({ name }) {
     getPosts();
   }, [name])
 
-  const handleAddAttendee = () => {
-    setAttendees([...attendees, { email }]);
-    setEmail('');
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Prepare the event object with the form values
@@ -116,7 +110,7 @@ function SocietyProfile({ name }) {
         timeZone: 'Europe/Dublin',
       },
       recurrence: [''],
-      attendees,
+      attendees: [],
       reminders: {
         useDefault: false,
         overrides: [
@@ -224,48 +218,38 @@ function SocietyProfile({ name }) {
 
         {showEventForm && (
         <div className="row mt-4 p-4 rounded border-0" id="createEvent">
-            <h2>Create Event</h2>
-            <form onSubmit={handleSubmit}>
-              <div className='row'>
-                <div className='col'>
-                    <p>Title:</p>
-                    <input type="text" value={summary} onChange={(e) => setSummary(e.target.value)} />
-                </div>
-                <div className='col'>
-                    <p>Location:</p>
-                    <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
-                </div>
-                <div className="row">
-                  <div className='col'>
-                      <p>Start Date Time:</p>
-                      <input type="datetime-local" value={startDateTime} onChange={(e) => setStartDateTime(e.target.value)} />
-                    </div>
-                  <div className='col'>
-                      <p>End Date Time:</p>
-                      <input type="datetime-local" value={endDateTime} onChange={(e) => setEndDateTime(e.target.value)} />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col">
-                      <p>Description:</p>
-                      <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-                  </div>
-                  <div className='col'>
-                      <p>Add Attendee:</p>
-                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                      <button type="button" onClick={handleAddAttendee}>Add</button>
-                      <ul>
-                        {attendees.map((attendee, index) => (
-                          <li key={index}>{attendee.email}</li>
-                        ))}
-                      </ul>
-                    </div>
-                </div>
-              </div>
-              <button className="btn btn-primary" type="submit" onClick={handleSubmit} id="createEventButton">Create Event</button>
-            </form>
+          <h2 id="createEventTitle">Create Event</h2>
+          <form onSubmit={handleSubmit}>
+          <div className="row">
+            <div className="col">
+              <p>Title:</p>
+              <input type="text" value={summary} onChange={(e) => setSummary(e.target.value)} />
+            </div>
+            <div className="col">
+              <p>Location:</p>
+              <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <p>Start Date Time:</p>
+              <input id ="start" type="datetime-local" value={startDateTime} onChange={(e) => setStartDateTime(e.target.value)} />
+            </div>
+            <div className="col">
+              <p>End Date Time:</p>
+              <input id="end" type="datetime-local" value={endDateTime} onChange={(e) => setEndDateTime(e.target.value)} />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <p>Description:</p>
+              <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+            </div>
+          </div>
+          <button className="btn btn-primary" type="submit" onClick={handleSubmit} id="createEventButton">Create Event</button>
+          </form>
         </div>
-        )}
+      )}
 
       {showAddEventButton && (
         <div className="row mt-4">

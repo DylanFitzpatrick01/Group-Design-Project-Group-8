@@ -1,7 +1,7 @@
 import os.path
 
 from flask import Flask, send_from_directory, request, jsonify
-from flask_restful import Api, Resource, reqparse
+from flask_restful import Api
 from flask_cors import CORS #comment this on deployment
 from api.HelloApiHandler import HelloApiHandler
 from google.auth.transport.requests import Request
@@ -10,7 +10,6 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from datetime import datetime
-import json
 
 
 API_KEY = "AIzaSyDAlrmNP4IydBXFKbj9ry7fZQmrswg1HKk"
