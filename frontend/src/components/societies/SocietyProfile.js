@@ -145,6 +145,11 @@ function SocietyProfile({ name }) {
     setShowAddEventButton(false); // Hide the Add Event button
   };
 
+  const handleCloseEventBoxClick = () => {
+    setShowEventForm(false);
+    setShowAddEventButton(true);
+  };
+
   const handleEventFormClose = () => {
     setShowEventForm(false); // Set showEventForm to false when event form is closed
   };
@@ -247,6 +252,7 @@ function SocietyProfile({ name }) {
             </div>
           </div>
           <button className="btn btn-primary" type="submit" onClick={handleSubmit} id="createEventButton">Create Event</button>
+          <button onClick={handleCloseEventBoxClick} className="btn btn-primary" id="closeEventBoxButton">X</button>
           </form>
         </div>
       )}
