@@ -65,7 +65,6 @@ def create_event():
         service = build("calendar", "v3", credentials=creds, developerKey=API_KEY)
 
         event = request.json
-
         # format the datetime from frontend
         format_datetime(event)
 

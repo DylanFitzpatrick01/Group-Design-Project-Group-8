@@ -119,6 +119,7 @@ function SocietyProfile({ name }) {
           ],
       },
     };
+    const eventString = JSON.stringify(event);
     // Now you can send this event object to your backend API to create the event
     try {
         // Make HTTP POST request to Flask backend
@@ -130,7 +131,9 @@ function SocietyProfile({ name }) {
           date: currentDate.toISOString(),
           like: 0,
           share: 0,
-          title: `New Event! ${event.summary}`
+          title: `New Event! ${event.summary}`,
+          isEvent: true,
+          eventDetails: eventString
         });        
         setShowEventForm(false);
         const response = await axios.post('http://localhost:8000//societies/:name/info', event);
@@ -150,9 +153,19 @@ function SocietyProfile({ name }) {
     setShowAddEventButton(true);
   };
 
-  const handleEventFormClose = () => {
-    setShowEventForm(false); // Set showEventForm to false when event form is closed
-  };
+  const handleAddToCalendarClick = async (event) => {
+    try {
+      // Make HTTP POST request to Flask backend
+      const response = await axios.post('http://localhost:8000/societies/:name/info', event, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log('Event created:', response.data);
+    } catch (error) {
+      console.error('Error creating event:', error.response.data);
+    }
+};
 
   return (
     <div className="Profile">
@@ -208,6 +221,11 @@ function SocietyProfile({ name }) {
                     </div>
                     <div className="row border-0 text-start">
                       <pre className="m-0 mb-3">{post.content}</pre>
+                      {post.isEvent && (
+                        <div className="row border-0">
+                        <button className='btn btn-primary' id="addToCalendar" onClick={() => handleAddToCalendarClick(post.eventDetails)}>Add to Calendar</button>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="col-1 ms-3 postLnk d-flex flex-column justify-content-center">
