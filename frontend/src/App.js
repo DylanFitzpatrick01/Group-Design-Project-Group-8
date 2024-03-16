@@ -18,17 +18,39 @@ import LogoutPage from './components/Logout';
 import SocietyProfile from './components/societies/SocietyProfile';
 
 
-const navLinks = [
+const originalNavLinks = [
   { to: "/modules", label: "Modules" },
   { to: "/societies", label: "Societies" },
   { to: "/notifications", label: <img src="/bell.png" alt="Notifications" /> },
   { to: "/profile", label: <img src="/profile.png" alt="Profile" /> },
   { to: "/logout", label: <img src="/logout.png" alt="Logout" /> },
-
-
 ];
 
+
 function App() {
+  const [navLinks, setNavLinks] = useState(originalNavLinks);
+  const isSociety = localStorage.getItem('society') !== null;
+  useEffect(() => {
+    const updateNavLinks = () => {
+      const societyExists = localStorage.getItem('society') !== null && localStorage.getItem('society') !== '';
+      const userExists = localStorage.getItem('userEmail') !== null;
+      if (!userExists) {
+        setNavLinks([]);
+      }
+      else if (societyExists) {
+        let updatedLinks = [
+          { to: `/societies/${localStorage.getItem('society')}`, label: "My Society" },
+          { to: `/societies/${localStorage.getItem('society')}/info`, label: <img src="/profile.png" alt="Profile" /> },
+          { to: "/logout", label: <img src="/logout.png" alt="Logout" /> },
+        ];
+        setNavLinks(updatedLinks);
+
+      } else {
+        setNavLinks(originalNavLinks);
+      }
+    };
+    updateNavLinks();
+  }, []);
 
   return (
     <div className="App">
