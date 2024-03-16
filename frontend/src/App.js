@@ -17,6 +17,7 @@ import Profile from './components/Profile';
 import LogoutPage from './components/Logout';
 import SocietyProfile from './components/societies/SocietyProfile';
 
+
 const navLinks = [
   { to: "/modules", label: "Modules" },
   { to: "/societies", label: "Societies" },

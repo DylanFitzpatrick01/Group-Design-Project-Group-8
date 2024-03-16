@@ -8,7 +8,6 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import changeActiveStatus from './changeActiveStatus.js';
 
-
 function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState('');

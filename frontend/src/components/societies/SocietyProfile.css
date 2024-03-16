@@ -17,7 +17,8 @@ p {
   text-decoration: none;
 }
 
-#recentPosts {
+#recentPosts ,
+#createEventTitle{
   color: var(--accent);
   font-weight: bold;
 
@@ -78,4 +79,55 @@ a {
 .icon {
   color: var(--accent);
   padding-left: 0.15em;
+}
+
+#createEvent{
+  background-color: var(--card-background);
+  box-shadow: 0px 1px 5px var(--shadows);
+  margin-bottom: 5%;
+  position: relative;
+}
+
+#addEventButton{
+  background-color: var(--card-background);
+  color: var(--ordinary-text);
+  box-shadow: 0px 1px 5px var(--shadows);
+  margin-bottom: 5%;
+}
+
+#createEventButton{
+  background-color: var(--card-background);
+  color: var(--ordinary-text);
+  box-shadow: 0px 1px 5px var(--shadows);
+  margin-top: 5%;
+}
+
+pre{
+  color: var(--ordinary-text);
+  margin: 5px 0;
+  white-space: pre-wrap;
+}
+
+input, textarea{
+  border-radius: 5px;
+  width: 60%;
+}
+
+#closeEventBoxButton{
+  background-color: var(--card-background);
+  color: var(--ordinary-text);
+  box-shadow: 0px 1px 5px var(--shadows);
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#addToCalendar{
+  background-color: var(--card-background);
+  color: var(--ordinary-text);
+  box-shadow: 0px 1px 5px var(--shadows);
+  margin-left: 50%;
+  margin-bottom: 2%;
+  width: 20%;
+  align-items: center;
 }
