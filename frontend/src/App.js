@@ -38,7 +38,7 @@ function App() {
       }
       else if (societyExists) {
         let updatedLinks = [
-          { to: `/societies/${localStorage.getItem('society')}`, label: "My Society" },
+          { to: `/societies/${localStorage.getItem('society')}`, label: "Chat" },
           { to: `/societies/${localStorage.getItem('society')}/info`, label: <img src="/profile.png" alt="Profile" /> },
           { to: "/logout", label: <img src="/logout.png" alt="Logout" /> },
         ];
