@@ -29,10 +29,9 @@ const originalNavLinks = [
 
 function App() {
   const [navLinks, setNavLinks] = useState(originalNavLinks);
-  const isSociety = localStorage.getItem('society') !== null;
   useEffect(() => {
     const updateNavLinks = () => {
-      const societyExists = localStorage.getItem('society') !== null && localStorage.getItem('society') !== '';
+      const societyExists = localStorage.getItem('society') !== 'false';
       const userExists = localStorage.getItem('userEmail') !== null;
       if (!userExists) {
         setNavLinks([]);
