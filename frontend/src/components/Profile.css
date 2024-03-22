@@ -34,6 +34,7 @@ p {
 #bioCard {
   position: relative;
 }
+
 .post {
   background-color: var(--background-color);
   box-shadow: 0px 1px 5px var(--shadows);
@@ -47,24 +48,24 @@ p {
 
 .profile-picture {
   position: relative;
-  display: inline-block; 
-  width: 200px; 
-  height: 200px; 
+  display: inline-block;
+  width: 200px;
+  height: 200px;
 }
 
 .profile-picture img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 50%; 
+  border-radius: 50%;
 }
 
 .editBtn {
   position: absolute;
   cursor: pointer;
-  background-color: var(--card-background); 
+  background-color: var(--card-background);
   border: 2px solid var(--background-color);
-  border-radius: 50%; 
+  border-radius: 50%;
   color: var(--accent);
   bottom: 5px;
   right: 10px;
@@ -75,16 +76,18 @@ p {
   background-color: var(--accent);
   color: white;
 }
-.fileInputBtn, .cancelEditBtn {
+
+.fileInputBtn,
+.cancelEditBtn {
   position: absolute;
   cursor: pointer;
-  background-color: var(--card-background); 
+  background-color: var(--card-background);
   color: var(--ordinary-text);
-  border: 1px solid var(--accent); 
-  padding: 5px 10px; 
-  border-radius: 20px; 
-  font-size: 0.8rem; 
-  opacity: 0.9; 
+  border: 1px solid var(--accent);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  opacity: 0.9;
 }
 
 .fileInputBtn {
@@ -97,10 +100,11 @@ p {
   right: 5px;
 }
 
-.fileInputBtn:hover, .cancelEditBtn:hover {
-  background-color: var(--accent); 
+.fileInputBtn:hover,
+.cancelEditBtn:hover {
+  background-color: var(--accent);
   color: var(--background-color);
-  opacity: 1; 
+  opacity: 1;
 }
 
 /* Hide the file input but make label clickable */
@@ -115,7 +119,7 @@ p {
 
 .fileInputBtn label {
   cursor: pointer;
-  display: inline-block; 
+  display: inline-block;
 }
 
 .user-details h1 {
@@ -140,23 +144,25 @@ p {
 }
 
 .bioTextarea {
-  width: 100%; 
+  width: 100%;
   background-color: var(--background-color);
-  color: var(--ordinary-text); 
+  color: var(--ordinary-text);
   border: 1px solid var(--shadows);
-  border-radius: 5px; 
-  padding: 20px; 
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); 
-  resize: none; 
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  resize: none;
 }
 
 .editBtnContainer {
   position: absolute;
-  bottom: 21px;
-  right: 11px;
+  bottom: 14px;
+  right: 15px;
 }
 
-.bioSaveBtn, .bioCancelBtn, .bioEditBtn {
+.bioSaveBtn,
+.bioCancelBtn,
+.bioEditBtn {
   cursor: pointer;
   background-color: var(--card-background);
   color: var(--ordinary-text);
@@ -167,7 +173,9 @@ p {
   box-shadow: 0px 1px 5px var(--shadows);
 }
 
-.bioSaveBtn:hover, .bioCancelBtn:hover, .bioEditBtn:hover {
+.bioSaveBtn:hover,
+.bioCancelBtn:hover,
+.bioEditBtn:hover {
   background-color: var(--accent);
   color: white;
 }
