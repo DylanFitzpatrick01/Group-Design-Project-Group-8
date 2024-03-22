@@ -84,6 +84,7 @@ function Profile({ username }) {
 
     try {
       const avatarUrl = await uploadAvatar(file);
+      await updateProfileAvatar(username, avatarUrl);
       setUserInfo({ ...userInfo, avatar: avatarUrl }); 
       setIsEditingAvatar(false); 
     } catch (error) {
