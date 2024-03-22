@@ -38,26 +38,30 @@ async function sendChat(moduleCode, text, user, imageUrl = null) {
         if (imageUrl) {
             messageData.imageUrl = imageUrl;
         }
+
+        // since some usernames have multiple spaces
+            // we need to check for usernames after an '@' symbol
         
         const allUserNames = await getAllUserNames();
         if (text.includes('@')) {
-            // since some usernames have multiple spaces
-            // we need to check for usernames after an '@' symbol
             const wordsAfterAt = text.split('@')[1].split(' ');
-            let username = '';
-            let mentionedUserObj = null; 
-            for (let i = 0; i < wordsAfterAt.length; i++) {
-                username += (i > 0 ? ' ' : '') + wordsAfterAt[i];
-                mentionedUserObj = allUserNames.find(user => user.name === username);
-                if (mentionedUserObj) {
-                    break;
-                }
-                console.log(i);
-            }
-            if (mentionedUserObj) { 
-                sendMentionedNotification(moduleCode, text, user.name, user.avatar, user.id, mentionedUserObj.id, serverTimestamp());
+            if (wordsAfterAt[0] === 'everyone') {
+                sendEveryoneNotification(moduleCode, text, user.name, user.avatar, user.id, serverTimestamp());
             } else {
-                console.log('no user found');
+                let username = '';
+                let mentionedUserObj = null; 
+                for (let i = 0; i < wordsAfterAt.length; i++) {
+                    username += (i > 0 ? ' ' : '') + wordsAfterAt[i];
+                    mentionedUserObj = allUserNames.find(user => user.name === username);
+                    if (mentionedUserObj) {
+                        break;
+                    }
+                }
+                if (mentionedUserObj) { 
+                    sendMentionedNotification(moduleCode, text, user.name, user.avatar, user.id, mentionedUserObj.id, serverTimestamp());
+                } else {
+                    console.log('no user found');
+                }
             }
         }
         await addDoc(collection(db, 'modules', moduleCode, 'chats'), messageData);
@@ -80,6 +84,18 @@ async function sendMentionedNotification(moduleCode, text, mentionedByUsername, 
     catch (error) {
         console.error(error);
     }
+}
+
+async function sendEveryoneNotification(moduleCode, text, mentionedByUsername, mentionedByUserAvatar, mentionedByUserID, timestamp) {  
+    try {
+        // get all the usernames of the people who have favourited the module
+        // add a notification for each of them from the person who mentioned everyone
+        console.log('sending everyone notification');
+    }
+    catch (error) {
+        console.error(error);
+    }
+
 }
 
 // get all chats from a module and call getChatsOnChange every time the chats change
