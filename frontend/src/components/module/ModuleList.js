@@ -85,7 +85,7 @@ const ModulesList = () => {
     <div>
       <div className='content-container'>
         <div className='my-modules'>
-          <h2>My Modules</h2>
+          <h2 className="modules-title">My Modules</h2>
           {myModule.map(module => (
             <Link key={module.id} to={`/modules/${module.id}`}>
               <button key={module.id} className='module-item-button'>

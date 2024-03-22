@@ -10,7 +10,7 @@ const AddModuleBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="add-module-container">
+    <div className="add-modules-container">
       <form onSubmit={handleSearch}>
         <input className="search-bar"
           type="text"

@@ -1,38 +1,99 @@
+.content-container {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--background-color);
+}
+
+.my-societies {
+  flex: 1;
+  padding: 10px;
+  margin-right: 20px;
+  margin-top: 30px;
+}
+
+.search-results {
+  flex: 1;
+  padding: 10px;
+  text-align: left;
+  margin-left: 180px;
+  margin-top: -50px;
+  max-width: 450px;
+  background-color: var(--card-background);
+  box-shadow: 0 1px 5px var(--shadows);
+  border-radius: 20px;
+  position: relative;
+  top:-50px;
+  z-index: 10;
+}
+
+.search-section {
+  flex: 1;
+  margin-left: 10px;
+  margin-top: 60px;
+  padding: 10px;
+}
+
+.search-result-item {
+  padding: 15px;
+  width: 85%;
+  border-radius: 20px;
+  background-color: var(--shadows);
+  text-align: left;
+  flex: 1;
+  margin: 10px 0 15px 20px;
+}
+
+
+.add-button {
+  display: inline-block;
+  color: var(--ordinary-text);
+  background-color: var(--unimportant-text);
+  border: none;
+  padding: 8px 15px;
+  margin: 0 auto;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-button:hover {
+  background-color: var(--background-color);
+}
+
+
 .societies-list-container {
-    background-color: var(--background-color);
-    color: var(--ordinary-text);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .societies-item {
-    background-color: var(--card-background);
-    margin: 5px 0;
-    padding: 1px ;
-    color: var(--ordinary-text);
-    box-shadow: 0px 1px 5px var(--shadows);
-    width: 65vh;
-    text-align: left;
-    height: 30px;
-  }
-  
-  .society-item-button {
-    background-color: var(--card-background);
-    margin: 5px 0;
-    padding: 1px;
-    color: var(--ordinary-text);
-    box-shadow: 0px 1px 5px var(--shadows);
-    width: 65vh;
-    text-align: left;
-    height: 30px;
-    border: none;
-    white-space: nowrap;
-    box-sizing: border-box;
-  
-  }
-  
-  .societies-title {
-    color: var(--accent);
-  }
-  
+    flex: 1;
+    padding: 10px;
+    margin-right: 20px;
+    margin-top: 30px;
+}
+
+.societies-item {
+  background-color: var(--card-background);
+  margin: 5px 0;
+  padding: 1px ;
+  color: var(--ordinary-text);
+  box-shadow: 0px 1px 5px var(--shadows);
+  width: 65vh;
+  text-align: left;
+  height: 30px;
+}
+
+.society-item-button {
+  padding: 27px 40px;
+  width: 90%;
+  box-shadow: 0 1px 5px var(--shadows);
+  background-color: var(--card-background);
+  color: var(--ordinary-text);
+  text-align: left;
+  flex: 1;
+  margin: 5px 0 20px 200px;
+  border-radius: 20px;
+  border: none;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.societies-title {
+  color: var(--accent);
+}
