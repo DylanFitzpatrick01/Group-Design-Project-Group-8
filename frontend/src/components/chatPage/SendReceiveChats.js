@@ -1,14 +1,34 @@
 import { useEffect, useState } from 'react';
 import { db } from '../../firebase.js';
+import axios from 'axios'
 import {
     collection,
     addDoc,
+    getDoc,
+    doc,
     serverTimestamp,
     onSnapshot,
     query,
     orderBy,
     getDocs
 } from 'firebase/firestore';
+
+
+async function getUserEmailByID(userID) {
+    try {
+        const docRef = doc(db, "users", userID);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const userData = docSnap.data();
+            return userData.email;
+        } else {
+            console.log("No such document!");
+            return null;
+        }
+    } catch (e) {
+        console.error("Error fetching document: ", e);
+    }
+};
 
 
 function getAllUserNames() {
@@ -84,6 +104,13 @@ async function sendMentionedNotification(moduleCode, text, mentionedByUsername, 
     catch (error) {
         console.error(error);
     }
+    // send email
+    const userEmail = await getUserEmailByID(mentionedUserID);
+    const senderEmail = await getUserEmailByID(mentionedByUserID);
+    axios.get(`http://localhost:5000/send_mail/${userEmail}?sender=${senderEmail}&module=${moduleCode}`)        
+      .then(response => console.log(response))
+        .catch(error => console.error(error));
+        
 }
 
 async function sendEveryoneNotification(moduleCode, text, mentionedByUsername, mentionedByUserAvatar, mentionedByUserID, timestamp) {  
@@ -95,7 +122,6 @@ async function sendEveryoneNotification(moduleCode, text, mentionedByUsername, m
     catch (error) {
         console.error(error);
     }
-
 }
 
 // get all chats from a module and call getChatsOnChange every time the chats change
