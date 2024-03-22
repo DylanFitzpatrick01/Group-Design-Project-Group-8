@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios'
 import './NotificationsPage.css';
 import NotificationBlock from './NotificationBlock';  
@@ -10,6 +10,8 @@ function NotificationsPage() {
   const [getMessage, setGetMessage] = useState({})
   const navigate = useNavigate();
   const directMentions = useUpdatedNotifications();
+  const [emailCount, setEmailCount] = useState(0);
+
   
   useEffect(() => {
     // if the user is not logged in, redirect to the login page
@@ -23,6 +25,22 @@ function NotificationsPage() {
 
     return () => unsubscribe();
   }, []);
+
+
+  const prevMentionsLengthRef = useRef(directMentions.length);
+
+  useEffect(() => {
+    if (directMentions.length > prevMentionsLengthRef.current) {
+      const newNotification = directMentions[0];
+      const senderEmail = newNotification.mentionedBy;
+      const moduleCode = newNotification.moduleCode;
+      const userEmail = localStorage.getItem('userEmail');
+      axios.get(`http://localhost:5000/send_mail/${userEmail}?sender=${senderEmail}&module=${moduleCode}`)        
+      .then(response => console.log(response))
+        .catch(error => console.error(error));
+    }
+    prevMentionsLengthRef.current = directMentions.length;
+  }, [directMentions]);
 
   useEffect(() => {
     axios.get('http://localhost:5000/flask/hello').then(response => {

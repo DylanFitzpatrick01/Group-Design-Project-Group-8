@@ -10,16 +10,31 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from datetime import datetime
+from flask_mail import Mail, Message 
 
 
 API_KEY = "AIzaSyDAlrmNP4IydBXFKbj9ry7fZQmrswg1HKk"
 
 import os.path
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 app = Flask(__name__, static_url_path='', static_folder='frontend/build')
 CORS(app) #comment this on deployment
 api = Api(app)
+
+
+
+# Flask Mail Set up!
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SMTP')
+app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)  
 
 
 # Function to format datetime from frontend
@@ -82,6 +97,18 @@ def create_event():
         print(f"An error occurred: {error}")
         return jsonify({'error': str(error)}), 500  # Return error response#
 
+
+@app.route("/send_mail/<user_email>")
+def send_mail(user_email):
+    sender_email = request.args.get('sender')
+    module_code = request.args.get('module')
+    mail_message = Message(
+        'New notifications waiting for you on Campus!', 
+        sender = os.getenv('MAIL_USERNAME'), 
+        recipients = [user_email])
+    mail_message.body = f"{sender_email} has mentioned you in {module_code}!"
+    mail.send(mail_message)
+    return "Mail has been sent"
 
 if __name__ == '__main__':
     app.run(port=8000)
