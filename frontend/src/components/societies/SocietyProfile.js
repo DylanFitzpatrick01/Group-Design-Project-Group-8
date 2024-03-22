@@ -32,7 +32,7 @@ function SocietyProfile({ name }) {
   const [posts, setPosts] = useState([
     {}]);
   const [showEventForm, setShowEventForm] = useState(false);
-  const [showAddEventButton, setShowAddEventButton] = useState(true); // State to manage visibility of the Add Event button
+  const [showAddEventButton, setShowAddEventButton] = useState(false); // State to manage visibility of the Add Event button
 
   // if the user is not logged in, redirect to the login page
   const navigate = useNavigate();
@@ -114,33 +114,33 @@ function SocietyProfile({ name }) {
       reminders: {
         useDefault: false,
         overrides: [
-            { method: 'email', minutes: 24 * 60 },
-            { method: 'popup', minutes: 10 },
-          ],
+          { method: 'email', minutes: 24 * 60 },
+          { method: 'popup', minutes: 10 },
+        ],
       },
     };
     const eventString = JSON.stringify(event);
     // Now you can send this event object to your backend API to create the event
     try {
-        // Make HTTP POST request to Flask backend
-        const currentDate = new Date();
-        const docRef = await addDoc(collection(db, "posts"), {
-          author: name,
-          comment: 0,
-          content: name + " has just created a new event! \nEvent: " + event.summary + "\nWhen: " + new Date(event.start.dateTime).toLocaleString() + " - " + new Date(event.end.dateTime).toLocaleString() + "\nWhere: " + event.location + "\nDescription: " + event.description,
-          date: currentDate.toISOString(),
-          like: 0,
-          share: 0,
-          title: `New Event! ${event.summary}`,
-          isEvent: true,
-          eventDetails: eventString
-        });        
-        setShowEventForm(false);
-        const response = await axios.post('http://localhost:8000//societies/:name/info', event);
-        console.log('Event created:', response.data);
-      } catch (error) {
-        console.error('Error creating event:', error.response.data);
-      }
+      // Make HTTP POST request to Flask backend
+      const currentDate = new Date();
+      const docRef = await addDoc(collection(db, "posts"), {
+        author: name,
+        comment: 0,
+        content: name + " has just created a new event! \nEvent: " + event.summary + "\nWhen: " + new Date(event.start.dateTime).toLocaleString() + " - " + new Date(event.end.dateTime).toLocaleString() + "\nWhere: " + event.location + "\nDescription: " + event.description,
+        date: currentDate.toISOString(),
+        like: 0,
+        share: 0,
+        title: `New Event! ${event.summary}`,
+        isEvent: true,
+        eventDetails: eventString
+      });
+      setShowEventForm(false);
+      const response = await axios.post('http://localhost:8000//societies/:name/info', event);
+      console.log('Event created:', response.data);
+    } catch (error) {
+      console.error('Error creating event:', error.response.data);
+    }
   };
 
   const handleAddEventClick = () => {
@@ -165,7 +165,14 @@ function SocietyProfile({ name }) {
     } catch (error) {
       console.error('Error creating event:', error.response.data);
     }
-};
+  };
+
+  // if the user's society is the same as the profile, show the add event button
+  useEffect(() => {
+    if (localStorage.getItem('society') === name) {
+      setShowAddEventButton(true);
+    }
+  }, [name]);
 
   return (
     <div className="Profile">
@@ -223,7 +230,7 @@ function SocietyProfile({ name }) {
                       <pre className="m-0 mb-3">{post.content}</pre>
                       {post.isEvent && (
                         <div className="row border-0">
-                        <button className='btn btn-primary' id="addToCalendar" onClick={() => handleAddToCalendarClick(post.eventDetails)}>Add to Calendar</button>
+                          <button className='btn btn-primary' id="addToCalendar" onClick={() => handleAddToCalendarClick(post.eventDetails)}>Add to Calendar</button>
                         </div>
                       )}
                     </div>
@@ -240,50 +247,50 @@ function SocietyProfile({ name }) {
         </div>
 
         {showEventForm && (
-        <div className="row mt-4 p-4 rounded border-0" id="createEvent">
-          <h2 id="createEventTitle">Create Event</h2>
-          <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col">
-              <p>Title:</p>
-              <input type="text" value={summary} onChange={(e) => setSummary(e.target.value)} />
-            </div>
-            <div className="col">
-              <p>Location:</p>
-              <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
-            </div>
+          <div className="row mt-4 p-4 rounded border-0" id="createEvent">
+            <h2 id="createEventTitle">Create Event</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="row">
+                <div className="col">
+                  <p>Title:</p>
+                  <input type="text" value={summary} onChange={(e) => setSummary(e.target.value)} />
+                </div>
+                <div className="col">
+                  <p>Location:</p>
+                  <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <p>Start Date Time:</p>
+                  <input id="start" type="datetime-local" value={startDateTime} onChange={(e) => setStartDateTime(e.target.value)} />
+                </div>
+                <div className="col">
+                  <p>End Date Time:</p>
+                  <input id="end" type="datetime-local" value={endDateTime} onChange={(e) => setEndDateTime(e.target.value)} />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <p>Description:</p>
+                  <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+                </div>
+              </div>
+              <button className="btn btn-primary" type="submit" onClick={handleSubmit} id="createEventButton">Create Event</button>
+              <button onClick={handleCloseEventBoxClick} className="btn btn-primary" id="closeEventBoxButton">X</button>
+            </form>
           </div>
-          <div className="row">
-            <div className="col">
-              <p>Start Date Time:</p>
-              <input id ="start" type="datetime-local" value={startDateTime} onChange={(e) => setStartDateTime(e.target.value)} />
-            </div>
-            <div className="col">
-              <p>End Date Time:</p>
-              <input id="end" type="datetime-local" value={endDateTime} onChange={(e) => setEndDateTime(e.target.value)} />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col">
-              <p>Description:</p>
-              <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-            </div>
-          </div>
-          <button className="btn btn-primary" type="submit" onClick={handleSubmit} id="createEventButton">Create Event</button>
-          <button onClick={handleCloseEventBoxClick} className="btn btn-primary" id="closeEventBoxButton">X</button>
-          </form>
-        </div>
-      )}
+        )}
 
-      {showAddEventButton && (
-        <div className="row mt-4">
-          <div className="col">
-            <button onClick={handleAddEventClick} className="btn btn-primary" id="addEventButton">Add Event</button>
+        {showAddEventButton && (
+          <div className="row mt-4">
+            <div className="col">
+              <button onClick={handleAddEventClick} className="btn btn-primary" id="addEventButton">Add Event</button>
+            </div>
           </div>
-        </div>
-    )}
+        )}
+      </div>
     </div>
-  </div>
   );
 }
 
