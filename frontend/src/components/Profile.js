@@ -18,7 +18,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 function Profile({ username }) {
   const params = useParams();
   username = params.id || localStorage.getItem('userPrefix');
-  
+
   const [userInfo, setUserInfo] = useState({
     name: '',
     email: '',
@@ -32,10 +32,10 @@ function Profile({ username }) {
   const [posts, setPosts] = useState([
     {}]);
 
-  const [originalAvatar, setOriginalAvatar] = useState(userInfo.avatar); 
+  const [originalAvatar, setOriginalAvatar] = useState(userInfo.avatar);
   const [isEditingAvatar, setIsEditingAvatar] = useState(false);
   const [isEditingBio, setIsEditingBio] = useState(false);
-  const [editableBio, setEditableBio] = useState(userInfo.bio); 
+  const [editableBio, setEditableBio] = useState(userInfo.bio);
   const [originalBio, setOriginalBio] = useState(userInfo.bio);
 
   const handleStatusChange = (newStatus) => {
@@ -61,7 +61,7 @@ function Profile({ username }) {
     const userRef = doc(db, "users", username);
     await updateDoc(userRef, { avatar: avatarUrl });
   };
-  
+
   const toggleBioEdit = () => {
     if (!isEditingBio) {
       setOriginalBio(userInfo.bio);
@@ -71,22 +71,22 @@ function Profile({ username }) {
     setIsEditingBio(!isEditingBio);
   };
 
-// When the edit icon/button is clicked
+  // When the edit icon/button is clicked
   const handleEditAvatarClick = () => {
     setIsEditingAvatar(true);
   };
 
-// Handling file input change and upload
+  // Handling file input change and upload
   const handleAvatarChange = async (event) => {
-    console.log("File input changed"); 
+    console.log("File input changed");
     const file = event.target.files[0];
     if (!file) return;
 
     try {
       const avatarUrl = await uploadAvatar(file);
       await updateProfileAvatar(username, avatarUrl);
-      setUserInfo({ ...userInfo, avatar: avatarUrl }); 
-      setIsEditingAvatar(false); 
+      setUserInfo({ ...userInfo, avatar: avatarUrl });
+      setIsEditingAvatar(false);
     } catch (error) {
       console.error("Failed to upload new avatar: ", error);
     }
@@ -94,7 +94,7 @@ function Profile({ username }) {
 
   const cancelAvatarEdit = () => {
     setIsEditingAvatar(false);
-    setUserInfo({ ...userInfo, avatar: originalAvatar }); 
+    setUserInfo({ ...userInfo, avatar: originalAvatar });
   };
 
   useEffect(() => {
@@ -102,17 +102,17 @@ function Profile({ username }) {
   }, [userInfo.avatar]);
 
 
-// Function to save the new bio to Firestore
-const saveBio = async () => {
-  try {
-    const userRef = doc(db, "users", username);
-    await updateDoc(userRef, { bio: editableBio });
-    setIsEditingBio(false);
-    setUserInfo({ ...userInfo, bio: editableBio }); // Update local state
-  } catch (error) {
-    console.error("Error updating bio: ", error);
-  }
-};
+  // Function to save the new bio to Firestore
+  const saveBio = async () => {
+    try {
+      const userRef = doc(db, "users", username);
+      await updateDoc(userRef, { bio: editableBio });
+      setIsEditingBio(false);
+      setUserInfo({ ...userInfo, bio: editableBio }); // Update local state
+    } catch (error) {
+      console.error("Error updating bio: ", error);
+    }
+  };
 
   // if the user is not logged in, redirect to the login page
   const navigate = useNavigate();
@@ -192,20 +192,20 @@ const saveBio = async () => {
         <div className="row mt-5 p-4 rounded border-0" id="profileCard">
           <div className="col-5 ">
             <div className="profile-picture">
-            <img src={userInfo.avatar} alt="User avatar" className="img-fluid" />
-            {!isEditingAvatar && (
-              <button onClick={handleEditAvatarClick} className="editBtn">✏️</button>
-            )}
-            {isEditingAvatar && (
-              <>
-                <div className="fileInputBtn">
-                  <label htmlFor="file-upload">Choose File</label>
-                  <input id="file-upload" type="file" accept="image/*" onChange={handleAvatarChange} />
-                </div>
-                <button onClick={cancelAvatarEdit} className="cancelEditBtn">Cancel</button>
-              </>
-            )}
-          </div>
+              <img src={userInfo.avatar} alt="User avatar" className="img-fluid" />
+              {!isEditingAvatar && (
+                <button onClick={handleEditAvatarClick} className="editBtn"><i class="bi bi-pencil"></i></button>
+              )}
+              {isEditingAvatar && (
+                <>
+                  <div className="fileInputBtn">
+                    <label htmlFor="file-upload">Choose File</label>
+                    <input id="file-upload" type="file" accept="image/*" onChange={handleAvatarChange} />
+                  </div>
+                  <button onClick={cancelAvatarEdit} className="cancelEditBtn">Cancel</button>
+                </>
+              )}
+            </div>
           </div>
           <div className="col-7 border-0 ">
             <div className="row ">
@@ -240,7 +240,7 @@ const saveBio = async () => {
                 {isEditingBio ? (
                   <>
                     <textarea
-                    className="bioTextarea"
+                      className="bioTextarea"
                       value={editableBio}
                       onChange={e => setEditableBio(e.target.value)}
                       autoFocus
@@ -254,12 +254,12 @@ const saveBio = async () => {
                   <>
                     <p className="m-0"
                       dangerouslySetInnerHTML={{
-                         __html: userInfo.bio.replace(/\n/g, '<br />'),
+                        __html: userInfo.bio.replace(/\n/g, '<br />'),
                       }}
                     ></p>
                     {!params.id && (
                       <div className="editBtnContainer">
-                        <button onClick={toggleBioEdit} className="bioEditBtn">✏️</button>
+                        <button onClick={toggleBioEdit} className="bioEditBtn"><i class="bi bi-pencil"></i></button>
                       </div>
                     )}
                   </>
