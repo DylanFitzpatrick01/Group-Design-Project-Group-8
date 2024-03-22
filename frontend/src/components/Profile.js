@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './Profile.css'; // import the CSS file
-import { db } from '../firebase.js';
+import { storage, db } from '../firebase.js';
 import { doc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
 import { getStatus } from './getStatus.js';
 import { getYear } from './getYear.js';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useParams } from 'react-router-dom';
+import { updateDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import changeActiveStatus from './changeActiveStatus.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
@@ -16,6 +18,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 function Profile({ username }) {
   const params = useParams();
   username = params.id || localStorage.getItem('userPrefix');
+  
   const [userInfo, setUserInfo] = useState({
     name: '',
     email: '',
@@ -29,6 +32,12 @@ function Profile({ username }) {
   const [posts, setPosts] = useState([
     {}]);
 
+  const [originalAvatar, setOriginalAvatar] = useState(userInfo.avatar); 
+  const [isEditingAvatar, setIsEditingAvatar] = useState(false);
+  const [isEditingBio, setIsEditingBio] = useState(false);
+  const [editableBio, setEditableBio] = useState(userInfo.bio); 
+  const [originalBio, setOriginalBio] = useState(userInfo.bio);
+
   const handleStatusChange = (newStatus) => {
     setUserInfo(prevState => ({
       ...prevState,
@@ -37,7 +46,72 @@ function Profile({ username }) {
     changeActiveStatus(newStatus);
   };
 
+  const uploadAvatar = async (file) => {
+    const storageRef = ref(storage, `avatars/${file.name}`);
+    try {
+      const uploadResult = await uploadBytes(storageRef, file);
+      const avatarUrl = await getDownloadURL(uploadResult.ref);
+      return avatarUrl;
+    } catch (error) {
+      console.error("Upload failed:", error);
+    }
+  };
 
+  const updateProfileAvatar = async (username, avatarUrl) => {
+    const userRef = doc(db, "users", username);
+    await updateDoc(userRef, { avatar: avatarUrl });
+  };
+  
+  const toggleBioEdit = () => {
+    if (!isEditingBio) {
+      setOriginalBio(userInfo.bio);
+    } else {
+      setEditableBio(originalBio);
+    }
+    setIsEditingBio(!isEditingBio);
+  };
+
+// When the edit icon/button is clicked
+  const handleEditAvatarClick = () => {
+    setIsEditingAvatar(true);
+  };
+
+// Handling file input change and upload
+  const handleAvatarChange = async (event) => {
+    console.log("File input changed"); 
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const avatarUrl = await uploadAvatar(file);
+      setUserInfo({ ...userInfo, avatar: avatarUrl }); 
+      setIsEditingAvatar(false); 
+    } catch (error) {
+      console.error("Failed to upload new avatar: ", error);
+    }
+  };
+
+  const cancelAvatarEdit = () => {
+    setIsEditingAvatar(false);
+    setUserInfo({ ...userInfo, avatar: originalAvatar }); 
+  };
+
+  useEffect(() => {
+    setOriginalAvatar(userInfo.avatar);
+  }, [userInfo.avatar]);
+
+
+// Function to save the new bio to Firestore
+const saveBio = async () => {
+  try {
+    const userRef = doc(db, "users", username);
+    await updateDoc(userRef, { bio: editableBio });
+    setIsEditingBio(false);
+    setUserInfo({ ...userInfo, bio: editableBio }); // Update local state
+  } catch (error) {
+    console.error("Error updating bio: ", error);
+  }
+};
 
   // if the user is not logged in, redirect to the login page
   const navigate = useNavigate();
@@ -117,8 +191,20 @@ function Profile({ username }) {
         <div className="row mt-5 p-4 rounded border-0" id="profileCard">
           <div className="col-5 ">
             <div className="profile-picture">
-              <img src={userInfo.avatar} alt="User avatar" className="img-fluid" />
-            </div>
+            <img src={userInfo.avatar} alt="User avatar" className="img-fluid" />
+            {!isEditingAvatar && (
+              <button onClick={handleEditAvatarClick} className="editBtn">✏️</button>
+            )}
+            {isEditingAvatar && (
+              <>
+                <div className="fileInputBtn">
+                  <label htmlFor="file-upload">Choose File</label>
+                  <input id="file-upload" type="file" accept="image/*" onChange={handleAvatarChange} />
+                </div>
+                <button onClick={cancelAvatarEdit} className="cancelEditBtn">Cancel</button>
+              </>
+            )}
+          </div>
           </div>
           <div className="col-7 border-0 ">
             <div className="row ">
@@ -150,7 +236,33 @@ function Profile({ username }) {
                 </div>
               </div>
               <div className="col-7 border-0 rounded d-flex justify-content-center align-items-center" id="bioCard">
-                <p className="m-0">{userInfo.bio}</p>
+                {isEditingBio ? (
+                  <>
+                    <textarea
+                    className="bioTextarea"
+                      value={editableBio}
+                      onChange={e => setEditableBio(e.target.value)}
+                      autoFocus
+                    />
+                    <div className="editBtnContainer">
+                      <button onClick={saveBio} className="bioSaveBtn">Save</button>
+                      <button onClick={toggleBioEdit} className="bioCancelBtn">Cancel</button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="m-0"
+                      dangerouslySetInnerHTML={{
+                         __html: userInfo.bio.replace(/\n/g, '<br />'),
+                      }}
+                    ></p>
+                    {!params.id && (
+                      <div className="editBtnContainer">
+                        <button onClick={toggleBioEdit} className="bioEditBtn">✏️</button>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>
