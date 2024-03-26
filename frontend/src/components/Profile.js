@@ -193,7 +193,7 @@ function Profile({ username }) {
           <div className="col-5 ">
             <div className="profile-picture">
               <img src={userInfo.avatar} alt="User avatar" className="img-fluid" />
-              {!isEditingAvatar && (
+              {(!params.id || params.id === localStorage.getItem('userPrefix')) && !isEditingAvatar && (
                 <button onClick={handleEditAvatarClick} className="editBtn"><i class="bi bi-pencil"></i></button>
               )}
               {isEditingAvatar && (
