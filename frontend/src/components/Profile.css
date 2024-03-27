@@ -3,7 +3,7 @@ body {
   color: var(--ordinary-text);
 }
 
-p {
+p, h1 {
   color: var(--ordinary-text);
 }
 
@@ -24,7 +24,8 @@ p {
 }
 
 #profileCard,
-#userPosts {
+#userPosts,
+#reportCard {
   background-color: var(--card-background);
   box-shadow: 0px 1px 5px var(--shadows);
 }
@@ -197,4 +198,63 @@ p {
 .dropdown-item:hover {
   background-color: var(--accent);
   color: var(--background-color);
+}
+
+#reportButton{
+  background-color: darkred;
+  box-shadow: 0px 1px 5px darkpink;
+}
+
+#reportButton:hover{
+  background-color: brown;
+}
+
+#closeReportBoxButton{
+  background-color: var(--card-background);
+  color: var(--ordinary-text);
+  box-shadow: 0px 1px 5px var(--shadows);
+  position: relative;
+  top: 2%;
+  left: 90%;
+  width: 10%;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 999; /* Ensure it's above everything */
+}
+
+#reportCard {
+  position: relative; 
+  display: flex;
+  z-index: 6;
+  width: 50%; 
+  box-shadow: 0px 1px 5px var(--shadows); /* Add shadow for depth */
+}
+
+#reportCheckbox {
+  padding-left: 5%;
+  padding-bottom: 5%;
+}
+
+#descriptionBox{
+  padding-top: 10%;
+}
+
+#submitReport{
+  padding-top: 3%;
+}
+
+#submitReportButton{
+  background-color: var(--card-background);
+  color: var(--ordinary-text);
+  box-shadow: 0px 1px 5px var(--shadows);
 }
