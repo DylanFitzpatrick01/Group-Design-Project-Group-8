@@ -3,8 +3,12 @@ body {
   color: var(--ordinary-text);
 }
 
-p, h1 {
+p {
   color: var(--ordinary-text);
+}
+
+h1 {
+  color: var(--accent);
 }
 
 #userName {
