@@ -37,7 +37,14 @@ function Profile({ username }) {
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [editableBio, setEditableBio] = useState(userInfo.bio);
   const [originalBio, setOriginalBio] = useState(userInfo.bio);
-
+  const [reportCard, setReportCard] = useState(false);
+  const [hate, setHate] = useState(false);
+  const [harassment, setHarassment] = useState(false);
+  const [violent, setViolent] = useState(false);
+  const [nudity, setNudity] = useState(false);
+  const [fake, setFake] = useState(false);
+  const [description, setDescription] = useState('');
+  
   const handleStatusChange = (newStatus) => {
     setUserInfo(prevState => ({
       ...prevState,
@@ -97,6 +104,14 @@ function Profile({ username }) {
     setUserInfo({ ...userInfo, avatar: originalAvatar });
   };
 
+  const handleReportButtonClick = () => {
+    setReportCard(true);
+  }
+
+  const handleCloseReport = () => {
+    setReportCard(false);
+  }
+
   useEffect(() => {
     setOriginalAvatar(userInfo.avatar);
   }, [userInfo.avatar]);
@@ -113,6 +128,11 @@ function Profile({ username }) {
       console.error("Error updating bio: ", error);
     }
   };
+
+  const handleSubmitReportButtonClick = (e) => {
+    e.preventDefault();
+    console.log(`${hate}, ${harassment}, ${violent}, ${nudity}, ${fake}, ${description}`)
+  }
 
   // if the user is not logged in, redirect to the login page
   const navigate = useNavigate();
@@ -183,7 +203,6 @@ function Profile({ username }) {
     return () => clearTimeout(timer);
 
   }, [username]); // Dependencies array to run the effect when `username` changes
-
 
   return (
     <div className="Profile">
@@ -278,6 +297,57 @@ function Profile({ username }) {
             <div className="col-auto" style={{ paddingRight: "0px" }}>
               <button className="btn bioBtn" >DM</button>
             </div>
+            <div className="col-auto">
+              <button className="btn bioBtn" id = "reportButton" onClick={handleReportButtonClick}>REPORT</button>
+            </div>
+          </div>
+        )}
+        {reportCard && (
+          <div className="overlay">
+            <div className = "row rounded border-0" id="reportCard">
+              <button onClick={handleCloseReport} className="btn btn-primary" id="closeReportBoxButton">X</button>
+              <h1>Report User</h1>
+              <p>Please select all that apply:</p>
+              <form id="reportCheckbox">
+                <div className="form-check">
+                  <input type="checkbox" className="form-check-input" value={hate} id="hate" onChange={(e) => setHate(e.target.checked)} />
+                  <label className="form-check-label" htmlFor="hate">
+                    Hate Speech
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input type = "checkbox" className="form-check-input" value={harassment} id = "abuseharassment" onChange={(e) => setHarassment(e.target.checked)}/>
+                  <label className = "form-check-label" for="abuseharrasment">
+                    Bullying or Harassment
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input type = "checkbox" className="form-check-input" value={violent} id = "violentspeech" onChange={(e) => setViolent(e.target.checked)}/>
+                  <label className = "form-check-label" for="violentspeech">
+                    Violent Speech
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input type = "checkbox" className="form-check-input" value={nudity} id = "nudity" onChange={(e) => setNudity(e.target.checked)}/>
+                  <label className="form-check-label" for="nudity">
+                    Nudity or Inappropriate Content
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input type = "checkbox" className="form-check-input" value={fake} id = "fake" onChange={(e) => setFake(e.target.checked)}/>
+                  <label className="form-check-label" for="fake">
+                    Pretending to be someone else
+                  </label>
+                </div>
+                <div id="descriptionBox">
+                  <p>Please provide any additional information:</p>
+                  <textarea value={description} onChange={(e) => setDescription(e.target.value) }></textarea>
+                </div>
+                <div id = "submitReport">
+                  <button className="btn btn-primary" id="submitReportButton" onClick = {handleSubmitReportButtonClick}>Submit Report</button>
+                </div>
+              </form>
+            </div>  
           </div>
         )}
         {/* user posts */}
