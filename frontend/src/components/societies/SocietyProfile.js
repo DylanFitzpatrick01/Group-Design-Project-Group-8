@@ -7,6 +7,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useParams } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import axios from 'axios'; // Import Axios library for making HTTP requests
+import Posts from '../Posts.js';
 
 // Profile takes a society name (the name of the collection in FB) as a prop
 
@@ -49,12 +50,34 @@ function SocietyProfile({ name }) {
     return () => unsubscribe();
   }, []);
 
+  const getPosts = async () => {
+    try {
+      const q = query(collection(db, "posts"), where("author", "==", name));
+      const docSnap = await getDocs(q);
+      if (!docSnap.empty) {
+        const posts = [];
+        docSnap.forEach((doc) => {
+          const postData = doc.data();
+          const postId = doc.id; // obtain document ID
+          posts.push({ id: postId, ...postData }); // combine ID and postdata
+        });
+        console.log("Posts data:", posts);
+        setPosts(posts);
+      } else {
+        console.log("No matching posts.");
+        console.log(posts);
+      }
+    } catch (e) {
+      console.error("Error getting documents: ", e);
+    }
+  };
 
   const deletePost = async (postId) => {
     try {
       const docRef = doc(db, "posts", postId);
       await deleteDoc(docRef);
       console.log("Post deleted successfully");
+      setPosts(posts.filter(post => post.id !== postId));
     } catch (e) {
       console.error("Error deleting post: ", e);
     }
@@ -77,33 +100,6 @@ function SocietyProfile({ name }) {
         console.error("Error adding document: ", e);
       }
     };
-
-    const getPosts = async () => {
-      try {
-        // get user posts from firebase
-        // query: where('author', '==', societyName);
-        const q = query(collection(db, "posts"), where("author", "==", name));
-        const docSnap = await getDocs(q);
-        if (!docSnap.empty) {
-          const posts = [];
-          docSnap.forEach((doc) => {
-            const postData = doc.data();
-            const postId = doc.id; // obtain document ID
-            posts.push({ id: postId, ...postData }); // combine ID and postdata
-          });
-          console.log("Posts data:", posts);
-          setPosts(posts);
-        } else {
-          console.log("No matching documents.");
-        }
-      } catch (e) {
-        console.error("Error getting documents: ", e);
-      }
-    };
-
-
-
-
     console.log("Name:");
     console.log(name);
     getSociety();
@@ -154,6 +150,7 @@ function SocietyProfile({ name }) {
       setShowEventForm(false);
       const response = await axios.post('http://localhost:8000//societies/:name/info', event);
       console.log('Event created:', response.data);
+      window.location.reload();
     } catch (error) {
       console.error('Error creating event:', error.response.data);
     }
@@ -234,36 +231,9 @@ function SocietyProfile({ name }) {
         </div>
         <div className="row mt-1 p-4 rounded border-0" id="userPosts">
           {/* head */}
-          <div className="col">
-            {posts[0].date ? (
-              posts.map(post => (
-                <div key={post.id} className="row border-0 mb-4 post rounded">
-                  <div className="col-10 ms-3">
-                    <div className="row border-0 text-start">
-                      <p className="mt-3 mb-3 postTitle">{post.title} - {new Date(post.date).toLocaleString()}</p>
-                    </div>
-                    <div className="row border-0 text-start">
-                      <pre className="m-0 mb-3">{post.content}</pre>
-                      {post.isEvent && (
-                        <div className="row border-0">
-                          <button className='btn btn-primary' id="addToCalendar" onClick={() => handleAddToCalendarClick(post.eventDetails)}>Add to Calendar</button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-1 ms-3 postLnk d-flex flex-column justify-content-center">
-                    <div className="row border-0"><a href="#">Like({post.like})</a></div>
-                    <div className="row border-0"><a href="#">Comment({post.comment})</a></div>
-                    <div className="row border-0"><a href="#">Share({post.share})</a></div>
-                    {post.author === localStorage.getItem('society') && <div className="row border-0">
-                      <a href="#" onClick={() => deletePost(post.id)}>Delete</a>
-                    </div>}
-
-                  </div>
-                </div>
-              ))
-            ) : "No posts found."}
-          </div>
+          {posts.length > 0 && posts[0] && Object.keys(posts[0]).length > 0 ?
+            <Posts posts={posts} deletePost={deletePost} handleAddToCalendarClick={handleAddToCalendarClick} />
+            : "No Posts Found."}
         </div>
 
         {showEventForm && (
