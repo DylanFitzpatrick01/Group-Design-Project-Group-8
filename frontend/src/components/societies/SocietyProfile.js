@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './SocietyProfile.css'; // import the CSS file
 import { db } from '../../firebase.js';
-import { doc, getDoc, getDocs, collection, query, where, addDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, deleteDoc, collection, query, where, addDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useParams } from 'react-router-dom';
@@ -50,6 +50,17 @@ function SocietyProfile({ name }) {
   }, []);
 
 
+  const deletePost = async (postId) => {
+    try {
+      const docRef = doc(db, "posts", postId);
+      await deleteDoc(docRef);
+      console.log("Post deleted successfully");
+    } catch (e) {
+      console.error("Error deleting post: ", e);
+    }
+  };
+
+
   useEffect(() => {
     // get user profile from firebase
     const getSociety = async () => {
@@ -76,7 +87,9 @@ function SocietyProfile({ name }) {
         if (!docSnap.empty) {
           const posts = [];
           docSnap.forEach((doc) => {
-            posts.push(doc.data());
+            const postData = doc.data();
+            const postId = doc.id; // obtain document ID
+            posts.push({ id: postId, ...postData }); // combine ID and postdata
           });
           console.log("Posts data:", posts);
           setPosts(posts);
@@ -87,6 +100,9 @@ function SocietyProfile({ name }) {
         console.error("Error getting documents: ", e);
       }
     };
+
+
+
 
     console.log("Name:");
     console.log(name);
@@ -239,6 +255,10 @@ function SocietyProfile({ name }) {
                     <div className="row border-0"><a href="#">Like({post.like})</a></div>
                     <div className="row border-0"><a href="#">Comment({post.comment})</a></div>
                     <div className="row border-0"><a href="#">Share({post.share})</a></div>
+                    {post.author === localStorage.getItem('society') && <div className="row border-0">
+                      <a href="#" onClick={() => deletePost(post.id)}>Delete</a>
+                    </div>}
+
                   </div>
                 </div>
               ))
