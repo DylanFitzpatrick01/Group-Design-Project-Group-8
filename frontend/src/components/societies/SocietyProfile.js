@@ -244,7 +244,7 @@ function SocietyProfile({ name }) {
         </div>
 
         {showEventForm && (
-          <div className="container mt-4 p-4 rounded border-0" id="createEvent">
+          <div className="row mt-4 p-4 rounded border-0" id="createEvent">
             <h2 id="createEventTitle">Create Event</h2>
             <form onSubmit={handleSubmit}>
               <div className="row mb-3">
