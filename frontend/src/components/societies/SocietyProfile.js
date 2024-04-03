@@ -34,7 +34,7 @@ function SocietyProfile({ name }) {
     {}]);
   const [showEventForm, setShowEventForm] = useState(false);
   const [showAddEventButton, setShowAddEventButton] = useState(false); // State to manage visibility of the Add Event button
-
+  const [formError, setFormError] = useState('');
   // if the user is not logged in, redirect to the login page
   const navigate = useNavigate();
   // if the user is not logged in, redirect to the login page
@@ -108,6 +108,13 @@ function SocietyProfile({ name }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // check valid datetime
+    if (new Date(startDateTime) >= new Date(endDateTime)) {
+      setFormError('Start time must be earlier than end time.');
+      return;
+    }
+    setFormError('');
+
     // Prepare the event object with the form values
     const event = {
       summary,
@@ -240,37 +247,39 @@ function SocietyProfile({ name }) {
           <div className="container mt-4 p-4 rounded border-0" id="createEvent">
             <h2 id="createEventTitle">Create Event</h2>
             <form onSubmit={handleSubmit}>
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="eventTitle" class="form-label">Title:</label>
-                  <input type="text" class="form-control" id="eventTitle" value={summary} onChange={(e) => setSummary(e.target.value)} />
+              <div className="row mb-3">
+                <div className="col">
+                  <label htmlFor="eventTitle" className="form-label">Title:</label>
+                  <input type="text" className="form-control" id="eventTitle" value={summary} onChange={(e) => setSummary(e.target.value)} required />
                 </div>
-                <div class="col">
-                  <label for="eventLocation" class="form-label">Location:</label>
-                  <input type="text" class="form-control" id="eventLocation" value={location} onChange={(e) => setLocation(e.target.value)} />
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="start" class="form-label">Start Date Time:</label>
-                  <input type="datetime-local" class="form-control" id="start" value={startDateTime} onChange={(e) => setStartDateTime(e.target.value)} />
-                </div>
-                <div class="col">
-                  <label for="end" class="form-label">End Date Time:</label>
-                  <input type="datetime-local" class="form-control" id="end" value={endDateTime} onChange={(e) => setEndDateTime(e.target.value)} />
+                <div className="col">
+                  <label htmlFor="eventLocation" className="form-label">Location:</label>
+                  <input type="text" className="form-control" id="eventLocation" value={location} onChange={(e) => setLocation(e.target.value)} required />
                 </div>
               </div>
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="eventDescription" class="form-label">Description:</label>
-                  <textarea class="form-control" id="eventDescription" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+              <div className="row mb-3">
+                <div className="col">
+                  <label htmlFor="start" className="form-label">Start Date Time:</label>
+                  <input type="datetime-local" className="form-control" id="start" value={startDateTime} onChange={(e) => setStartDateTime(e.target.value)} required />
+                </div>
+                <div className="col">
+                  <label htmlFor="end" className="form-label">End Date Time:</label>
+                  <input type="datetime-local" className="form-control" id="end" value={endDateTime} onChange={(e) => setEndDateTime(e.target.value)} required />
                 </div>
               </div>
-              <button class="btn btn-primary" type="submit" onClick={handleSubmit} id="createEventButton">Create Event</button>
-              <button type="button" class="btn btn-secondary ms-2" onClick={handleCloseEventBoxClick} id="closeEventBoxButton">Close</button>
+              <div className="row mb-3">
+                <div className="col">
+                  <label htmlFor="eventDescription" className="form-label">Description:</label>
+                  <textarea className="form-control" id="eventDescription" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+                </div>
+              </div>
+              {formError && <p className="text-danger">{formError}</p>}
+              <button className="btn btn-primary" type="submit" id="createEventButton">Create Event</button>
+              <button type="button" className="btn btn-secondary ms-2" onClick={handleCloseEventBoxClick} id="closeEventBoxButton">Close</button>
             </form>
           </div>
         )}
+
 
 
         {showAddEventButton && (
