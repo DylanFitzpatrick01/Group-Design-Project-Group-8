@@ -13,7 +13,6 @@ import {
     getDocs
 } from 'firebase/firestore';
 
-
 async function getUserEmailByID(userID) {
     try {
         const docRef = doc(db, "users", userID);
@@ -42,8 +41,9 @@ function getAllUserNames() {
         });
 }
 
+
 // add new chat to a module's chat collection
-async function sendChat(societyOrModule, moduleCode, text, user, imageUrl = null) {
+async function sendChat(userNames, societyOrModule, moduleCode, text, user, imageUrl = null) {
     try {
 
         const messageData = {
@@ -62,7 +62,6 @@ async function sendChat(societyOrModule, moduleCode, text, user, imageUrl = null
         // since some usernames have multiple spaces
             // we need to check for usernames after an '@' symbol
         
-        const allUserNames = await getAllUserNames();
         if (typeof text !== 'string') {
             console.error('Invalid text:', text);
         }
@@ -75,7 +74,7 @@ async function sendChat(societyOrModule, moduleCode, text, user, imageUrl = null
                 let mentionedUserObj = null; 
                 for (let i = 0; i < wordsAfterAt.length; i++) {
                     username += (i > 0 ? ' ' : '') + wordsAfterAt[i];
-                    mentionedUserObj = allUserNames.find(user => user.name === username);
+                    mentionedUserObj = userNames.find(user => user.name === username);
                     if (mentionedUserObj) {
                         break;
                     }
@@ -164,4 +163,4 @@ function useUpdatedChats(societyOrModule, moduleCode) {
     return chats;
 }
 
-export { sendChat, getChats, useUpdatedChats };
+export { sendChat, getChats, useUpdatedChats, getAllUserNames };
