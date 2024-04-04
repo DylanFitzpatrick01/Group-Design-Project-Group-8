@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import changeActiveStatus from './changeActiveStatus.js';
+import checkSocietyEmail from './societies/checkSocietyEmail.js';
 
 function Login() {
   const navigate = useNavigate();
@@ -37,6 +38,18 @@ function Login() {
       const token = await user.getIdToken();
       localStorage.setItem('accessToken', token); // Save the token to localStorage
       localStorage.setItem('userEmail', user.email); // Save the user email to localStorage
+      // check if this is a society email
+      const societyName = await checkSocietyEmail(user.email);
+      if (societyName) {
+        console.log("User is a society, redirecting to society page");
+        localStorage.setItem('society', societyName);
+        window.location.href = `/societies/${societyName}/info`;
+        return;
+      } else {
+        console.log("User is not a society, take as normal user");
+        localStorage.setItem('society', false);
+      }
+
       // Query a user's specific document
       // use email prefix for Firestore query
       const prefix = user.email.split('@')[0];
@@ -48,10 +61,10 @@ function Login() {
       if (docSnap.exists()) {
         console.log("User is already registered, set active status to online.");
         changeActiveStatus(1);
-        navigate('/profile');
+        window.location.href = '/profile';
 
       } else {
-        navigate('/registration');
+        window.location.href = '/registration';
       }
     } catch (error) {
       console.error("Error checking user registration:", error);

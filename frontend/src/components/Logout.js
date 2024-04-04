@@ -23,7 +23,8 @@ function LogoutPage() {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    if (user) {
+
+    if (user && !localStorage.getItem('society')) {
       // if the user is logged in, change the active status to offline
       changeActiveStatus(0).then(() => {
         console.log('Status updated to offline.');
@@ -31,15 +32,23 @@ function LogoutPage() {
         signOut(auth).then(() => {
           console.log('Logged out successfully.');
           // remove the user's data from local storage
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('userPrefix');
-          localStorage.removeItem('userEmail');
-          navigate('/');
+          localStorage.clear();
+          window.location.href = '/';
         }).catch((error) => {
           console.error('Error occurred during logging out', error);
         });
       }).catch((error) => {
         console.error('Error updating status', error);
+      });
+    } else if (user && localStorage.getItem('society')) {
+      // if the user is logged in as a society, sign out the user
+      signOut(auth).then(() => {
+        console.log('Logged out successfully.');
+        // remove the user's data from local storage
+        localStorage.clear();
+        window.location.href = '/';
+      }).catch((error) => {
+        console.error('Error occurred during logging out', error);
       });
     }
   }, [navigate]);
