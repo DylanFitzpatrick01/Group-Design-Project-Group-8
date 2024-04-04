@@ -22,8 +22,8 @@ function checkUser(username) {
     else return false;
 }
 
-function AllChatsForAModule({ moduleCode }) {
-    const chats = useUpdatedChats(moduleCode);
+function AllChatsForAModule({ societyOrModule, moduleCode }) {
+    const chats = useUpdatedChats(societyOrModule, moduleCode);
 
     // reference to the latest message so we can auto scroll there
     const endOfMessagesRef = useRef(null);

@@ -43,7 +43,7 @@ function getAllUserNames() {
 }
 
 // add new chat to a module's chat collection
-async function sendChat(moduleCode, text, user, imageUrl = null) {
+async function sendChat(societyOrModule, moduleCode, text, user, imageUrl = null) {
     try {
 
         const messageData = {
@@ -63,7 +63,10 @@ async function sendChat(moduleCode, text, user, imageUrl = null) {
             // we need to check for usernames after an '@' symbol
         
         const allUserNames = await getAllUserNames();
-        if (text.includes('@')) {
+        if (typeof text !== 'string') {
+            console.error('Invalid text:', text);
+        }
+        else if (text.includes('@')) {
             const wordsAfterAt = text.split('@')[1].split(' ');
             if (wordsAfterAt[0] === 'everyone') {
                 sendEveryoneNotification(moduleCode, text, user.name, user.avatar, user.id, serverTimestamp());
@@ -84,7 +87,7 @@ async function sendChat(moduleCode, text, user, imageUrl = null) {
                 }
             }
         }
-        await addDoc(collection(db, 'modules', moduleCode, 'chats'), messageData);
+        await addDoc(collection(db, societyOrModule, moduleCode, 'chats'), messageData);
     } catch (error) {
         console.error("Failed to send chat:", error);
     }
@@ -125,10 +128,14 @@ async function sendEveryoneNotification(moduleCode, text, mentionedByUsername, m
 }
 
 // get all chats from a module and call getChatsOnChange every time the chats change
-function getChats(moduleCode, getChatsOnChange) {
+function getChats(societyOrModule, moduleCode, getChatsOnChange) {
+    if (!societyOrModule) {
+        console.log('societyOrModule is empty');
+        return;
+    }
     return onSnapshot(
         query(
-            collection(db, 'modules', moduleCode, 'chats'),
+            collection(db, societyOrModule, moduleCode, 'chats'),
             orderBy('timestamp', 'asc')
         ),
         (querySnapshot) => {
@@ -144,11 +151,10 @@ function getChats(moduleCode, getChatsOnChange) {
 
 
 
-function useUpdatedChats(moduleCode) {
+function useUpdatedChats(societyOrModule, moduleCode) {
     const [chats, pullChats] = useState([]);
-
     useEffect(() => {
-        const stopUpdates = getChats(moduleCode, (newChats) => {
+        const stopUpdates = getChats(societyOrModule, moduleCode, (newChats) => {
             pullChats(newChats);
         });
 

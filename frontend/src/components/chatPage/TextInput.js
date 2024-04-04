@@ -6,7 +6,7 @@ import { uploadImage } from "./UploadImage";
 import Modal from './Modal';
 
 
-function TextInput({ moduleCode, user }) {
+function TextInput({ societyOrModule, moduleCode, user }) {
     const [message, setMessage] = useState('');
     const textareaRef = useRef(null);
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -27,16 +27,16 @@ function TextInput({ moduleCode, user }) {
 
     const handleSend = async (event) => {
         event.preventDefault();
-    
+        console.log(message);
         if (message.trim() !== '') {
-            await sendChat(moduleCode, message, user); 
+            await sendChat(societyOrModule, moduleCode, message, user); 
             setMessage('');
         }
     
         // If a picture preview exists, the picture is uploaded and a message containing the image URL is sent
         for (const file of selectedFiles) {
             const imageUrl = await uploadImage(file);
-            await sendChat(moduleCode, '', user, imageUrl);
+            await sendChat(societyOrModule, moduleCode, '', user, imageUrl);
         }
             setSelectedFiles([]); // Clear the selected files
             setImagePreviews([]); // Clear image previews
