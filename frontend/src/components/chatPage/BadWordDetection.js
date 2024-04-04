@@ -7,8 +7,8 @@ async function checkAndReplaceBadWords(text) {
   url: 'https://profanity-cleaner-bad-word-filter.p.rapidapi.com/profanity',
   headers: {
     'content-type': 'application/json',
-    'X-RapidAPI-Key': 'b2a89e86a8mshe7a0dc45cace45cp1e308ajsn0a4513169f67',
-    'X-RapidAPI-Host': 'profanity-cleaner-bad-word-filter.p.rapidapi.com'
+    'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
+    'X-RapidAPI-Host': process.env.REACT_APP_RAPIDAPI_HOST
   },
   data: {
     text: text,
@@ -18,6 +18,7 @@ async function checkAndReplaceBadWords(text) {
 };
 
 try {
+  console.log(process.env.REACT_APP_RAPIDAPI_KEY);
 	const response = await axios.request(options);
 	console.log(response.data);
     return response.data["clean"]
