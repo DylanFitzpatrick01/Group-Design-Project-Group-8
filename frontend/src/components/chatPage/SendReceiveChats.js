@@ -48,7 +48,7 @@ async function sendChat(userNames, societyOrModule, moduleCode, text, user, imag
 
         const messageData = {
             displayName: user.name,
-            text: text, 
+            text: text,
             timestamp: serverTimestamp(),
             uid: user.email,
             avatar: user.avatar,
@@ -60,18 +60,18 @@ async function sendChat(userNames, societyOrModule, moduleCode, text, user, imag
         }
 
         // since some usernames have multiple spaces
-            // we need to check for usernames after an '@' symbol
-        
+        // we need to check for usernames after an '@' symbol
+
         if (typeof text !== 'string') {
             console.error('Invalid text:', text);
         }
         else if (text.includes('@')) {
             const wordsAfterAt = text.split('@')[1].split(' ');
             if (wordsAfterAt[0] === 'everyone') {
-                sendEveryoneNotification(moduleCode, text, user.name, user.avatar, user.id, serverTimestamp());
+                sendEveryoneNotification(societyOrModule, moduleCode, text, user.name, user.avatar, user.id, serverTimestamp());
             } else {
                 let username = '';
-                let mentionedUserObj = null; 
+                let mentionedUserObj = null;
                 for (let i = 0; i < wordsAfterAt.length; i++) {
                     username += (i > 0 ? ' ' : '') + wordsAfterAt[i];
                     mentionedUserObj = userNames.find(user => user.name === username);
@@ -79,7 +79,7 @@ async function sendChat(userNames, societyOrModule, moduleCode, text, user, imag
                         break;
                     }
                 }
-                if (mentionedUserObj) { 
+                if (mentionedUserObj) {
                     sendMentionedNotification(moduleCode, text, user.name, user.avatar, user.id, mentionedUserObj.id, serverTimestamp());
                 } else {
                     console.log('no user found');
@@ -109,14 +109,31 @@ async function sendMentionedNotification(moduleCode, text, mentionedByUsername, 
     // send email
     const userEmail = await getUserEmailByID(mentionedUserID);
     const senderEmail = await getUserEmailByID(mentionedByUserID);
-    axios.get(`http://localhost:5000/send_mail/${userEmail}?sender=${senderEmail}&module=${moduleCode}`)        
-      .then(response => console.log(response))
+    axios.get(`http://localhost:5000/send_mail/${userEmail}?sender=${senderEmail}&module=${moduleCode}`)
+        .then(response => console.log(response))
         .catch(error => console.error(error));
-        
+
 }
 
-async function sendEveryoneNotification(moduleCode, text, mentionedByUsername, mentionedByUserAvatar, mentionedByUserID, timestamp) {  
+async function sendEveryoneNotification(societyOrModule, moduleCode, text, mentionedByUsername, mentionedByUserAvatar, mentionedByUserID, timestamp) {
     try {
+        const querySnapshot = await getDocs(collection(db, societyOrModule, moduleCode, 'users'));
+        const usernames = querySnapshot.docs.map((doc) => doc.id);
+
+        for (const username of usernames) {
+            if (username != mentionedByUserID) {
+                const userNotificationsRef = collection(db, 'users', username, 'notifications');
+                await addDoc(userNotificationsRef, {
+                    mentionedBy: mentionedByUsername,
+                    mentionedByAvatar: mentionedByUserAvatar,
+                    mentionedByUserID: mentionedByUserID,
+                    text: text,
+                    timestamp: timestamp,
+                    moduleCode: moduleCode,
+                });
+            }
+        }
+
         // get all the usernames of the people who have favourited the module
         // add a notification for each of them from the person who mentioned everyone
         console.log('sending everyone notification');

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../firebase';
-import {collection, getDocs, doc, getDoc, setDoc, updateDoc, arrayUnion, onSnapshot} from 'firebase/firestore';
+import {collection, getDocs, doc, getDoc, addDoc, setDoc, updateDoc, arrayUnion, onSnapshot} from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import './ModuleList.css';
 import AddModuleBar from './AddModuleBar';
 import AddChatCollections from './AddChatCollections';
+
 
 const ModulesList = () => {
   const [modules, setModules] = useState([]);
@@ -70,7 +71,14 @@ const ModulesList = () => {
       return;
     }
 
+    
+
     const user = auth.currentUser;
+    const username = user.email.split("@")[0];
+    const userRef = doc(db, "modules", moduleToAdd.id, 'users', username);
+
+    setDoc(userRef, { username: username }, { merge: true });
+
     const userFavoritesRef = doc(db, 'userFavorites', user.email.split("@")[0]);
     await updateDoc(userFavoritesRef, {
       modules: arrayUnion(moduleToAdd),
