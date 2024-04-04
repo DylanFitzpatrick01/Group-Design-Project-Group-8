@@ -11,27 +11,17 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from datetime import datetime
 from flask_mail import Mail, Message 
-
-
-API_KEY = "AIzaSyDAlrmNP4IydBXFKbj9ry7fZQmrswg1HKk"
-
 import os.path
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
+apiKey = os.getenv('API_KEY')
 
 app = Flask(__name__, static_url_path='', static_folder='frontend/build')
 CORS(app) #comment this on deployment
 api = Api(app)
 
-
-
-# Flask Mail Set up!
-app.config['MAIL_SERVER'] = os.getenv('MAIL_SMTP')
-app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
-app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)  
@@ -77,7 +67,7 @@ def create_event():
             token.write(creds.to_json())
 
     try:
-        service = build("calendar", "v3", credentials=creds, developerKey=API_KEY)
+        service = build("calendar", "v3", credentials=creds, developerKey=apiKey)
 
         event = request.json
         # format the datetime from frontend
