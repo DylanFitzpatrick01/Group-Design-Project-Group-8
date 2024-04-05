@@ -124,7 +124,7 @@ def send_report(user_email):
     description = form_data.get('description', '')
 
     # Prepare email body
-    user_email_body = "A user has reported your campus account for the following:\n"
+    user_email_body = "A user has reported your Campus account for the following:\n"
     admin_email_body = "Campus user " + request.args.get('username') + " has been reported for the following: \n" 
     if hate:
         user_email_body += "- Hate Speech\n"

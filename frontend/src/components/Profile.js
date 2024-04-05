@@ -153,6 +153,8 @@ function Profile({ username }) {
     })
       .then(response => console.log(response))
       .catch(error => console.error(error));
+
+    setReportCard(false);
   };
 
   // if the user is not logged in, redirect to the login page
