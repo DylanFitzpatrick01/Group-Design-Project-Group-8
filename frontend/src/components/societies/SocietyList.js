@@ -79,6 +79,12 @@ const SocietyList = () => {
     }
 
     const user = auth.currentUser;
+
+    const username = user.email.split("@")[0];
+    const userRef = doc(db, "societies", societyToAdd.id, 'users', username);
+
+    setDoc(userRef, { username: username }, { merge: true });
+
     const userFavoritesRef = doc(db, 'userFavorites', user.email.split("@")[0]);
     await updateDoc(userFavoritesRef, {
       societies: arrayUnion(societyToAdd),

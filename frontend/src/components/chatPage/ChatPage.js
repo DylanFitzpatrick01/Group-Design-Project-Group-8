@@ -17,7 +17,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 function ChatPage({ rootPage }) {
     const { moduleCode } = useParams();
-
+    const [societyOrModule, setSocietyOrModule] = useState('');
     const textInputRef = useRef(null);
 
     const [userInfo, setUserInfo] = useState(null);
@@ -35,6 +35,14 @@ function ChatPage({ rootPage }) {
 
         return () => unsubscribe();
     }, []);
+
+    useEffect(() => {
+        if (rootPage === '/societies') {
+            setSocietyOrModule("societies");
+        } else {
+            setSocietyOrModule("modules");
+        }
+    }, [rootPage]);
 
 
     useEffect(() => {
@@ -87,15 +95,18 @@ function ChatPage({ rootPage }) {
             </div>
             <div className="chat-container">
                 <div className="chat-content">
-                    <AllChatsForAModule moduleCode={moduleCode} />
-                    {localStorage.getItem('society') === 'false' ?
-                        <TextInput ref={textInputRef} moduleCode={moduleCode} user={userInfo} />
-                        :
-                        <div className="notPermittedBox">
-                            <h5>Society users have no permission to speak in the channel.</h5> </div>}
-
+                    {societyOrModule && (
+                        <>
+                            <AllChatsForAModule societyOrModule={societyOrModule} moduleCode={moduleCode} />
+                            {localStorage.getItem('society') === 'false' ?
+                                <TextInput ref={textInputRef} societyOrModule={societyOrModule} moduleCode={moduleCode} user={userInfo} />
+                                :
+                                <div className="notPermittedBox">
+                                    <h5>Society users have no permission to speak in the channel.</h5> </div>}
+                        </>
+                    )}
                 </div>
-            </div>
+            </div >
         </>
     );
 }
