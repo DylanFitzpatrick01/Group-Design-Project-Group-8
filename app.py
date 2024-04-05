@@ -22,6 +22,10 @@ app = Flask(__name__, static_url_path='', static_folder='frontend/build')
 CORS(app) #comment this on deployment
 api = Api(app)
 
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SMTP')
+app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)  
@@ -90,6 +94,9 @@ def create_event():
 
 @app.route("/send_mail/<user_email>")
 def send_mail(user_email):
+    print(f"Mail server: {app.config['MAIL_SERVER']}")
+    print(f"Mail port: {app.config['MAIL_PORT']}")
+
     sender_email = request.args.get('sender')
     module_code = request.args.get('module')
     mail_message = Message(
