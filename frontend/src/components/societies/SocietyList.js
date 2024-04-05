@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../firebase';
-import {collection, getDocs, doc, getDoc, setDoc, updateDoc, arrayUnion, onSnapshot} from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, setDoc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import './SocietyList.css';
@@ -28,6 +28,14 @@ const SocietyList = () => {
     });
     return () => unsubscribe();
   }, [auth, navigate]);
+
+  // if user logged in as a society, redirect to society chat page
+  useEffect(() => {
+    const societyExists = localStorage.getItem('society') !== 'false';
+    if (societyExists) {
+      navigate(`/societies/${localStorage.getItem('society')}/info`);
+    }
+  }, [])
 
   const fetchSocieties = async () => {
     const data = await getDocs(societiesCollectionRef);
@@ -91,24 +99,24 @@ const SocietyList = () => {
     <div>
       <div className='content-container'>
         <div className="societies-list-container">
-        <h2 className="societies-title">Societies List</h2>
-        {mySociety.map((society) => (
-          <Link key={society.id} to={`/societies/${society.id}`}>
-            <button className="society-item-button">
-              {society.id}
-            </button>
-          </Link>
-        ))}
+          <h2 className="societies-title">Societies List</h2>
+          {mySociety.map((society) => (
+            <Link key={society.id} to={`/societies/${society.id}`}>
+              <button className="society-item-button">
+                {society.id}
+              </button>
+            </Link>
+          ))}
         </div>
         <div className='search-section'>
           <AddSocietyBar onSearch={handleSearch} />
           {searchResults.length > 0 && (
-            <div className='search-results'><br/><br/><br/>
+            <div className='search-results'><br /><br /><br />
               <h2>&#8195;Results:</h2>
               {searchResults.map(society => (
                 <div key={society.id} className='search-result-item'>
                   <div>
-                    {society.id}<br/>&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;
+                    {society.id}<br />&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;
                     <button
                       className='add-button'
                       onClick={() => handleAddTomySociety(society)}
