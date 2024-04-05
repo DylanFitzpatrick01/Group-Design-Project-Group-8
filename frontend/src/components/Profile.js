@@ -38,6 +38,14 @@ function Profile({ username }) {
   const [editableBio, setEditableBio] = useState(userInfo.bio);
   const [originalBio, setOriginalBio] = useState(userInfo.bio);
 
+  // if user logged in as a society, redirect their own profile to the society page
+  useEffect(() => {
+    const societyExists = localStorage.getItem('society') !== 'false';
+    if (societyExists && !params.id) {
+      navigate(`/societies/${localStorage.getItem('society')}/info`);
+    }
+  }, [])
+
   const handleStatusChange = (newStatus) => {
     setUserInfo(prevState => ({
       ...prevState,

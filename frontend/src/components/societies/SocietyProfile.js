@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './SocietyProfile.css'; // import the CSS file
 import { db } from '../../firebase.js';
-import { doc, getDoc, getDocs, collection, query, where, addDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, deleteDoc, collection, query, where, addDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useParams } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import axios from 'axios'; // Import Axios library for making HTTP requests
+import Posts from '../Posts.js';
 
 // Profile takes a society name (the name of the collection in FB) as a prop
 
@@ -33,7 +34,7 @@ function SocietyProfile({ name }) {
     {}]);
   const [showEventForm, setShowEventForm] = useState(false);
   const [showAddEventButton, setShowAddEventButton] = useState(false); // State to manage visibility of the Add Event button
-
+  const [formError, setFormError] = useState('');
   // if the user is not logged in, redirect to the login page
   const navigate = useNavigate();
   // if the user is not logged in, redirect to the login page
@@ -48,6 +49,39 @@ function SocietyProfile({ name }) {
 
     return () => unsubscribe();
   }, []);
+
+  const getPosts = async () => {
+    try {
+      const q = query(collection(db, "posts"), where("author", "==", name));
+      const docSnap = await getDocs(q);
+      if (!docSnap.empty) {
+        const posts = [];
+        docSnap.forEach((doc) => {
+          const postData = doc.data();
+          const postId = doc.id; // obtain document ID
+          posts.push({ id: postId, ...postData }); // combine ID and postdata
+        });
+        console.log("Posts data:", posts);
+        setPosts(posts);
+      } else {
+        console.log("No matching posts.");
+        console.log(posts);
+      }
+    } catch (e) {
+      console.error("Error getting documents: ", e);
+    }
+  };
+
+  const deletePost = async (postId) => {
+    try {
+      const docRef = doc(db, "posts", postId);
+      await deleteDoc(docRef);
+      console.log("Post deleted successfully");
+      setPosts(posts.filter(post => post.id !== postId));
+    } catch (e) {
+      console.error("Error deleting post: ", e);
+    }
+  };
 
 
   useEffect(() => {
@@ -66,28 +100,6 @@ function SocietyProfile({ name }) {
         console.error("Error adding document: ", e);
       }
     };
-
-    const getPosts = async () => {
-      try {
-        // get user posts from firebase
-        // query: where('author', '==', societyName);
-        const q = query(collection(db, "posts"), where("author", "==", name));
-        const docSnap = await getDocs(q);
-        if (!docSnap.empty) {
-          const posts = [];
-          docSnap.forEach((doc) => {
-            posts.push(doc.data());
-          });
-          console.log("Posts data:", posts);
-          setPosts(posts);
-        } else {
-          console.log("No matching documents.");
-        }
-      } catch (e) {
-        console.error("Error getting documents: ", e);
-      }
-    };
-
     console.log("Name:");
     console.log(name);
     getSociety();
@@ -96,6 +108,13 @@ function SocietyProfile({ name }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // check valid datetime
+    if (new Date(startDateTime) >= new Date(endDateTime)) {
+      setFormError('Start time must be earlier than end time.');
+      return;
+    }
+    setFormError('');
+
     // Prepare the event object with the form values
     const event = {
       summary,
@@ -138,6 +157,7 @@ function SocietyProfile({ name }) {
       setShowEventForm(false);
       const response = await axios.post('http://localhost:8000//societies/:name/info', event);
       console.log('Event created:', response.data);
+      window.location.reload();
     } catch (error) {
       console.error('Error creating event:', error.response.data);
     }
@@ -218,69 +238,49 @@ function SocietyProfile({ name }) {
         </div>
         <div className="row mt-1 p-4 rounded border-0" id="userPosts">
           {/* head */}
-          <div className="col">
-            {posts[0].date ? (
-              posts.map(post => (
-                <div key={post.id} className="row border-0 mb-4 post rounded">
-                  <div className="col-10 ms-3">
-                    <div className="row border-0 text-start">
-                      <p className="mt-3 mb-3 postTitle">{post.title} - {new Date(post.date).toLocaleString()}</p>
-                    </div>
-                    <div className="row border-0 text-start">
-                      <pre className="m-0 mb-3">{post.content}</pre>
-                      {post.isEvent && (
-                        <div className="row border-0">
-                          <button className='btn btn-primary' id="addToCalendar" onClick={() => handleAddToCalendarClick(post.eventDetails)}>Add to Calendar</button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-1 ms-3 postLnk d-flex flex-column justify-content-center">
-                    <div className="row border-0"><a href="#">Like({post.like})</a></div>
-                    <div className="row border-0"><a href="#">Comment({post.comment})</a></div>
-                    <div className="row border-0"><a href="#">Share({post.share})</a></div>
-                  </div>
-                </div>
-              ))
-            ) : "No posts found."}
-          </div>
+          {posts.length > 0 && posts[0] && Object.keys(posts[0]).length > 0 ?
+            <Posts posts={posts} deletePost={deletePost} handleAddToCalendarClick={handleAddToCalendarClick} />
+            : "No Posts Found."}
         </div>
 
         {showEventForm && (
           <div className="row mt-4 p-4 rounded border-0" id="createEvent">
             <h2 id="createEventTitle">Create Event</h2>
             <form onSubmit={handleSubmit}>
-              <div className="row">
+              <div className="row mb-3">
                 <div className="col">
-                  <p>Title:</p>
-                  <input type="text" value={summary} onChange={(e) => setSummary(e.target.value)} />
+                  <label htmlFor="eventTitle" className="form-label">Title:</label>
+                  <input type="text" className="form-control" id="eventTitle" value={summary} onChange={(e) => setSummary(e.target.value)} required />
                 </div>
                 <div className="col">
-                  <p>Location:</p>
-                  <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
-                </div>
-              </div>
-              <div className="row">
-                <div className="col">
-                  <p>Start Date Time:</p>
-                  <input id="start" type="datetime-local" value={startDateTime} onChange={(e) => setStartDateTime(e.target.value)} />
-                </div>
-                <div className="col">
-                  <p>End Date Time:</p>
-                  <input id="end" type="datetime-local" value={endDateTime} onChange={(e) => setEndDateTime(e.target.value)} />
+                  <label htmlFor="eventLocation" className="form-label">Location:</label>
+                  <input type="text" className="form-control" id="eventLocation" value={location} onChange={(e) => setLocation(e.target.value)} required />
                 </div>
               </div>
-              <div className="row">
+              <div className="row mb-3">
                 <div className="col">
-                  <p>Description:</p>
-                  <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+                  <label htmlFor="start" className="form-label">Start Date Time:</label>
+                  <input type="datetime-local" className="form-control" id="start" value={startDateTime} onChange={(e) => setStartDateTime(e.target.value)} required />
+                </div>
+                <div className="col">
+                  <label htmlFor="end" className="form-label">End Date Time:</label>
+                  <input type="datetime-local" className="form-control" id="end" value={endDateTime} onChange={(e) => setEndDateTime(e.target.value)} required />
                 </div>
               </div>
-              <button className="btn btn-primary" type="submit" onClick={handleSubmit} id="createEventButton">Create Event</button>
-              <button onClick={handleCloseEventBoxClick} className="btn btn-primary" id="closeEventBoxButton">X</button>
+              <div className="row mb-3">
+                <div className="col">
+                  <label htmlFor="eventDescription" className="form-label">Description:</label>
+                  <textarea className="form-control" id="eventDescription" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+                </div>
+              </div>
+              {formError && <p className="text-danger">{formError}</p>}
+              <button className="btn btn-primary" type="submit" id="createEventButton">Create Event</button>
+              <button type="button" className="btn btn-secondary ms-2" onClick={handleCloseEventBoxClick} id="closeEventBoxButton">Close</button>
             </form>
           </div>
         )}
+
+
 
         {showAddEventButton && (
           <div className="row mt-4">

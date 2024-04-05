@@ -97,10 +97,14 @@ function ChatPage({ rootPage }) {
                 <div className="chat-content">
                     {societyOrModule && (
                         <>
-                        <AllChatsForAModule societyOrModule={societyOrModule} moduleCode={moduleCode} />
-                        <TextInput ref={textInputRef} societyOrModule={societyOrModule} moduleCode={moduleCode} user={userInfo} />
-                   </>
-                   )}
+                            <AllChatsForAModule societyOrModule={societyOrModule} moduleCode={moduleCode} />
+                            {localStorage.getItem('society') === 'false' ?
+                                <TextInput ref={textInputRef} societyOrModule={societyOrModule} moduleCode={moduleCode} user={userInfo} />
+                                :
+                                <div className="notPermittedBox">
+                                    <h5>Society users have no permission to speak in the channel.</h5> </div>}
+                        </>
+                    )}
                 </div>
             </div >
         </>
