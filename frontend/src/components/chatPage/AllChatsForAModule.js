@@ -48,13 +48,31 @@ function AllChatsForAModule({ societyOrModule, moduleCode }) {
 
     // Auto-scroll to the latest message
     useEffect(() => {
+        console.log('Raw Chats:', rawChats); // Check the original timestamps
+
+        const processChats = async () => {
+            const promises = rawChats.map(async (chat) => {
+                console.log('Processing chat:', chat); // Inspect each chat being processed
+                const cleanedText = await checkAndReplaceBadWords(chat.text);
+                return { ...chat, text: cleanedText };
+            });
+            const cleanedChats = await Promise.all(promises);
+            console.log('Processed Chats:', cleanedChats); // Inspect the timestamps after processing
+            setProcessedChats(cleanedChats);
+        };
+
+        processChats();
+    }, [rawChats]);
+
+    // Auto-scroll to the latest message
+    useEffect(() => {
         endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [chats]);
+    }, [processedChats]);
 
     return (
         <>
             <div style={{ maxHeight: '80vh', overflowY: 'auto' }}>
-                {chats.map((chat, index) => (
+                {processedChats.map((chat, index) => (
                     <ChatComponent
                         key={chat.id}
                         message={chat.text} // Now using processed text
