@@ -340,7 +340,7 @@ function Profile({ username }) {
                   </label>
                 </div>
                 <div id="descriptionBox">
-                  <p>Please provide any additional information:</p>
+                  <p>Please provide any additional information (please include as much detail as possible, including the channel the mesage was sent to):</p>
                   <textarea value={description} onChange={(e) => setDescription(e.target.value) }></textarea>
                 </div>
                 <div id = "submitReport">
