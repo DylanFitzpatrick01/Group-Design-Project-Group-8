@@ -17,7 +17,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 function ChatPage({ rootPage }) {
     const { moduleCode } = useParams();
-
+    const [societyOrModule, setSocietyOrModule] = useState('');
     const textInputRef = useRef(null);
 
     const [userInfo, setUserInfo] = useState(null);
@@ -35,6 +35,14 @@ function ChatPage({ rootPage }) {
 
         return () => unsubscribe();
     }, []);
+
+    useEffect(() => {
+        if (rootPage === '/societies') {
+            setSocietyOrModule("societies");
+        } else {
+            setSocietyOrModule("modules");
+        }
+    }, [rootPage]);
 
 
     useEffect(() => {
@@ -87,11 +95,14 @@ function ChatPage({ rootPage }) {
             </div>
             <div className="chat-container">
                 <div className="chat-content">
-                    <AllChatsForAModule moduleCode={moduleCode} />
-                    <TextInput ref={textInputRef} moduleCode={moduleCode} user={userInfo} />
-
+                    {societyOrModule && (
+                        <>
+                        <AllChatsForAModule societyOrModule={societyOrModule} moduleCode={moduleCode} />
+                        <TextInput ref={textInputRef} societyOrModule={societyOrModule} moduleCode={moduleCode} user={userInfo} />
+                   </>
+                   )}
                 </div>
-            </div>
+            </div >
         </>
     );
 }

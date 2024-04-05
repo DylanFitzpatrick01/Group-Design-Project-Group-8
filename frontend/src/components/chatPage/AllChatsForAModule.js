@@ -4,7 +4,6 @@ import ChatComponent from './ChatComponent';
 import { useUpdatedChats } from './SendReceiveChats';
 import {checkAndReplaceBadWords} from './BadWordDetection';
 
-
 function formatTimestamp(timestamp) {
     if (!timestamp) return '';
     const date = timestamp.toDate();
@@ -23,10 +22,31 @@ function checkUser(username) {
     else return false;
 }
 
-function AllChatsForAModule({ moduleCode }) {
-    const rawChats = useUpdatedChats(moduleCode);
-    const [processedChats, setProcessedChats] = useState([]);
+function AllChatsForAModule({ societyOrModule, moduleCode }) {
+    const rawChats = useUpdatedChats(societyOrModule, moduleCode);
+    const [chats, setChats] = useState([]);
+
+    // reference to the latest message so we can auto scroll there
     const endOfMessagesRef = useRef(null);
+
+    useEffect(() => {
+        console.log('Raw Chats:', rawChats); // Check the original timestamps
+
+        const processChats = async () => {
+            const promises = rawChats.map(async (chat) => {
+                console.log('Processing chat:', chat); // Inspect each chat being processed
+                const cleanedText = await checkAndReplaceBadWords(chat.text);
+                return { ...chat, text: cleanedText };
+            });
+            const cleanedChats = await Promise.all(promises);
+            console.log('Processed Chats:', cleanedChats); // Inspect the timestamps after processing
+            setChats(cleanedChats);
+        };
+
+        processChats();
+    }, [rawChats]);
+
+    // Auto-scroll to the latest message
     useEffect(() => {
         console.log('Raw Chats:', rawChats); // Check the original timestamps
 

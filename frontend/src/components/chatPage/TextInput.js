@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './TextInput.css';
-import { sendChat } from './SendReceiveChats';
+import { sendChat, getAllUserNames } from './SendReceiveChats';
 import { uploadImage } from "./UploadImage";
 import Modal from './Modal';
 
 
-function TextInput({ moduleCode, user }) {
+function TextInput({ societyOrModule, moduleCode, user }) {
     const [message, setMessage] = useState('');
     const textareaRef = useRef(null);
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -20,6 +20,16 @@ function TextInput({ moduleCode, user }) {
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }, [message]);
 
+    const [userNames, setUserNames] = useState(null);
+
+    useEffect(() => {
+        if (!userNames) {
+            getAllUserNames()
+                .then(names => setUserNames(names))
+                .catch(error => console.error("Error getting user names: ", error));
+        }
+    }, [userNames]);
+
 
     const handleInputChange = (event) => {
         setMessage(event.target.value);
@@ -27,16 +37,16 @@ function TextInput({ moduleCode, user }) {
 
     const handleSend = async (event) => {
         event.preventDefault();
-    
+        console.log(message);
         if (message.trim() !== '') {
-            await sendChat(moduleCode, message, user); 
+            await sendChat(userNames, societyOrModule, moduleCode, message, user); 
             setMessage('');
         }
     
         // If a picture preview exists, the picture is uploaded and a message containing the image URL is sent
         for (const file of selectedFiles) {
             const imageUrl = await uploadImage(file);
-            await sendChat(moduleCode, '', user, imageUrl);
+            await sendChat(userNames, societyOrModule, moduleCode, '', user, imageUrl);
         }
             setSelectedFiles([]); // Clear the selected files
             setImagePreviews([]); // Clear image previews
