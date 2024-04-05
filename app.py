@@ -90,6 +90,7 @@ def create_event():
 
 @app.route("/send_mail/<user_email>")
 def send_mail(user_email):
+    print(request.args)
     sender_email = request.args.get('sender')
     module_code = request.args.get('module')
     mail_message = Message(
