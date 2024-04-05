@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios'
 import './NotificationsPage.css';
 import NotificationBlock from './NotificationBlock';  
@@ -10,6 +10,7 @@ function NotificationsPage() {
   const [getMessage, setGetMessage] = useState({})
   const navigate = useNavigate();
   const directMentions = useUpdatedNotifications();
+
   
   useEffect(() => {
     // if the user is not logged in, redirect to the login page
