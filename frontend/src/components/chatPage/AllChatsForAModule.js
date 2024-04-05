@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ChatComponent from './ChatComponent';
 import { useUpdatedChats } from './SendReceiveChats';
-
+import {checkAndReplaceBadWords} from './BadWordDetection';
 
 function formatTimestamp(timestamp) {
     if (!timestamp) return '';
@@ -23,10 +23,30 @@ function checkUser(username) {
 }
 
 function AllChatsForAModule({ societyOrModule, moduleCode }) {
-    const chats = useUpdatedChats(societyOrModule, moduleCode);
+    const rawChats = useUpdatedChats(societyOrModule, moduleCode);
+    const [chats, setChats] = useState([]);
 
     // reference to the latest message so we can auto scroll there
     const endOfMessagesRef = useRef(null);
+
+    useEffect(() => {
+        console.log('Raw Chats:', rawChats); // Check the original timestamps
+
+        const processChats = async () => {
+            const promises = rawChats.map(async (chat) => {
+                console.log('Processing chat:', chat); // Inspect each chat being processed
+                const cleanedText = await checkAndReplaceBadWords(chat.text);
+                return { ...chat, text: cleanedText };
+            });
+            const cleanedChats = await Promise.all(promises);
+            console.log('Processed Chats:', cleanedChats); // Inspect the timestamps after processing
+            setChats(cleanedChats);
+        };
+
+        processChats();
+    }, [rawChats]);
+
+    // Auto-scroll to the latest message
     useEffect(() => {
         endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [chats]);
@@ -37,7 +57,7 @@ function AllChatsForAModule({ societyOrModule, moduleCode }) {
                 {chats.map((chat, index) => (
                     <ChatComponent
                         key={chat.id}
-                        message={chat.text}
+                        message={chat.text} // Now using processed text
                         isMyMessage={checkUser(chat.uid)}
                         timestamp={formatTimestamp(chat.timestamp)}
                         name={chat.displayName}
