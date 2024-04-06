@@ -130,6 +130,10 @@ function Profile({ username }) {
   }, []);
 
 
+  const handleDMClick = () => {
+    navigate(`/direct-messages/${userInfo.uid}`);
+  };
+
   useEffect(() => {
     // Define the function to fetch user profile
     const getUser = async () => {
@@ -276,7 +280,7 @@ function Profile({ username }) {
               <button className="btn bioBtn" >ADD</button>
             </div>
             <div className="col-auto" style={{ paddingRight: "0px" }}>
-              <button className="btn bioBtn" >DM</button>
+              <button className="btn bioBtn" onClick={handleDMClick} >DM</button>
             </div>
           </div>
         )}
