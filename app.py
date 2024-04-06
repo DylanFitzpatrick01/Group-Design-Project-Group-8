@@ -14,6 +14,7 @@ from flask_mail import Mail, Message
 import os.path
 import os
 from dotenv import load_dotenv
+import json
 load_dotenv()
 
 apiKey = os.getenv('API_KEY')
@@ -105,6 +106,56 @@ def send_mail(user_email):
         recipients = [user_email])
     mail_message.body = f"{sender_email} has mentioned you in {module_code}!"
     mail.send(mail_message)
+    return "Mail has been sent"
+
+@app.route("/send_report/<user_email>")
+def send_report(user_email):
+    print(f"Mail server: {app.config['MAIL_SERVER']}")
+    print(f"Mail port: {app.config['MAIL_PORT']}")
+
+    form = request.args.get('form')
+    form_data = json.loads(form)  # Parse form data into JSON object
+    
+    hate = form_data.get('hate', False)
+    harassment = form_data.get('harassment', False)
+    violent = form_data.get('violent', False)
+    nudity = form_data.get('nudity', False)
+    fake = form_data.get('fake', False)
+    description = form_data.get('description', '')
+
+    # Prepare email body
+    user_email_body = "A user has reported your Campus account for the following:\n"
+    admin_email_body = "Campus user " + request.args.get('username') + " has been reported for the following: \n" 
+    if hate:
+        user_email_body += "- Hate Speech\n"
+        admin_email_body += "- Hate Speech\n"
+    if harassment:
+        user_email_body += "- Bullying or Harassment\n"
+        admin_email_body += "- Bullying or Harassment\n"
+    if violent:
+        user_email_body += "- Violent Speech\n"
+        admin_email_body += "- Violent Speech\n"
+    if nudity:
+        user_email_body += "- Nudity or Inappropriate Content\n"
+        admin_email_body += "- Nudity or Inappropriate Content\n"
+    if fake:
+        user_email_body += "- Pretending to be someone else\n"
+        admin_email_body += "- Pretending to be someone else\n"
+    if description:
+        user_email_body += f"\nAdditional Information:\n{description}"
+        admin_email_body += f"\nAdditional Information:\n{description} \n"
+    mail_message_user = Message(
+        'Your Campus account has been reported.', 
+        sender = os.getenv('MAIL_USERNAME'), 
+        recipients = [user_email])
+    mail_message_admin = Message(
+        'Report received.', 
+        sender = os.getenv('MAIL_USERNAME'), 
+        recipients = ['reports.campus.groupdesign@gmail.com'])
+    mail_message_user.body = user_email_body
+    mail_message_admin.body = admin_email_body
+    mail.send(mail_message_user)
+    mail.send(mail_message_admin)
     return "Mail has been sent"
 
 if __name__ == '__main__':

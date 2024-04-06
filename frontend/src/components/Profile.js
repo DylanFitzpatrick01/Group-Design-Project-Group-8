@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom';
 import { updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import changeActiveStatus from './changeActiveStatus.js';
+import axios from 'axios'; // import axios for sending HTTP requests
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 
@@ -37,6 +38,15 @@ function Profile({ username }) {
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [editableBio, setEditableBio] = useState(userInfo.bio);
   const [originalBio, setOriginalBio] = useState(userInfo.bio);
+  const [reportCard, setReportCard] = useState(false);
+  const [reportData, setReportData] = useState({
+    hate: false,
+    harassment: false,
+    violent: false,
+    nudity: false,
+    fake: false,
+    description: ''
+  });
 
   // if user logged in as a society, redirect their own profile to the society page
   useEffect(() => {
@@ -105,6 +115,14 @@ function Profile({ username }) {
     setUserInfo({ ...userInfo, avatar: originalAvatar });
   };
 
+  const handleReportButtonClick = () => {
+    setReportCard(true);
+  }
+
+  const handleCloseReport = () => {
+    setReportCard(false);
+  }
+
   useEffect(() => {
     setOriginalAvatar(userInfo.avatar);
   }, [userInfo.avatar]);
@@ -120,6 +138,23 @@ function Profile({ username }) {
     } catch (error) {
       console.error("Error updating bio: ", error);
     }
+  };
+
+  const handleReportFormSubmit = (e) => {
+    e.preventDefault();
+    // Handle report form submission
+    console.log(reportData);
+      // send report
+      axios.get(`http://localhost:8000/send_report/${userInfo.email}`, {
+        params: {
+            form: JSON.stringify(reportData),
+            username: userInfo.name
+        }
+    })
+      .then(response => console.log(response))
+      .catch(error => console.error(error));
+
+    setReportCard(false);
   };
 
   // if the user is not logged in, redirect to the login page
@@ -191,7 +226,6 @@ function Profile({ username }) {
     return () => clearTimeout(timer);
 
   }, [username]); // Dependencies array to run the effect when `username` changes
-
 
   return (
     <div className="Profile">
@@ -285,6 +319,57 @@ function Profile({ username }) {
             </div>
             <div className="col-auto" style={{ paddingRight: "0px" }}>
               <button className="btn bioBtn" >DM</button>
+            </div>
+            <div className="col-auto">
+              <button className="btn bioBtn" id="reportButton" onClick={handleReportButtonClick}>REPORT</button>
+            </div>
+          </div>
+        )}
+        {reportCard && (
+          <div className="overlay">
+            <div className="row rounded border-0" id="reportCard">
+              <button onClick={handleCloseReport} className="btn btn-primary" id="closeReportBoxButton">X</button>
+              <h1>Report User</h1>
+              <p>Please select all that apply:</p>
+              <form onSubmit={handleReportFormSubmit}>
+                <div className="form-check">
+                  <input type="checkbox" className="form-check-input" value={reportData.hate} id="hate" onChange={(e) => setReportData({...reportData, hate: e.target.checked})} />
+                  <label className="form-check-label" htmlFor="hate">
+                    Hate Speech
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input type="checkbox" className="form-check-input" value={reportData.harassment} id="abuseharassment" onChange={(e) => setReportData({...reportData, harassment: e.target.checked})} />
+                  <label className="form-check-label" htmlFor="abuseharrasment">
+                    Bullying or Harassment
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input type="checkbox" className="form-check-input" value={reportData.violent} id="violentspeech" onChange={(e) => setReportData({...reportData, violent: e.target.checked})} />
+                  <label className="form-check-label" htmlFor="violentspeech">
+                    Violent Speech
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input type="checkbox" className="form-check-input" value={reportData.nudity} id="nudity" onChange={(e) => setReportData({...reportData, nudity: e.target.checked})} />
+                  <label className="form-check-label" htmlFor="nudity">
+                    Nudity or Inappropriate Content
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input type="checkbox" className="form-check-input" value={reportData.fake} id="fake" onChange={(e) => setReportData({...reportData, fake: e.target.checked})} />
+                  <label className="form-check-label" htmlFor="fake">
+                    Pretending to be someone else
+                  </label>
+                </div>
+                <div id="descriptionBox">
+                  <p>Please provide any additional information (please include as much detail as possible, including the channel the message was sent to):</p>
+                  <textarea value={reportData.description} onChange={(e) => setReportData({...reportData, description: e.target.value})}></textarea>
+                </div>
+                <div id="submitReport">
+                  <button className="btn btn-primary" id="submitReportButton" type="submit">Submit Report</button>
+                </div>
+              </form>
             </div>
           </div>
         )}

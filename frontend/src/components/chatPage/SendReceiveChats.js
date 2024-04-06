@@ -109,7 +109,7 @@ async function sendMentionedNotification(moduleCode, text, mentionedByUsername, 
     // send email
     const userEmail = await getUserEmailByID(mentionedUserID);
     const senderEmail = await getUserEmailByID(mentionedByUserID);
-    axios.get(`http://localhost:5000/send_mail/${userEmail}?sender=${senderEmail}&module=${moduleCode}`)
+    axios.get(`http://localhost:8000/send_mail/${userEmail}?sender=${senderEmail}&module=${moduleCode}`)
         .then(response => console.log(response))
         .catch(error => console.error(error));
 
