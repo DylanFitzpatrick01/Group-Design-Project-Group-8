@@ -42,8 +42,14 @@ function DirectMessagesComponent() {
     useEffect(() => {
         textareaRef.current.style.height = 'auto';
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });;
+        
     }, [newMessage]);
+
+    useEffect(() => {
+        if (messagesEndRef.current) {
+          messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, [messages]);
 
     const initAndListenToConversation = async (currentUserUid, otherUserUid) => {
         if (!currentUserUid || !otherUserUid) return;
@@ -135,6 +141,7 @@ function DirectMessagesComponent() {
             <div className="chat-content">
                 <div className="messages-container">
                     {messages.map((msg, index) => {
+                        if (!currentUser || !otherUser) return null;
                         const isMyMessage = msg.senderUid === currentUserUid;
 
                         // Choose the name and avatar to display based on who sent the message
