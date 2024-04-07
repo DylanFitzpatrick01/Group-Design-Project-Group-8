@@ -176,7 +176,9 @@ function SocietyProfile({ name }) {
     <div className="Profile">
       <div className="container">
         {/* profile card */}
-        <div className="row mt-5 p-4 rounded border-0" id="profileCard">
+        <div className="row mt-5 p-4 rounded border-0" style={{ position: 'relative' }} id="profileCard">
+          {/* last page */}
+          <button type="button" className="btn btn-secondary col-auto" id="lastPageButton" onClick={() => { navigate(-1); }}><i class="bi bi-arrow-left"></i></button>
           <div className="col-4 ">
             <div className="soc-profile-picture">
               <img src={societyInfo.avatar} alt="User avatar" className="img-fluid" />
