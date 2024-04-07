@@ -1,7 +1,7 @@
 // Post.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { db } from '../firebase.js';
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, addDoc, setDoc, getDocs, collection } from "firebase/firestore";
 import axios from 'axios';
 
 
@@ -9,6 +9,7 @@ import axios from 'axios';
 function Posts({ initialPosts }) {
 
     const [posts, setPosts] = useState(initialPosts);
+    const userEmail = localStorage.getItem('userEmail');
 
     const deletePost = async (postId) => {
         try {
@@ -18,6 +19,123 @@ function Posts({ initialPosts }) {
             setPosts(posts.filter(post => post.id !== postId));
         } catch (e) {
             console.error("Error deleting post: ", e);
+        }
+    };
+
+    // post fetch like count
+    // count the numbers in firestore /posts/{postId}/likes/
+    // return the number of likes
+    const fetchLikeCount = async (postId) => {
+        try {
+            const likesRef = collection(db, "posts", postId, "likes");
+            const querySnapshot = await getDocs(likesRef);
+            return querySnapshot.size; // Returns the number of likes
+        } catch (error) {
+            console.error("Error getting likes count: ", error);
+            return 0; // Return 0 if there's an error
+        }
+    };
+
+
+    // post fetch share count
+    // count the numbers in firestore /posts/{postId}/shares/
+    // return the number of shares
+    const fetchShareCount = async (postId) => {
+        try {
+            const sharesRef = collection(db, "posts", postId, "shares");
+            const querySnapshot = await getDocs(sharesRef);
+            return querySnapshot.size; // Returns the number of shares
+        } catch (error) {
+            console.error("Error getting shares count: ", error);
+            return 0; // Return 0 if there's an error
+        }
+    };
+
+
+    // Function to add a like or share to the post
+    // actionType should be 'likes' or 'shares'
+    // return the updated count of likes or shares
+    const addInteraction = async (postId, actionType) => {
+        try {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) {
+                console.error("No email found in localStorage");
+                return 0;
+            }
+            if (!postId) {
+                throw new Error("Invalid post ID");
+            }
+            if (actionType !== 'likes' && actionType !== 'shares') {
+                throw new Error("Invalid action type");
+            }
+
+            // Create a reference to the specific document in the collection
+            const interactionDocRef = doc(db, "posts", postId, actionType, userEmail);
+            // Set the document with the email as the ID
+            await setDoc(interactionDocRef, { email: userEmail });
+
+            // Fetch the updated counts
+            if (actionType === 'likes') {
+                return await fetchLikeCount(postId); // Assumes this function is already defined
+            } else {
+                return await fetchShareCount(postId); // Assumes this function is already defined
+            }
+        } catch (error) {
+            console.error(`Error adding ${actionType} for user ${userEmail}: `, error);
+            return 0;
+        }
+    };
+
+
+
+
+    // update the like count when the page is loaded
+    // update the number and save in post.like
+    useEffect(() => {
+        const fetchPosts = async () => {
+            const posts = [];
+            for (let post of initialPosts) {
+                const like = await fetchLikeCount(post.id);
+                const share = await fetchShareCount(post.id);
+                posts.push({ ...post, like, share });
+            }
+            setPosts(posts);
+        };
+        fetchPosts();
+    }, [initialPosts]);
+
+    // Function to handle the like button click
+    const handleLike = async (postId) => {
+        try {
+            const likeCount = await addInteraction(postId, 'likes');
+            console.log(`Post with id ${postId} liked! New like count: ${likeCount}`);
+            setPosts(posts.map(post => post.id === postId ? { ...post, like: likeCount } : post));
+        } catch (error) {
+            console.error(`Error when trying to like post with id ${postId}: `, error);
+        }
+    };
+
+
+    // Function to handle the share button click
+    const handleShare = async (post) => {
+        try {
+            const shareCount = await addInteraction(post.id, 'shares');
+            console.log(`Post with id ${post.id} shared! New share count: ${shareCount}`);
+            setPosts(posts.map(p => p.id === post.id ? { ...p, share: shareCount } : p));
+
+            // use navigator.share to share the post
+            if (navigator.share) {
+                await navigator.share({
+                    title: "Post from " + post.author,
+                    text: post.content, // Assuming `post.content` contains the text you want to share
+                    url: window.location.href, // The URL of the current page; adjust as necessary for your app
+                });
+                console.log(`Post with id ${post.id} has been shared!`);
+            } else {
+                console.log('Web Share API is not available in this browser. Share count updated regardless.');
+            }
+        } catch (error) {
+            console.error(`Error when trying to share post with id ${post.id}: `, error);
         }
     };
 
@@ -56,8 +174,8 @@ function Posts({ initialPosts }) {
                             </div>
                         </div>
                         <div className="col-1 ms-3 postLnk d-flex flex-column justify-content-center">
-                            <div className="row border-0"><a href="#">Like({post.like})</a></div>
-                            <div className="row border-0"><a href="#">Share({post.share})</a></div>
+                            <div className="row border-0">  <a className='link' onClick={() => handleLike(post.id)}>Like({post.like})</a></div>
+                            <div className="row border-0"><a className='link' onClick={() => handleShare(post)}>Share({post.share})</a></div>
                             {post.author === localStorage.getItem('society') && <div className="row border-0">
                                 <a href="#" onClick={() => deletePost(post.id)}>Delete</a>
                             </div>}
@@ -66,7 +184,7 @@ function Posts({ initialPosts }) {
                     </div>
                 ))
             }
-        </div>
+        </div >
     );
 }
 
