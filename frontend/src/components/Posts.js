@@ -34,6 +34,8 @@ function Posts({ initialPosts }) {
             console.error("Error getting likes count: ", error);
             return 0; // Return 0 if there's an error
         }
+        // check if the user has liked the post
+
     };
 
 
@@ -159,10 +161,10 @@ function Posts({ initialPosts }) {
         <div className="col">
             {
                 posts.map(post => (
-                    <div key={post.id} className="row border-0 mb-4 post rounded">
-                        <div className="col-10 ms-3">
+                    <div key={post.id} className="row border-0 mb-2 post rounded">
+                        <div className="col-10 ps-3">
                             <div className="row border-0 text-start">
-                                <p className="mt-3 mb-3 postTitle">{post.title} - {new Date(post.date).toLocaleString()}</p>
+                                <p className="mt-3 mb-3  postTitle">{post.title} - {new Date(post.date).toLocaleString()}</p>
                             </div>
                             <div className="row border-0 text-start">
                                 <pre className="m-0 mb-3">{post.content}</pre>
@@ -173,9 +175,9 @@ function Posts({ initialPosts }) {
                                 )}
                             </div>
                         </div>
-                        <div className="col-1 ms-3 postLnk d-flex flex-column justify-content-center">
-                            <div className="row border-0">  <a className='link' onClick={() => handleLike(post.id)}>Like({post.like})</a></div>
-                            <div className="row border-0"><a className='link' onClick={() => handleShare(post)}>Share({post.share})</a></div>
+                        <div className="col-2 postLnk d-flex flex-column justify-content-center">
+                            <div className="row border-0">  <a className='link' onClick={() => handleLike(post.id)}><i class="bi bi-heart"></i> Like({post.like})</a></div>
+                            <div className="row border-0"><a className='link' onClick={() => handleShare(post)}><i class="bi bi-share-fill"></i> Share({post.share})</a></div>
                             {post.author === localStorage.getItem('society') && <div className="row border-0">
                                 <a href="#" onClick={() => deletePost(post.id)}>Delete</a>
                             </div>}
