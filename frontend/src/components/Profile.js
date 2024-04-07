@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Profile.css'; // import the CSS file
 import { storage, db } from '../firebase.js';
-import { doc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
+import { doc, getDoc, getDocs, deleteDoc, collection, query, where } from "firebase/firestore";
 import { getStatus } from './getStatus.js';
 import { getYear } from './getYear.js';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import changeActiveStatus from './changeActiveStatus.js';
 import axios from 'axios'; // import axios for sending HTTP requests
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-
+import Posts from './Posts.js';
 
 // Profile takes a username (the name of the collection in FB) as a prop
 
@@ -127,6 +127,16 @@ function Profile({ username }) {
     setOriginalAvatar(userInfo.avatar);
   }, [userInfo.avatar]);
 
+  const deletePost = async (postId) => {
+    try {
+      const docRef = doc(db, "posts", postId);
+      await deleteDoc(docRef);
+      console.log("Post deleted successfully");
+      setPosts(posts.filter(post => post.id !== postId));
+    } catch (e) {
+      console.error("Error deleting post: ", e);
+    }
+  };
 
   // Function to save the new bio to Firestore
   const saveBio = async () => {
@@ -144,12 +154,12 @@ function Profile({ username }) {
     e.preventDefault();
     // Handle report form submission
     console.log(reportData);
-      // send report
-      axios.get(`http://localhost:8000/send_report/${userInfo.email}`, {
-        params: {
-            form: JSON.stringify(reportData),
-            username: userInfo.name
-        }
+    // send report
+    axios.get(`http://localhost:8000/send_report/${userInfo.email}`, {
+      params: {
+        form: JSON.stringify(reportData),
+        username: userInfo.name
+      }
     })
       .then(response => console.log(response))
       .catch(error => console.error(error));
@@ -231,11 +241,14 @@ function Profile({ username }) {
 
   }, [username]); // Dependencies array to run the effect when `username` changes
 
+
   return (
     <div className="Profile">
       <div className="container">
         {/* profile card */}
-        <div className="row mt-5 p-4 rounded border-0" id="profileCard">
+        <div className="row mt-5 p-4 rounded border-0" style={{ position: 'relative' }} id="profileCard">
+          {/* last page */}
+          <button type="button" className="btn btn-secondary col-auto" id="lastPageButton" onClick={() => { navigate(-1); }}><i class="bi bi-arrow-left"></i></button>
           <div className="col-5 ">
             <div className="profile-picture">
               <img src={userInfo.avatar} alt="User avatar" className="img-fluid" />
@@ -337,38 +350,38 @@ function Profile({ username }) {
               <p>Please select all that apply:</p>
               <form onSubmit={handleReportFormSubmit}>
                 <div className="form-check">
-                  <input type="checkbox" className="form-check-input" value={reportData.hate} id="hate" onChange={(e) => setReportData({...reportData, hate: e.target.checked})} />
+                  <input type="checkbox" className="form-check-input" value={reportData.hate} id="hate" onChange={(e) => setReportData({ ...reportData, hate: e.target.checked })} />
                   <label className="form-check-label" htmlFor="hate">
                     Hate Speech
                   </label>
                 </div>
                 <div className="form-check">
-                  <input type="checkbox" className="form-check-input" value={reportData.harassment} id="abuseharassment" onChange={(e) => setReportData({...reportData, harassment: e.target.checked})} />
+                  <input type="checkbox" className="form-check-input" value={reportData.harassment} id="abuseharassment" onChange={(e) => setReportData({ ...reportData, harassment: e.target.checked })} />
                   <label className="form-check-label" htmlFor="abuseharrasment">
                     Bullying or Harassment
                   </label>
                 </div>
                 <div className="form-check">
-                  <input type="checkbox" className="form-check-input" value={reportData.violent} id="violentspeech" onChange={(e) => setReportData({...reportData, violent: e.target.checked})} />
+                  <input type="checkbox" className="form-check-input" value={reportData.violent} id="violentspeech" onChange={(e) => setReportData({ ...reportData, violent: e.target.checked })} />
                   <label className="form-check-label" htmlFor="violentspeech">
                     Violent Speech
                   </label>
                 </div>
                 <div className="form-check">
-                  <input type="checkbox" className="form-check-input" value={reportData.nudity} id="nudity" onChange={(e) => setReportData({...reportData, nudity: e.target.checked})} />
+                  <input type="checkbox" className="form-check-input" value={reportData.nudity} id="nudity" onChange={(e) => setReportData({ ...reportData, nudity: e.target.checked })} />
                   <label className="form-check-label" htmlFor="nudity">
                     Nudity or Inappropriate Content
                   </label>
                 </div>
                 <div className="form-check">
-                  <input type="checkbox" className="form-check-input" value={reportData.fake} id="fake" onChange={(e) => setReportData({...reportData, fake: e.target.checked})} />
+                  <input type="checkbox" className="form-check-input" value={reportData.fake} id="fake" onChange={(e) => setReportData({ ...reportData, fake: e.target.checked })} />
                   <label className="form-check-label" htmlFor="fake">
                     Pretending to be someone else
                   </label>
                 </div>
                 <div id="descriptionBox">
                   <p>Please provide any additional information (please include as much detail as possible, including the channel the message was sent to):</p>
-                  <textarea value={reportData.description} onChange={(e) => setReportData({...reportData, description: e.target.value})}></textarea>
+                  <textarea value={reportData.description} onChange={(e) => setReportData({ ...reportData, description: e.target.value })}></textarea>
                 </div>
                 <div id="submitReport">
                   <button className="btn btn-primary" id="submitReportButton" type="submit">Submit Report</button>
@@ -381,30 +394,11 @@ function Profile({ username }) {
         <div className="row mt-4 text-start">
           <h2 id="recentPosts">Recent Posts</h2>
         </div>
-        <div className="row mt-1 p-4 rounded border-0" id="userPosts">
+        <div className="row mt-1 p-4 mb-4 rounded border-0" id="userPosts">
           {/* head */}
-          <div className="col">
-            {posts[0].date ? (
-              posts.map(post => (
-                <div key={post.id} className="row border-0 mb-4 post rounded">
-                  <div className="col-10 ms-3">
-                    <div className="row border-0 text-start">
-                      <p className="mt-3 mb-3 postTitle">{post.title} - {new Date(post.date).toLocaleString()}</p>
-                    </div>
-                    <div className="row border-0 text-start">
-                      <p className="m-0 mb-3">{post.content}</p>
-                    </div>
-                  </div>
-                  <div className="col-1 ms-3 postLnk d-flex flex-column justify-content-center">
-                    <div className="row border-0"><a href="#">Like({post.like})</a></div>
-                    <div className="row border-0"><a href="#">Comment({post.comment})</a></div>
-                    <div className="row border-0"><a href="#">Share({post.share})</a></div>
-                  </div>
-                </div>
-              ))
-            ) : "No posts found."}
-          </div>
-
+          {posts.length > 0 && posts[0] && Object.keys(posts[0]).length > 0 ?
+            <Posts initialPosts={posts} />
+            : "No Posts Found."}
         </div>
       </div>
     </div >
