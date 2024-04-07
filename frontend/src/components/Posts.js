@@ -1,7 +1,7 @@
 // Post.js
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase.js';
-import { doc, deleteDoc, addDoc, setDoc, getDocs, collection } from "firebase/firestore";
+import { doc, deleteDoc, getDoc, setDoc, getDocs, collection } from "firebase/firestore";
 import axios from 'axios';
 
 
@@ -34,9 +34,25 @@ function Posts({ initialPosts }) {
             console.error("Error getting likes count: ", error);
             return 0; // Return 0 if there's an error
         }
-        // check if the user has liked the post
-
     };
+
+
+    // Function to check if the current user has liked a post
+    const checkUserLikeStatus = async (postId) => {
+        try {
+            if (!userEmail) {
+                console.error("User email is not found.");
+                return false; // if no user email is found, return false
+            }
+            const userLikeRef = doc(db, "posts", postId, "likes", userEmail);
+            const userLikeSnap = await getDoc(userLikeRef);
+            return userLikeSnap.exists();
+        } catch (error) {
+            console.error("Error checking user like status: ", error);
+            return false;
+        }
+    };
+
 
 
     // post fetch share count
@@ -89,6 +105,26 @@ function Posts({ initialPosts }) {
     };
 
 
+    // Function to remove a like from the post
+    const dislikePost = async (postId) => {
+        try {
+            if (!userEmail) {
+                console.error("User email is not found.");
+                return;
+            }
+            //  find the user's like document and delete it
+            const userLikeRef = doc(db, "posts", postId, "likes", userEmail);
+            await deleteDoc(userLikeRef);
+
+            // recalculate the like count and return it
+            const likesRef = collection(db, "posts", postId, "likes");
+            const querySnapshot = await getDocs(likesRef);
+            return querySnapshot.size; // return the new like count
+        } catch (error) {
+            console.error("Error when trying to dislike post: ", error);
+            return 0; // return 0 if there's an error
+        }
+    };
 
 
     // update the like count when the page is loaded
@@ -99,7 +135,8 @@ function Posts({ initialPosts }) {
             for (let post of initialPosts) {
                 const like = await fetchLikeCount(post.id);
                 const share = await fetchShareCount(post.id);
-                posts.push({ ...post, like, share });
+                const isLiked = await checkUserLikeStatus(post.id);
+                posts.push({ ...post, like, share, isLiked });
             }
             setPosts(posts);
         };
@@ -107,13 +144,22 @@ function Posts({ initialPosts }) {
     }, [initialPosts]);
 
     // Function to handle the like button click
-    const handleLike = async (postId) => {
+    const handleLike = async (post) => {
         try {
-            const likeCount = await addInteraction(postId, 'likes');
-            console.log(`Post with id ${postId} liked! New like count: ${likeCount}`);
-            setPosts(posts.map(post => post.id === postId ? { ...post, like: likeCount } : post));
+            let likeCount;
+            if (post.isLiked) {
+                // if already liked, then dislike
+                likeCount = await dislikePost(post.id);
+                console.log(`Post with id ${post.id} unliked! New like count: ${likeCount}`);
+            } else {
+                // if not liked, then like
+                likeCount = await addInteraction(post.id, 'likes');
+                console.log(`Post with id ${post.id} liked! New like count: ${likeCount}`);
+            }
+            // update the like count in the UI
+            setPosts(posts.map(p => p.id === post.id ? { ...p, like: likeCount, isLiked: !p.isLiked } : p));
         } catch (error) {
-            console.error(`Error when trying to like post with id ${postId}: `, error);
+            console.error(`Error when trying to toggle like for post with id ${post.id}: `, error);
         }
     };
 
@@ -162,7 +208,7 @@ function Posts({ initialPosts }) {
             {
                 posts.map(post => (
                     <div key={post.id} className="row border-0 mb-2 post rounded">
-                        <div className="col-10 ps-3">
+                        <div className="col-10 ps-4">
                             <div className="row border-0 text-start">
                                 <p className="mt-3 mb-3  postTitle">{post.title} - {new Date(post.date).toLocaleString()}</p>
                             </div>
@@ -176,7 +222,7 @@ function Posts({ initialPosts }) {
                             </div>
                         </div>
                         <div className="col-2 postLnk d-flex flex-column justify-content-center">
-                            <div className="row border-0">  <a className='link' onClick={() => handleLike(post.id)}><i class="bi bi-heart"></i> Like({post.like})</a></div>
+                            <div className="row border-0"><a className='link' onClick={() => handleLike(post)}>{post.isLiked ? <i class="bi bi-heart-fill"></i> : <i class="bi bi-heart"></i>} Like({post.like})</a></div>
                             <div className="row border-0"><a className='link' onClick={() => handleShare(post)}><i class="bi bi-share-fill"></i> Share({post.share})</a></div>
                             {post.author === localStorage.getItem('society') && <div className="row border-0">
                                 <a href="#" onClick={() => deletePost(post.id)}>Delete</a>
