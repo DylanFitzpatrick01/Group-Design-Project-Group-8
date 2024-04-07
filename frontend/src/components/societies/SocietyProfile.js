@@ -30,8 +30,7 @@ function SocietyProfile({ name }) {
   const [startDateTime, setStartDateTime] = useState('');
   const [endDateTime, setEndDateTime] = useState('');
   const [email, setEmail] = useState('');
-  const [posts, setPosts] = useState([
-    {}]);
+  const [posts, setPosts] = useState([{}]);
   const [showEventForm, setShowEventForm] = useState(false);
   const [showAddEventButton, setShowAddEventButton] = useState(false); // State to manage visibility of the Add Event button
   const [formError, setFormError] = useState('');
@@ -72,16 +71,7 @@ function SocietyProfile({ name }) {
     }
   };
 
-  const deletePost = async (postId) => {
-    try {
-      const docRef = doc(db, "posts", postId);
-      await deleteDoc(docRef);
-      console.log("Post deleted successfully");
-      setPosts(posts.filter(post => post.id !== postId));
-    } catch (e) {
-      console.error("Error deleting post: ", e);
-    }
-  };
+
 
 
   useEffect(() => {
@@ -173,19 +163,7 @@ function SocietyProfile({ name }) {
     setShowAddEventButton(true);
   };
 
-  const handleAddToCalendarClick = async (event) => {
-    try {
-      // Make HTTP POST request to Flask backend
-      const response = await axios.post('http://localhost:8000/societies/:name/info', event, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      console.log('Event created:', response.data);
-    } catch (error) {
-      console.error('Error creating event:', error.response.data);
-    }
-  };
+
 
   // if the user's society is the same as the profile, show the add event button
   useEffect(() => {
@@ -239,7 +217,7 @@ function SocietyProfile({ name }) {
         <div className="row mt-1 p-4 rounded border-0" id="userPosts">
           {/* head */}
           {posts.length > 0 && posts[0] && Object.keys(posts[0]).length > 0 ?
-            <Posts posts={posts} deletePost={deletePost} handleAddToCalendarClick={handleAddToCalendarClick} />
+            <Posts initialPosts={posts} />
             : "No Posts Found."}
         </div>
 

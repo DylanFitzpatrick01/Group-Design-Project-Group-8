@@ -1,7 +1,42 @@
 // Post.js
-import React from 'react';
+import React, { useState } from 'react';
+import { db } from '../firebase.js';
+import { doc, deleteDoc } from "firebase/firestore";
+import axios from 'axios';
 
-function Posts({ posts, deletePost, handleAddToCalendarClick }) {
+
+
+function Posts({ initialPosts }) {
+
+    const [posts, setPosts] = useState(initialPosts);
+
+    const deletePost = async (postId) => {
+        try {
+            const docRef = doc(db, "posts", postId);
+            await deleteDoc(docRef);
+            console.log("Post deleted successfully");
+            setPosts(posts.filter(post => post.id !== postId));
+        } catch (e) {
+            console.error("Error deleting post: ", e);
+        }
+    };
+
+
+    const handleAddToCalendarClick = async (event) => {
+        try {
+            // Make HTTP POST request to Flask backend
+            const response = await axios.post('http://localhost:8000/societies/:name/info', event, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log('Event created:', response.data);
+        } catch (error) {
+            console.error('Error creating event:', error.response.data);
+        }
+    };
+
+
     return (
         <div className="col">
             {
