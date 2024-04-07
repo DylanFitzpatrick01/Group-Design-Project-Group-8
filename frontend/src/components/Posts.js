@@ -57,7 +57,6 @@ function Posts({ initialPosts }) {
                         </div>
                         <div className="col-1 ms-3 postLnk d-flex flex-column justify-content-center">
                             <div className="row border-0"><a href="#">Like({post.like})</a></div>
-                            <div className="row border-0"><a href="#">Comment({post.comment})</a></div>
                             <div className="row border-0"><a href="#">Share({post.share})</a></div>
                             {post.author === localStorage.getItem('society') && <div className="row border-0">
                                 <a href="#" onClick={() => deletePost(post.id)}>Delete</a>
