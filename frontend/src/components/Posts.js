@@ -225,7 +225,7 @@ function Posts({ initialPosts }) {
                             <div className="row border-0"><a className='link' onClick={() => handleLike(post)}>{post.isLiked ? <i class="bi bi-heart-fill"></i> : <i class="bi bi-heart"></i>} Like({post.like})</a></div>
                             <div className="row border-0"><a className='link' onClick={() => handleShare(post)}><i class="bi bi-share-fill"></i> Share({post.share})</a></div>
                             {post.author === localStorage.getItem('society') && <div className="row border-0">
-                                <a href="#" onClick={() => deletePost(post.id)}>Delete</a>
+                                <a href="#" onClick={() => deletePost(post.id)}><i class="bi bi-trash3-fill"></i> Delete</a>
                             </div>}
 
                         </div>
