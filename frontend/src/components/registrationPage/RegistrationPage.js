@@ -67,12 +67,17 @@ function RegistrationPage() {
     // else {
     //   setFormData({ ...formData, emailError: '' });
     // }
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const uid = user ? user.uid : null;
+
+
 
     try {
       const { firstName, lastName, ...data } = formData; // Removing firstName and lastName
       const name = `${formData.firstName} ${formData.lastName}`; // Combining firstName and lastName
       const docRef = doc(db, 'users', formData.email.split("@")[0]);
-      await setDoc(docRef, { ...data, name });
+      await setDoc(docRef, { ...data, name, uid });
       console.log('Document written with ID: ', docRef.id);
       navigate('/profile');
 

@@ -16,6 +16,7 @@ import Login from './components/LoginPage';
 import Profile from './components/Profile';
 import LogoutPage from './components/Logout';
 import SocietyProfile from './components/societies/SocietyProfile';
+import DirectMessagesComponent from './components/chatPage/DirectMessagesComponent';
 
 
 const originalNavLinks = [
@@ -83,6 +84,7 @@ function App() {
           <Route path="/societies/:name/info" element={<SocietyProfile />} />
           <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/logout" element={<LogoutPage />} />
+          <Route path="/direct-messages/:uid" element={<DirectMessagesComponent />} />
         </Routes>
       </Router>
     </div>
