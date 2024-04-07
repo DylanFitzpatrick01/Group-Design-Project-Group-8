@@ -173,15 +173,28 @@ function Posts({ initialPosts }) {
 
             // use navigator.share to share the post
             if (navigator.share) {
-                await navigator.share({
-                    title: "Post from " + post.author,
-                    text: post.content, // Assuming `post.content` contains the text you want to share
-                    url: window.location.href, // The URL of the current page; adjust as necessary for your app
-                });
-                console.log(`Post with id ${post.id} has been shared!`);
+                try {
+                    await navigator.share({
+                        title: "Post from " + post.author,
+                        text: post.content,
+                        url: window.location.href,
+                    });
+                    console.log(`Post with id ${post.id} has been shared!`);
+                } catch (error) {
+                    console.error('Error sharing the post: ', error);
+                }
             } else {
-                console.log('Web Share API is not available in this browser. Share count updated regardless.');
+                // Web Share API error fallback
+                try {
+                    // copy the post URL to the clipboard
+                    await navigator.clipboard.writeText("Post from " + post.author + " " + window.location.href);
+                    alert('Link copied to clipboard!');
+                    console.log('Link copied to clipboard. Share it with your friends!');
+                } catch (error) {
+                    console.error('Failed to copy link: ', error);
+                }
             }
+
         } catch (error) {
             console.error(`Error when trying to share post with id ${post.id}: `, error);
         }
