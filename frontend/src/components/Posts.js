@@ -188,8 +188,8 @@ function Posts({ initialPosts }) {
                 try {
                     // copy the post URL to the clipboard
                     await navigator.clipboard.writeText("Post from " + post.author + " " + window.location.href);
-                    alert('Link copied to clipboard!');
-                    console.log('Link copied to clipboard. Share it with your friends!');
+                    alert('Link copied to clipboard. Share it with your friends!');
+                    console.log('Link copied to clipboard.');
                 } catch (error) {
                     console.error('Failed to copy link: ', error);
                 }
