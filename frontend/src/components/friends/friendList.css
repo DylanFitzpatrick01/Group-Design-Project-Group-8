@@ -1,0 +1,37 @@
+.friendcard {
+    color: var(--accent);
+    width: 80%;
+    max-width: 350px;
+    background-color: var(--card-background);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Smooth transition for transform and shadow */
+    cursor: pointer;
+    /* Change cursor on hover to indicate clickable */
+}
+
+.friendcard:hover {
+    transform: scale(1.05);
+    /* Slightly increase size */
+    box-shadow: 0px 1px 5px var(--shadows);
+    /* Add shadow */
+}
+
+.friendcard img {
+    transition: width 0.3s ease, height 0.3s ease;
+    /* Smooth transition for size */
+    width: 100px;
+    /* Initial width */
+    height: 100px;
+    /* Initial height */
+}
+
+.friendcard:hover img {
+    width: 120px;
+    /* Increase width on hover */
+    height: 120px;
+    /* Increase height on hover */
+}
+
+.title {
+    color: var(--accent);
+}

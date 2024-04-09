@@ -197,7 +197,9 @@ function Profile({ username }) {
       // Set the document with friend's info
       await setDoc(friendDocRef, {
         name: userInfo.name,
-        uid: userInfo.uid
+        uid: userInfo.uid,
+        avatar: userInfo.avatar,
+        courseTitle: userInfo.courseTitle,
       });
       console.log(`Friend ${userInfo.name} added successfully`);
       setInFriendsList(true);
