@@ -60,7 +60,7 @@ function Login() {
       // Check whether the document exists
       if (docSnap.exists()) {
         console.log("User is already registered, set active status to online.");
-        changeActiveStatus(1);
+        await changeActiveStatus(1);
         window.location.href = '/profile';
 
       } else {

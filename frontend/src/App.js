@@ -17,14 +17,15 @@ import Profile from './components/Profile';
 import LogoutPage from './components/Logout';
 import SocietyProfile from './components/societies/SocietyProfile';
 import DirectMessagesComponent from './components/chatPage/DirectMessagesComponent';
-
+import FriendList from './components/friends/friendList';
 
 const originalNavLinks = [
   { to: "/modules", label: "Modules" },
   { to: "/societies", label: "Societies" },
-  { to: "/notifications", label: <img src="/bell.png" alt="Notifications" /> },
-  { to: "/profile", label: <img src="/profile.png" alt="Profile" /> },
-  { to: "/logout", label: <img src="/logout.png" alt="Logout" /> },
+  { to: "/friends", label: <i class="bi bi-people-fill"></i>, alt: "Friends" },
+  { to: "/notifications", label: <i class="bi bi-bell-fill"></i>, alt: "Notifications" },
+  { to: "/profile", label: <i class="bi bi-person-circle"></i>, alt: "Profile" },
+  { to: "/logout", label: <i class="bi bi-box-arrow-right"></i>, alt: "Logout" },
 ];
 
 
@@ -40,8 +41,8 @@ function App() {
       else if (societyExists) {
         let updatedLinks = [
           { to: `/societies/${localStorage.getItem('society')}`, label: "Chat" },
-          { to: `/societies/${localStorage.getItem('society')}/info`, label: <img src="/profile.png" alt="Profile" /> },
-          { to: "/logout", label: <img src="/logout.png" alt="Logout" /> },
+          { to: `/societies/${localStorage.getItem('society')}/info`, label: <i class="bi bi-person-circle"></i>, alt: "Profile" },
+          { to: "/logout", label: <i class="bi bi-box-arrow-right"></i>, alt: "Logout" },
         ];
         setNavLinks(updatedLinks);
 
@@ -85,6 +86,7 @@ function App() {
           <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/logout" element={<LogoutPage />} />
           <Route path="/direct-messages/:uid" element={<DirectMessagesComponent />} />
+          <Route path="/friends" element={<FriendList />} />
         </Routes>
       </Router>
     </div>

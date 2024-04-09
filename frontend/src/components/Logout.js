@@ -24,7 +24,7 @@ function LogoutPage() {
     const user = auth.currentUser;
 
 
-    if (user && !localStorage.getItem('society')) {
+    if (user && localStorage.getItem('society') === 'false') {
       // if the user is logged in, change the active status to offline
       changeActiveStatus(0).then(() => {
         console.log('Status updated to offline.');
@@ -40,7 +40,7 @@ function LogoutPage() {
       }).catch((error) => {
         console.error('Error updating status', error);
       });
-    } else if (user && localStorage.getItem('society')) {
+    } else if (user && localStorage.getItem('society') !== 'false') {
       // if the user is logged in as a society, sign out the user
       signOut(auth).then(() => {
         console.log('Logged out successfully.');

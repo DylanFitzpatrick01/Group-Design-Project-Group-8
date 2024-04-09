@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Profile.css'; // import the CSS file
 import { storage, db } from '../firebase.js';
-import { doc, getDoc, getDocs, deleteDoc, collection, query, where } from "firebase/firestore";
+import { doc, getDoc, getDocs, setDoc, deleteDoc, collection, query, where } from "firebase/firestore";
 import { getStatus } from './getStatus.js';
 import { getYear } from './getYear.js';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +20,7 @@ import Posts from './Posts.js';
 function Profile({ username }) {
   const params = useParams();
   username = params.id || localStorage.getItem('userPrefix');
+  const my_username = localStorage.getItem('userPrefix');
 
   function IsMyProfile(){
     const location = useLocation();
@@ -54,6 +55,7 @@ function Profile({ username }) {
     fake: false,
     description: ''
   });
+  const [inFriendsList, setInFriendsList] = useState(false);
 
   // if user logged in as a society, redirect their own profile to the society page
   useEffect(() => {
@@ -194,6 +196,54 @@ function Profile({ username }) {
     navigate(`/direct-messages/${userInfo.uid}`);
   };
 
+  // add user to friends list
+  const handleADDClick = async () => {
+    try {
+      // Create a reference to the specific document in the collection
+      const friendDocRef = doc(db, "users", my_username, "friends", userInfo.uid);
+      // Set the document with friend's info
+      await setDoc(friendDocRef, {
+        name: userInfo.name,
+        uid: userInfo.uid,
+        avatar: userInfo.avatar,
+        courseTitle: userInfo.courseTitle,
+      });
+      console.log(`Friend ${userInfo.name} added successfully`);
+      setInFriendsList(true);
+    } catch (error) {
+      console.error("Error adding friend: ", error);
+    }
+  }
+
+  // check if the user is in the friends list
+  const checkFriendExists = async (my_username, friendUID) => {
+    try {
+      // Validate input
+      if (!my_username || !friendUID) {
+        throw new Error("Missing username or friend UID");
+      }
+
+      // Create a reference to the specific document in the collection
+      const friendDocRef = doc(db, "users", my_username, "friends", friendUID);
+
+      // Attempt to fetch the document
+      const docSnap = await getDoc(friendDocRef);
+
+      // Check if the document exists
+      if (docSnap.exists()) {
+        setInFriendsList(true);
+        console.log(`Friend with UID ${friendUID} exists in the friends list.`);
+      } else {
+        setInFriendsList(false);
+        console.log(`Friend with UID ${friendUID} does not exist in the friends list.`);
+      }
+    } catch (error) {
+      console.error("Error checking friend existence: ", error);
+    }
+  };
+
+
+
   useEffect(() => {
     // Define the function to fetch user profile
     const getUser = async () => {
@@ -201,13 +251,13 @@ function Profile({ username }) {
         const docRef = doc(db, "users", username);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          console.log("Document data:", docSnap.data());
+          console.log("Profile data:", docSnap.data());
           setUserInfo(docSnap.data());
         } else {
-          console.log("No such document!");
+          console.log("No such profile!");
         }
       } catch (e) {
-        console.error("Error adding document: ", e);
+        console.error("Error adding profile: ", e);
       }
     };
 
@@ -219,12 +269,15 @@ function Profile({ username }) {
         if (!docSnap.empty) {
           const posts = [];
           docSnap.forEach((doc) => {
-            posts.push(doc.data());
+            const postData = doc.data();
+            const postId = doc.id; // obtain document ID
+            posts.push({ id: postId, ...postData }); // combine ID and postdata
           });
           console.log("Posts data:", posts);
           setPosts(posts);
         } else {
-          console.log("No matching documents.");
+          console.log("No matching posts.");
+          console.log(posts);
         }
       } catch (e) {
         console.error("Error getting documents: ", e);
@@ -235,19 +288,17 @@ function Profile({ username }) {
     getUser();
     getPosts();
 
-    // Set a timeout to re-fetch the data after 1 second, but only once
-    // to update the online status of the user
-    const timer = setTimeout(() => {
-      getUser();
-      getPosts();
-      console.log("Data re-fetched after 1 second.");
-    }, 1000);
 
-    // Cleanup function to clear the timer if the component unmounts before the timer fires
-    return () => clearTimeout(timer);
+
 
   }, [username]); // Dependencies array to run the effect when `username` changes
 
+
+  // check if the user is in the friends list
+  useEffect(() => {
+    if (!userInfo.uid) return;
+    checkFriendExists(my_username, userInfo.uid);
+  }, [userInfo.uid]);
 
   return (
     <div className="Profile">
@@ -350,9 +401,13 @@ function Profile({ username }) {
         {params.id && (
           <div className="row mt-3 d-flex justify-content-end">
             <div className="col-auto">
-              <button className="btn bioBtn" >ADD</button>
+              {!inFriendsList ? (
+                <button className="btn bioBtn" onClick={handleADDClick}>ADD</button>
+              ) : (
+                <button className="btn bioBtn" disabled>ADDED</button>
+              )}
             </div>
-            <div className="col-auto" style={{ paddingRight: "0px" }}>
+            <div className="col-auto" >
               <button className="btn bioBtn" onClick={handleDMClick} >DM</button>
             </div>
             <div className="col-auto">
@@ -410,7 +465,7 @@ function Profile({ username }) {
         )}
         {/* user posts */}
         <div className="row mt-4 text-start">
-          <h2 id="recentPosts">Recent Posts</h2>
+          {params.id ? <h2 id="recentPosts">Recent Posts</h2> : <h2 id="recentPosts">My Posts</h2>}
         </div>
         <div className="row mt-1 p-4 mb-4 rounded border-0" id="userPosts">
           {/* head */}
