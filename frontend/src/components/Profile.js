@@ -9,6 +9,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useParams } from 'react-router-dom';
 import { updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useLocation } from 'react-router-dom';
 import changeActiveStatus from './changeActiveStatus.js';
 import axios from 'axios'; // import axios for sending HTTP requests
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -19,6 +20,12 @@ import Posts from './Posts.js';
 function Profile({ username }) {
   const params = useParams();
   username = params.id || localStorage.getItem('userPrefix');
+
+  function IsMyProfile(){
+    const location = useLocation();
+    if (location.pathname == "/profile")  return true;
+    else return false;
+  }
 
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -248,7 +255,18 @@ function Profile({ username }) {
         {/* profile card */}
         <div className="row mt-5 p-4 rounded border-0" style={{ position: 'relative' }} id="profileCard">
           {/* last page */}
-          <button type="button" className="btn btn-secondary col-auto" id="lastPageButton" onClick={() => { navigate(-1); }}><i class="bi bi-arrow-left"></i></button>
+          {!IsMyProfile() && (
+            <button
+              type="button"
+              className="btn btn-secondary col-auto"
+              id="lastPageButton"
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              <i className="bi bi-arrow-left"></i>
+            </button>
+          )}
           <div className="col-5 ">
             <div className="profile-picture">
               <img src={userInfo.avatar} alt="User avatar" className="img-fluid" />
