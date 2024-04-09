@@ -39,6 +39,7 @@ function Login() {
       localStorage.setItem('accessToken', token); // Save the token to localStorage
       localStorage.setItem('userEmail', user.email); // Save the user email to localStorage
       // check if this is a society email
+      console.log("here!!!!!!!!!!");
       const societyName = await checkSocietyEmail(user.email);
       if (societyName) {
         console.log("User is a society, redirecting to society page");
@@ -80,14 +81,17 @@ function Login() {
       // Check that the email address matches a specific suffix
       const allowedDomains = ["tcd.ie", "csc.tcd.ie", "gmail.com"];
       const isAllowedDomain = allowedDomains.some(domain => userEmail.endsWith(domain));
-
+      console.log("got to here");
       if (isAllowedDomain) {
         // After successful login, check whether the user is registered
         await checkUserRegistration(result.user);
+        console.log("1");
       } else {
+        console.log("2");
         await result.user.delete(); // Delete user accounts that do not meet the requirements
         setError("Please use an email address with a permitted domain (tcd.ie, csc.tcd.ie, gmail.com).");
       }
+      console.log("3");
     } catch (error) {
       console.error("Error during Google login: ", error);
       setError(error.message);
