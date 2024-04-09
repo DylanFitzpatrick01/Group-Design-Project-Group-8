@@ -284,7 +284,7 @@ function Profile({ username }) {
 
 
 
-  }, []); // Dependencies array to run the effect when `username` changes
+  }, [username]); // Dependencies array to run the effect when `username` changes
 
 
   // check if the user is in the friends list
@@ -447,7 +447,7 @@ function Profile({ username }) {
         )}
         {/* user posts */}
         <div className="row mt-4 text-start">
-          <h2 id="recentPosts">Recent Posts</h2>
+          {params.id ? <h2 id="recentPosts">Recent Posts</h2> : <h2 id="recentPosts">My Posts</h2>}
         </div>
         <div className="row mt-1 p-4 mb-4 rounded border-0" id="userPosts">
           {/* head */}
