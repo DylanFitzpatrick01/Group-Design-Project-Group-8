@@ -262,15 +262,18 @@ function Profile({ username }) {
         if (!docSnap.empty) {
           const posts = [];
           docSnap.forEach((doc) => {
-            posts.push(doc.data());
+            const postData = doc.data();
+            const postId = doc.id; // obtain document ID
+            posts.push({ id: postId, ...postData }); // combine ID and postdata
           });
           console.log("Posts data:", posts);
           setPosts(posts);
         } else {
           console.log("No matching posts.");
+          console.log(posts);
         }
       } catch (e) {
-        console.error("Error getting posts: ", e);
+        console.error("Error getting documents: ", e);
       }
     };
 
@@ -279,19 +282,9 @@ function Profile({ username }) {
     getPosts();
 
 
-    // Set a timeout to re-fetch the data after 1 second, but only once
-    // to update the online status of the user
-    const timer = setTimeout(() => {
-      getUser();
-      getPosts();
-      console.log("Data re-fetched after 1 second.");
-    }, 1000);
 
 
-    // Cleanup function to clear the timer if the component unmounts before the timer fires
-    return () => clearTimeout(timer);
-
-  }, [username]); // Dependencies array to run the effect when `username` changes
+  }, []); // Dependencies array to run the effect when `username` changes
 
 
   // check if the user is in the friends list
