@@ -4,6 +4,7 @@ import './TextInput.css';
 import { sendChat, getAllUserNames } from './SendReceiveChats';
 import { uploadImage } from "./UploadImage";
 import Modal from './Modal';
+import {checkAndReplaceBadWords} from './BadWordDetection';
 
 
 function TextInput({ societyOrModule, moduleCode, user }) {
@@ -39,7 +40,15 @@ function TextInput({ societyOrModule, moduleCode, user }) {
         event.preventDefault();
         console.log(message);
         if (message.trim() !== '') {
-            await sendChat(userNames, societyOrModule, moduleCode, message, user); 
+            let CleanMessage = "";
+            if (message != "hello"){
+                CleanMessage = await checkAndReplaceBadWords(message);
+            }
+            else{
+                CleanMessage = message;
+            }
+            console.log(CleanMessage)
+            await sendChat(userNames, societyOrModule, moduleCode, CleanMessage, user);
             setMessage('');
         }
     
