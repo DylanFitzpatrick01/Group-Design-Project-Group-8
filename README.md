@@ -14,7 +14,7 @@ The repository for CSU44098 Group 8
          - ```source env/bin/activate```
 
 5. Install all requirements to the virtual environment: ```pip3 install -r requirements.txt``` (or ```pip install -r requirements.txt``` depending on your version of python)
-6. Start the flask server: ```flask run```
+6. Start the flask server: ```flask run -p 8000```
 7. In another terminal, cd into the frontend directory inside the root of the project: ```cd frontend```
 8. Install the dependencies: ```npm install```
 
