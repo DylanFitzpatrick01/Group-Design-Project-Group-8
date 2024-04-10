@@ -19,10 +19,12 @@ The repository for CSU44098 Group 8
 8. Install the dependencies: ```npm install```
 
     -   npm with some versions may give errors when installing, please use `npm install --save --legacy-peer-deps` in such case.
-
-9. Run the project locally: ```npm start```
-10. If it doesn't open automatically, open [localhost:3000/](http://localhost:3000/)
-11. Use your tcd email to create an account and log in (for testing purposes, you can also use Gmail)
+9. Add the secrets that we sent you by email:
+     -   create a file in the root of the project folder and name it ```.env``` and add the contents from the google doc sent to you (flask mail set up and an api key)
+     -   create a second file, this time inside the frontend folder and also name it ```.env``` but add the contents from the second box in the google doc sent to you (rapidapi key and host)
+10. Run the project locally: ```npm start```
+11. If it doesn't open automatically, open [localhost:3000/](http://localhost:3000/)
+12. Use your tcd email to create an account and log in (for testing purposes, you can also use Gmail)
 
 ## Backends
 
