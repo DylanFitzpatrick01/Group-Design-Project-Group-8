@@ -52,5 +52,8 @@
   cursor: pointer;
 }
 .campus-image {
-  margin: 100px;
+  margin-top: 5%;
+  margin-bottom: 2%;
+  width: 75%; /* Adjust this value as needed */
+  height: auto; /* This will maintain the aspect ratio of the image */
 }
