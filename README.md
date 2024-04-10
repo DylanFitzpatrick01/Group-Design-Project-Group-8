@@ -17,6 +17,9 @@ The repository for CSU44098 Group 8
 6. Start the flask server: ```flask run```
 7. In another terminal, cd into the frontend directory inside the root of the project: ```cd frontend```
 8. Install the dependencies: ```npm install```
+
+    -   npm with some versions may give errors when installing, please use `npm install --save --legacy-peer-deps` in such case.
+
 9. Run the project locally: ```npm start```
 10. If it doesn't open automatically, open [localhost:3000/](http://localhost:3000/)
 11. Use your tcd email to create an account and log in (for testing purposes, you can also use Gmail)
