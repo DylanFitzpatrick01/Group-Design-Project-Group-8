@@ -8,7 +8,8 @@ import { useParams } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import axios from 'axios'; // Import Axios library for making HTTP requests
 import Posts from '../Posts.js';
-
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // for Snow theme
 // Profile takes a society name (the name of the collection in FB) as a prop
 
 function SocietyProfile({ name }) {
@@ -32,8 +33,11 @@ function SocietyProfile({ name }) {
   const [email, setEmail] = useState('');
   const [posts, setPosts] = useState([{}]);
   const [showEventForm, setShowEventForm] = useState(false);
-  const [showAddEventButton, setShowAddEventButton] = useState(false); // State to manage visibility of the Add Event button
+  const [showAddButtons, setShowAddButtons] = useState(false); // State to manage visibility of the Add Event button
   const [formError, setFormError] = useState('');
+  const [postContent, setPostContent] = useState('');
+  const [showPostForm, setShowPostForm] = useState(false);
+  const [postFormError, setPostFormError] = useState('');
   // if the user is not logged in, redirect to the login page
   const navigate = useNavigate();
   // if the user is not logged in, redirect to the login page
@@ -155,12 +159,52 @@ function SocietyProfile({ name }) {
 
   const handleAddEventClick = () => {
     setShowEventForm(true); // Set showEventForm to true when "Add Event" button is clicked
-    setShowAddEventButton(false); // Hide the Add Event button
+    setShowAddButtons(false); // Hide the Add Event button
   };
 
   const handleCloseEventBoxClick = () => {
     setShowEventForm(false);
-    setShowAddEventButton(true);
+    setShowAddButtons(true);
+  };
+
+    // Add this function to handle the post form submission
+  const handlePostSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!postContent) {
+      setPostFormError('Post content is required.');
+      return;
+    }
+    setPostFormError('');
+
+    try {
+      const currentDate = new Date();
+      await addDoc(collection(db, "posts"), {
+        author: name,
+        content: postContent,
+        date: currentDate.toISOString(),
+        like: 0,
+        share: 0,
+        title: `New Post by ${name}`,
+        isEvent: false,
+      });
+      setShowPostForm(false);
+      window.location.reload();
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
+  };
+
+    // Add this function to show the post form
+  const handleAddPostClick = () => {
+    setShowPostForm(true);
+    setShowAddButtons(false);
+  };
+
+  // Add this function to hide the post form
+  const handleClosePostBoxClick = () => {
+    setShowPostForm(false);
+    setShowAddButtons(true);
   };
 
 
@@ -168,9 +212,20 @@ function SocietyProfile({ name }) {
   // if the user's society is the same as the profile, show the add event button
   useEffect(() => {
     if (localStorage.getItem('society') === name) {
-      setShowAddEventButton(true);
+      setShowAddButtons(true);
     }
   }, [name]);
+
+  // NewPosts component
+  const NewPosts = ({ initialPosts }) => {
+    const modifiedPosts = initialPosts.map(post => ({
+      ...post,
+      content: <div dangerouslySetInnerHTML={{ __html: post.content }} />
+    }));
+
+    return <Posts initialPosts={modifiedPosts} />;
+  };
+
 
   return (
     <div className="Profile">
@@ -219,7 +274,7 @@ function SocietyProfile({ name }) {
         <div className="row mt-1 p-4 rounded border-0 mb-4" id="userPosts">
           {/* head */}
           {posts.length > 0 && posts[0] && Object.keys(posts[0]).length > 0 ?
-            <Posts initialPosts={posts} />
+            <NewPosts initialPosts={posts} />
             : "No Posts Found."}
         </div>
 
@@ -260,15 +315,30 @@ function SocietyProfile({ name }) {
           </div>
         )}
 
-
-
-        {showAddEventButton && (
+        {showPostForm && (
+          <div className="row mt-4 p-4 rounded border-0" id="createPost">
+            <h2 id="createPostTitle">Create Post</h2>
+            <form onSubmit={handlePostSubmit}>
+              <div className="row mb-3">
+                <div className="col">
+                  <ReactQuill value={postContent} onChange={setPostContent} className="react-quill" />
+                </div>
+              </div>
+              {postFormError && <p className="text-danger">{postFormError}</p>}
+              <button className="btn btn-primary" type="submit" id="createPostButton">Create Post</button>
+              <button type="button" className="btn btn-secondary ms-2" onClick={handleClosePostBoxClick} id="closePostBoxButton">Close</button>
+            </form>
+          </div>
+        )}
+        {showAddButtons && (
           <div className="row mt-4">
             <div className="col">
-              <button onClick={handleAddEventClick} className="btn btn-primary" id="addEventButton">Add Event</button>
+              <button onClick={handleAddEventClick} className="btn btn-primary me-5" id="addEventButton">Add Event</button>
+              <button onClick={handleAddPostClick} className="btn btn-primary" id="addPostButton">Add Post</button>
             </div>
           </div>
         )}
+
       </div>
     </div>
   );
