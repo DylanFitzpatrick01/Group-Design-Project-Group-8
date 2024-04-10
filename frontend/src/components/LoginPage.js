@@ -100,6 +100,7 @@ function Login() {
 
   return (
     <div className="LoginPage">
+      <img src="campus.png" alt="Campus" className="campus-image" />      
       <div className="Login-container">
         <h2>Login</h2>
         {error && <p className="error-message">{error}</p>}

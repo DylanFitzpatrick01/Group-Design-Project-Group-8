@@ -1,8 +1,8 @@
 .LoginPage {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   text-align: center;
   background-color: var(--background-color);
 }
@@ -50,4 +50,7 @@
 .link {
   color: var(--accent);
   cursor: pointer;
+}
+.campus-image {
+  margin: 100px;
 }
