@@ -17,6 +17,8 @@ function Posts({ initialPosts }) {
             await deleteDoc(docRef);
             console.log("Post deleted successfully");
             setPosts(posts.filter(post => post.id !== postId));
+            // refresh 
+            window.location.reload();
         } catch (e) {
             console.error("Error deleting post: ", e);
         }

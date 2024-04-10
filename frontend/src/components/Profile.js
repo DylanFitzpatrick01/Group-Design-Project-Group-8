@@ -13,7 +13,6 @@ import { useLocation } from 'react-router-dom';
 import changeActiveStatus from './changeActiveStatus.js';
 import axios from 'axios'; // import axios for sending HTTP requests
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import Posts from './Posts.js';
 
 // Profile takes a username (the name of the collection in FB) as a prop
 
@@ -22,9 +21,9 @@ function Profile({ username }) {
   username = params.id || localStorage.getItem('userPrefix');
   const my_username = localStorage.getItem('userPrefix');
 
-  function IsMyProfile(){
+  function IsMyProfile() {
     const location = useLocation();
-    if (location.pathname == "/profile")  return true;
+    if (location.pathname == "/profile") return true;
     else return false;
   }
 
@@ -38,8 +37,6 @@ function Profile({ username }) {
     bio: ''
   });
 
-  const [posts, setPosts] = useState([
-    {}]);
 
   const [originalAvatar, setOriginalAvatar] = useState(userInfo.avatar);
   const [isEditingAvatar, setIsEditingAvatar] = useState(false);
@@ -136,16 +133,7 @@ function Profile({ username }) {
     setOriginalAvatar(userInfo.avatar);
   }, [userInfo.avatar]);
 
-  const deletePost = async (postId) => {
-    try {
-      const docRef = doc(db, "posts", postId);
-      await deleteDoc(docRef);
-      console.log("Post deleted successfully");
-      setPosts(posts.filter(post => post.id !== postId));
-    } catch (e) {
-      console.error("Error deleting post: ", e);
-    }
-  };
+
 
   // Function to save the new bio to Firestore
   const saveBio = async () => {
@@ -261,32 +249,10 @@ function Profile({ username }) {
       }
     };
 
-    // Define the function to fetch user posts
-    const getPosts = async () => {
-      try {
-        const q = query(collection(db, "posts"), where("author", "==", username));
-        const docSnap = await getDocs(q);
-        if (!docSnap.empty) {
-          const posts = [];
-          docSnap.forEach((doc) => {
-            const postData = doc.data();
-            const postId = doc.id; // obtain document ID
-            posts.push({ id: postId, ...postData }); // combine ID and postdata
-          });
-          console.log("Posts data:", posts);
-          setPosts(posts);
-        } else {
-          console.log("No matching posts.");
-          console.log(posts);
-        }
-      } catch (e) {
-        console.error("Error getting documents: ", e);
-      }
-    };
 
-    // Execute getUser and getPosts immediately
+
+    // Execute getUser immediately
     getUser();
-    getPosts();
 
 
 
