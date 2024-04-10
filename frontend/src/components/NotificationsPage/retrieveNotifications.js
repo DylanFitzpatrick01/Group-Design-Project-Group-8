@@ -61,6 +61,7 @@ function GetAllNotificationsForUser(onNewNotification) {
                         text: data.text,
                         timestamp: data.timestamp,
                         moduleCode: data.moduleCode,
+                        type: data.type
                     };
                 });
 

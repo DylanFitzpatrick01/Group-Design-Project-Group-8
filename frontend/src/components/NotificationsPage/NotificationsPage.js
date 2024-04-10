@@ -36,17 +36,20 @@ function NotificationsPage() {
     <div className="NotificationsPage">
       <div className="NotificationsList">
         {directMentions.length > 0 ? (
-          directMentions.map((notification) => (
-            <NotificationBlock
-              notificationType="directReply"
-              mentionedBy={notification.mentionedBy}
-              mentionedByAvatar={notification.mentionedByAvatar}
-              mentionedByUserID={notification.mentionedByUserID}
-              moduleCode={notification.moduleCode}
-              timestamp={formatTimestamp(notification.timestamp)}
-              message={notification.text}
-            />
-          ))
+          directMentions.map((notification) => {
+            console.log("hello" + notification.type); // Log the notification type
+            return (
+              <NotificationBlock
+                notificationType={notification.type}
+                mentionedBy={notification.mentionedBy}
+                mentionedByAvatar={notification.mentionedByAvatar}
+                mentionedByUserID={notification.mentionedByUserID}
+                moduleCode={notification.moduleCode}
+                timestamp={formatTimestamp(notification.timestamp)}
+                message={notification.text}
+              />
+            );
+          })
         ) : (
           <div className='no-notifs-block-outer'>
             <div className="no-notifs-block"><p>No Notifications</p></div>

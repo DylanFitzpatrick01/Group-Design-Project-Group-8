@@ -32,13 +32,22 @@ function DirectReplyNotificationComponent({ mentionedBy, mentionedByAvatar, ment
     );
 }
 
-
-function SocietyNotificationComponent({ moduleCode, timestamp, message }) {
+function DMNotificationComponent({ mentionedBy, mentionedByAvatar, mentionedByUserID, moduleCode, timestamp, message }) {
     return (
-        <div className='NotificationComponentOuter'>
+        <div className="NotificationComponentOuter">
             <div className="NotificationComponent">
                 <div className="NotificationComponent-header">
-                    <h2>New Post from Society {moduleCode}</h2>
+                    <h2>
+                        <div className='body-container'>
+                            <Link to={`/user/${mentionedByUserID}`} className='link-to-profile'>
+                                <div className="profile-info"> 
+                                    <img src={mentionedByAvatar} alt="User avatar" />
+                                    {mentionedBy}
+                                </div>
+                            </Link>
+                             sent you a new direct message!
+                        </div>
+                    </h2>
                     <div className="NotificationTimeStamp">{timestamp}</div>
                 </div>
                 <div className="NotificationComponent-body">
@@ -50,13 +59,14 @@ function SocietyNotificationComponent({ moduleCode, timestamp, message }) {
 }
 
 function NotificationBlock({ notificationType, mentionedBy, mentionedByAvatar, mentionedByUserID, moduleCode, timestamp, message }) {
-    switch (notificationType) {
-        case 'societyPost':
-            return <SocietyNotificationComponent mentionedBy={mentionedBy} timestamp={timestamp} message={message} />;
-        case 'directReply':
-            return <DirectReplyNotificationComponent mentionedBy={mentionedBy} mentionedByUserID={mentionedByUserID} moduleCode={moduleCode} mentionedByAvatar={mentionedByAvatar} timestamp={timestamp} message={message} />;
-        default:
-            throw new Error(`Unknown notification type: ${notificationType}`);
+    if(!notificationType){
+        return <DirectReplyNotificationComponent mentionedBy={mentionedBy} mentionedByUserID={mentionedByUserID} moduleCode={moduleCode} mentionedByAvatar={mentionedByAvatar} timestamp={timestamp} message={message} />;
+    }
+    else if (notificationType === "newDm" || notificationType === "newDM"){
+        return <DMNotificationComponent mentionedBy={mentionedBy} mentionedByUserID={mentionedByUserID} moduleCode={moduleCode} mentionedByAvatar={mentionedByAvatar} timestamp={timestamp} message={message} />;
+    }
+    else{
+        throw new Error(`Unknown notification type: ${notificationType}`);
     }
 }
 
