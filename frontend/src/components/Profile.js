@@ -429,7 +429,6 @@ function Profile({ username }) {
             </div>
           </div>
         )}
-
       </div>
     </div >
   );
