@@ -463,16 +463,6 @@ function Profile({ username }) {
             </div>
           </div>
         )}
-        {/* user posts */}
-        <div className="row mt-4 text-start">
-          {params.id ? <h2 id="recentPosts">Recent Posts</h2> : <h2 id="recentPosts">My Posts</h2>}
-        </div>
-        <div className="row mt-1 p-4 mb-4 rounded border-0" id="userPosts">
-          {/* head */}
-          {posts.length > 0 && posts[0] && Object.keys(posts[0]).length > 0 ?
-            <Posts initialPosts={posts} />
-            : "No Posts Found."}
-        </div>
       </div>
     </div >
   );
