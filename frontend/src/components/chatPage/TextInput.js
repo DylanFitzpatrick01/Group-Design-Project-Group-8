@@ -96,6 +96,14 @@ function TextInput({ societyOrModule, moduleCode, user }) {
         setShowModal(true);
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) { // check if the key pressed is 'Enter' and not 'Shift' + 'Enter'
+            e.preventDefault(); // prevent a new line from being added
+            handleSend(e);
+        }
+    };
+
+
     return (
         <div className="textBoxContainer">
             <form onSubmit={handleSend}>
@@ -131,6 +139,7 @@ function TextInput({ societyOrModule, moduleCode, user }) {
                         placeholder="Type your message..."
                         value={message}
                         onChange={handleInputChange}
+                        onKeyDown={handleKeyDown}
                     />
                     <button
                         className={`sendButton ${message || imagePreviews.length ? 'textBoxNotEmpty' : 'textBoxEmpty'}`}
