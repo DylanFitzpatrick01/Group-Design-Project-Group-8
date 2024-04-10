@@ -37,7 +37,6 @@ function NotificationsPage() {
       <div className="NotificationsList">
         {directMentions.length > 0 ? (
           directMentions.map((notification) => {
-            console.log("hello" + notification.type); // Log the notification type
             return (
               <NotificationBlock
                 notificationType={notification.type}
